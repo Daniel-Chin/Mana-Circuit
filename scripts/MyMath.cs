@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 
-public class Variable {}
 public class Function {
   public Expression Body;
 }
@@ -10,7 +9,7 @@ public class Function {
 public class TerminalType : EnumClass {
   public static readonly TerminalType NUMBER   = new TerminalType(0);
   public static readonly TerminalType OMEGA    = new TerminalType(1);
-  public static readonly TerminalType VARIABLE = new TerminalType(2);
+  public static readonly TerminalType X        = new TerminalType(2);
   public static readonly TerminalType FUNCTION = new TerminalType(3);
 }
 
@@ -19,15 +18,10 @@ public class Terminal {
 
   public TerminalType MyTerminalType;
   public float MyNumber;
-  public Variable MyVariable;
   public Function MyFunction;
 
   public Terminal(TerminalType terminalType) {
     MyTerminalType = terminalType;
-  }
-  public Terminal(Variable variable) {
-    MyTerminalType = TerminalType.VARIABLE;
-    MyVariable = variable;
   }
   public Terminal(Function function) {
     MyTerminalType = TerminalType.FUNCTION;
@@ -48,6 +42,8 @@ public class Operator : EnumClass {
 
 public class Expression {
   public static readonly Expression w = new Expression(Terminal.w);
+  public static readonly Expression ONE = new Expression(new Terminal(1));
+  public static readonly Expression MINUS_ONE = new Expression(new Terminal(-1));
 
   public bool IsTerminal;
   public Terminal MyTerminal;
@@ -88,8 +84,12 @@ public class Expression {
   }
 
   public Expression[] Top(Operator op) {
-    if (! IsTerminal && MyOperator == op) {
-      return Left.Top(op).Concat(Right.Top(op)).ToArray();
+    if (! IsTerminal) {
+      if (MyOperator == op) {
+        return Left.Top(op).Concat(Right.Top(op)).ToArray();
+      } else {
+        Debug.Assert(MyOperator.Id > op.Id);
+      }
     }
     return new Expression[]{ this };
   }
@@ -113,41 +113,48 @@ public class Equation {
   public Expression SolveFor(Function function) {
     // Only used when assuming class-1 solutions.  
     Expression newLeft = new Expression(Left, Operator.PLUS, new Expression(
-      new Expression(new Terminal(-1)), Operator.TIMES, Right
+      Expression.MINUS_ONE, Operator.TIMES, Right
     ));
     newLeft.ExpandAll();
     List<Expression> k = new List<Expression>();
     List<Expression> b = new List<Expression>();
     foreach (var part in newLeft.Top(Operator.PLUS)) {
       if (part.DoesContain(function)) {
-        ParsePart(part, function);
+        k.Add(ParsePart(part, function));
       } else {
         b.Add(part);
       }
     }
-    // TODO: negate b
+    b = new Expression(
+      Expression.MINUS_ONE, Operator.TIMES, b
+    );
   }
 
-  private Expression ParsePart(Expression part, Function function) {
-    Debug.Assert(! part.IsTerminal);
-    Expression container = null;
-    if (part.Left.DoesContain(function)) {
-      container = Left;
-    }
-    if (part.Right.DoesContain(function)) {
-      if (container is null) {
-        container = Right;
+  private Expression ParsePart(Expression expression, Function function) {
+    Debug.Assert(! expression.IsTerminal);
+    Expression[] parts = expression.Top(Operator.TIMES);
+    Expression factor = Expression.ONE;
+    int acc = 0;
+    foreach (var part in parts) {
+      if (part.DoesContain(funciton)) {
+        acc ++;
+        if (part.IsTerminal)
+          throw new CannotIsolateFunction("wt9q28");
+        if (part.MyOperator != Operator.APPLY)
+          throw new CannotIsolateFunction("t8932rg");
+        if (part.Left .MyTerminal.MyFunction != function)
+          throw new CannotIsolateFunction("v83r0ht");
+        if (part.Right.MyTerminal.MyTerminalType != TerminalType.X)
+          throw new CannotIsolateFunction("gr38024h");
       } else {
-        throw CannotIsolateFunction("Both Left and Right contain `function`.");
+        factor = new Expression(
+          factor, Operator.TIMES, part
+        );
       }
     }
-    Debug.Assert(container is object);
-    if (container.IsTerminal) {
-      Debug.Assert(part.MyOperator == Operator.APPLY);
-      Debug.Assert(container.MyTerminal.MyFunction == function);
-      return new Expression(new Terminal(1));
-    }
-    if (container.MyOperator != Operator.APPLY)
+    if (acc != 1)
+      throw new CannotIsolateFunction("5tn3oe0");
+    return factor;
   }
 
   public class CannotIsolateFunction : Exception { }
