@@ -1,0 +1,34 @@
+mana
+merger gem
+    allow dead loop
+custom gem
+    custom gem applies theoretical mean, then *=0.01
+    shoot NPC.
+        class-1 attack -> unlock CG
+        class-w attack -> unlock meta CG
+        class-w^x attack -> unlock meta^x CG
+        class-w^w attack -> unlock typeless CG
+stochastic gem
+    50% pass through, 50% bounced
+    allow stochastic inf-mean dmg
+make w
+    reach infinity
+2w, 4w
+chain the CG to get w^2, w^3
+meta CG
+make w ^ w
+    reach uncountability
+typeless CG
+product gem
+epsilon_0
+
+
+real-time preview of circuit flow
+CG: fast, weak, mean. 
+
+to implement mu
+    列方程
+
+Q
+what can typeless do
+    IDK
