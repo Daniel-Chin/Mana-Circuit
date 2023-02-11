@@ -13,7 +13,6 @@ seq
             class-w^w attack -> unlock typeless CG
     make w
         reach infinity
-    2w, 4w
     chain the CG to get w^2, w^3
     meta CG
     make w ^ w
