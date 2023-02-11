@@ -7,7 +7,8 @@ public class Test
     static public void Main()
     {
         Console.WriteLine("begin");
-        TestMath();
+        // TestMath();
+        MagicProblem.Test();
         Console.WriteLine("end");
         Console.ReadKey();
     }

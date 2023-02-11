@@ -214,11 +214,11 @@ public enum Rank
     FINITE, W_TO_THE_K, TWO_TO_THE_W, STACK_W
 }
 
-class Simplest
+public class Simplest
 {
     public Rank MyRank;
     public double K;
-    protected Simplest(
+    public Simplest(
         Rank rank, double k
     )
     {
