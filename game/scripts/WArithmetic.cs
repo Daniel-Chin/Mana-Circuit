@@ -420,8 +420,7 @@ class Simplest
 
     public override bool Equals(object obj)
     {
-        Simplest that = obj as Simplest;
-        if (that == null) return false;
+        if (!(obj is Simplest that)) return false;
         return (
             MyRank == that.MyRank
             && K == that.K
