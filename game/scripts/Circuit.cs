@@ -64,4 +64,19 @@ public class Circuit
         Gems.Remove(gem);
         IterRect(null, gem.Location, gem.Size);
     }
+
+    public Particle Advect(Particle particle, Gem lastGem) {
+
+    }
+
+    public List<Gem.Source> FindSources() {
+        List<Gem.Source> sources = new List<Gem.Source>();
+        foreach (Gem gem in Gems)
+        {
+            if (gem is Gem.Source source) {
+                sources.Add(source);
+            }
+        }
+        return sources;
+    }
 }
