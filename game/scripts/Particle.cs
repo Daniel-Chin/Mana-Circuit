@@ -1,13 +1,11 @@
-using MathNet.Numerics.LinearAlgebra;
-
 public class Particle
 {
-    public Vector<int> Location;
-    public Vector<int> Direction;
+    public PointInt Location;
+    public PointInt Direction;
     public Simplest[] Mana; // Mana[0] is 0th-order
     public Gem LastGem;
     public Particle(
-        Vector<int> location, Vector<int> direction,
+        PointInt location, PointInt direction,
         Simplest[] mana
     )
     {

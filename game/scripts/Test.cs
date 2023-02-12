@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using MathNet.Numerics.LinearAlgebra;
 
 public class Test
 {
@@ -8,12 +9,32 @@ public class Test
     {
         Console.WriteLine("begin");
         // TestMath();
-        MagicProblem.Test();
+        // MagicProblem.Test();
+        TestCircuit();
         Console.WriteLine("end");
         Console.ReadKey();
     }
 
-    static void TestMath() {
+    static void TestCircuit()
+    {
+        Circuit c = new Circuit(new PointInt(6, 6));
+        Gem source = new Gem.Source().Place(new PointInt(0, 3));
+        c.Add(source);
+
+        Gem drain = new Gem.Drain().Place(new PointInt(5, 3));
+        c.Add(drain);
+
+        Particle p = new Particle(source.Location, null, Simplest.Zeros(1));
+        while (p.Location != drain.Location)
+        {
+            p = c.Advect(p, false)[0];
+        }
+        Simplest manaOut = p.Mana[0];
+        Console.WriteLine(manaOut);
+    }
+
+    static void TestMath()
+    {
         for (int i = 0; i < 32; i++)
         {
             Console.WriteLine("=== ONE ITER ===");
@@ -44,7 +65,8 @@ public class Test
             Console.WriteLine(e);
             Console.WriteLine();
             Simplest es = Simplest.FromExpression(e, false);
-            if (! s.Equals(es)) {
+            if (!s.Equals(es))
+            {
                 Console.WriteLine("Oh NOOOO");
                 throw new ApplicationException();
             }

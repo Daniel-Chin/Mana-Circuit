@@ -2,17 +2,22 @@ using MathNet.Numerics.LinearAlgebra;
 
 public abstract class Gem
 {
-    public Vector<int> Location;
-    public Vector<int> Size;
+    public PointInt Location;
+    public PointInt Size;
     public Gem()
     {
-        Size = Vector<int>.Build.DenseOfArray(new int[2] { 1, 1 });
+        Size = new PointInt(1, 1);
+    }
+    public Gem Place(PointInt location)
+    {
+        Location = location;
+        return this;
     }
     public abstract Particle Apply(Particle input);
 
     public class Source : Gem
     {
-        Vector<int> Direction;
+        PointInt Direction;
         public override Particle Apply(Particle input)
         {
             input.Direction = Direction;
@@ -55,7 +60,7 @@ public abstract class Gem
     {
         Doubler() : base()
         {
-            Size = Vector<int>.Build.DenseOfArray(new int[2] { 2, 2 });
+            Size = new PointInt(2, 2);
         }
         public override Particle Apply(Particle input)
         {
@@ -65,7 +70,7 @@ public abstract class Gem
     }
     public class Focus : Gem
     {
-        Vector<int> Direction;
+        PointInt Direction;
         public override Particle Apply(Particle input)
         {
             input.Direction = Direction;
@@ -74,27 +79,33 @@ public abstract class Gem
     }
     public class Mirror : Gem
     {
-        Matrix<int> Transform;
+        Matrix<double> Transform;
         public Mirror(bool orientation) : base()
         {
             if (orientation)
             {
-                Transform = Matrix<int>.Build.DenseOfArray(new int[2, 2] {
-                    {0, 1},
-                    {1, 0},
-                });
+                Transform = Matrix<double>.Build.DenseOfArray(
+                    new double[2, 2] {
+                        {0, 1},
+                        {1, 0},
+                    }
+                );
             }
             else
             {
-                Transform = Matrix<int>.Build.DenseOfArray(new int[2, 2] {
-                    {0, -1},
-                    {-1, 0},
-                });
+                Transform = Matrix<double>.Build.DenseOfArray(
+                    new double[2, 2] {
+                        {0, -1},
+                        {-1, 0},
+                    }
+                );
             }
         }
         public override Particle Apply(Particle input)
         {
-            input.Direction = Transform * input.Direction;
+            input.Direction = PointInt.FromVector(
+                Transform * input.Direction.ToVector()
+            );
             return input;
         }
     }
