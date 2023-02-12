@@ -21,8 +21,8 @@ public class Circuit
         if (
             gem.Location.IntX < 0 ||
             gem.Location.IntY < 0 ||
-            gem.Location.IntX + gem.Size.IntX >= Size.IntX ||
-            gem.Location.IntY + gem.Size.IntY >= Size.IntY
+            gem.Location.IntX + gem.Size.IntX > Size.IntX ||
+            gem.Location.IntY + gem.Size.IntY > Size.IntY
         )
             throw new Collision();
         if (IterRect(null, gem.Location, gem.Size))
@@ -69,18 +69,23 @@ public class Circuit
     }
 
     public Particle[] Advect(
-        Particle particle, bool superposition
+        Particle particle, bool superposition, bool verbose
     )
     {
         Gem gem = Seek(particle.Location);
         Particle[] results;
-        if (gem == particle.LastGem)
+        if (gem == null || gem == particle.LastGem)
         {
             results = new Particle[1];
             results[0] = particle;
         }
         else
         {
+            if (verbose)
+            {
+                Console.Write("Enter ");
+                Console.WriteLine(gem);
+            }
             if (superposition && gem is Gem.Stochastic stochastic)
             {
                 results = stochastic.Superposition(particle);

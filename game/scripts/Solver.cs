@@ -27,6 +27,7 @@ public class MagicProblem
             }
             return solution;
         }
+        Console.WriteLine("No finite solution.");
         Simplest simplest = SolveInfinite();
         for (int i = 0; i < N; i++)
         {
@@ -66,17 +67,21 @@ public class MagicProblem
     {
         if (SolveRank(Rank.TWO_TO_THE_W, -1))
         {
+            // Console.WriteLine("TWO_TO_THE_W is a solution.");
             ExponentialSearch eSearch = new ExponentialSearch(2333);
             try
             {
-                while (!eSearch.Feedback(SolveRank(Rank.W_TO_THE_K, eSearch.Acc)))
-                { }
+                while (true)
+                {
+                    if (eSearch.Feedback(SolveRank(Rank.W_TO_THE_K, eSearch.Acc)))
+                        break;
+                }
             }
             catch (ExponentialSearch.SearchFailed)
             {
                 return new Simplest(Rank.TWO_TO_THE_W, -1);
             }
-            return new Simplest(Rank.W_TO_THE_K, eSearch.Acc + 1);
+            return new Simplest(Rank.W_TO_THE_K, eSearch.High);
         }
         else
         {
@@ -92,6 +97,8 @@ public class MagicProblem
     private bool SolveRank(Rank rank, int k)
     {
         Simplest x = new Simplest(rank, k);
+        Console.Write("Trying ");
+        Console.WriteLine(x);
         bool doAccept = true;
         for (int i = 0; i < N; i++)
         {
@@ -113,6 +120,8 @@ public class MagicProblem
                 break;
             }
         }
+        Console.Write("Accept? ");
+        Console.WriteLine(doAccept);
         return doAccept;
     }
 
@@ -143,5 +152,25 @@ public class MagicProblem
         Console.WriteLine(x);
         Console.WriteLine(x.Minimum());
         Console.ReadKey();
+    }
+
+    public void Print()
+    {
+        Console.WriteLine("MagicProblem BEGIN");
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                Console.Write(AWithoutDiag[i, j]);
+                Console.Write(" ");
+                Console.Write((char)((int)'A' + j));
+                Console.Write(" + ");
+            }
+            Console.Write(MinusB[i]);
+            Console.Write(" = ");
+            Console.Write((char)((int)'A' + i));
+            Console.WriteLine();
+        }
+        Console.WriteLine("MagicProblem END");
     }
 }

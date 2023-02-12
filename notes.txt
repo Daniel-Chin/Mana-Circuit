@@ -18,7 +18,6 @@ seq
         reach infinity
     chain the CG to get w^2, w^3
     meta CG
-    make 2 ^ w
     make w ^ w
         reach uncountability
     typeless CG

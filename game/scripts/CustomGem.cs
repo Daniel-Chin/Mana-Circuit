@@ -1,11 +1,12 @@
+using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 
 class CustomGem : Gem
 {
-    Simplest MetaLevel;
-    Circuit circuit;    // only one source one drain
-    Simplest CachedMultiplier;
+    public Simplest MetaLevel;
+    public Circuit MyCircuit;  // only one source one drain
+    public Simplest CachedMultiplier;
     public override Particle Apply(Particle input)
     {
         Debug.Assert(CachedMultiplier != null);
@@ -14,8 +15,8 @@ class CustomGem : Gem
     }
     public Simplest MinimumSuperpositionEquilibrium(int inputMana)
     {
-        Source source = circuit.FindAll<Source>()[0];
-        List<Focus> focuses = circuit.FindAll<Focus>();
+        Source source = MyCircuit.FindAll<Source>()[0];
+        List<Focus> focuses = MyCircuit.FindAll<Focus>();
         int n = focuses.Count;
         MagicProblem magicProblem = new MagicProblem(n);
         Dictionary<Focus, int> dictionary = new Dictionary<Focus, int>();
@@ -47,14 +48,18 @@ class CustomGem : Gem
 
         while (particles.Count > 0)
         {
+            // Console.Write("particles.Count ");
+            // Console.WriteLine(particles.Count);
             Particle p = particles.Dequeue();
-            Gem gem = circuit.Seek(p.Location);
+            Gem gem = MyCircuit.Seek(p.Location);
             if (gem is Drain drain)
             {
                 drainMana = p.Mana;
+                // Console.WriteLine("drain hit");
             }
             else if (gem is Focus focus)
             {
+                // Console.WriteLine("focus hit");
                 int iFocus = dictionary[focus];
                 for (int j = 0; j < n; j++)
                 {
@@ -70,13 +75,14 @@ class CustomGem : Gem
             }
             else
             {
-                foreach (Particle newP in circuit.Advect(p, true))
+                foreach (Particle newP in MyCircuit.Advect(p, true, false))
                 {
                     particles.Enqueue(newP);
                 }
             }
         }
 
+        magicProblem.Print();
         Simplest[] solution = magicProblem.Solve();
         Simplest acc = drainMana[0];
         for (int i = 0; i < n; i++)

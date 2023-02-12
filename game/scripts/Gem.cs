@@ -18,6 +18,10 @@ public abstract class Gem
     public class Source : Gem
     {
         PointInt Direction;
+        public Source(PointInt direction) : base()
+        {
+            Direction = direction;
+        }
         public override Particle Apply(Particle input)
         {
             input.Direction = Direction;
@@ -58,7 +62,7 @@ public abstract class Gem
     }
     public class Doubler : Gem
     {
-        Doubler() : base()
+        public Doubler() : base()
         {
             Size = new PointInt(2, 2);
         }
@@ -71,6 +75,10 @@ public abstract class Gem
     public class Focus : Gem
     {
         PointInt Direction;
+        public Focus(PointInt direction) : base()
+        {
+            Direction = direction;
+        }
         public override Particle Apply(Particle input)
         {
             input.Direction = Direction;

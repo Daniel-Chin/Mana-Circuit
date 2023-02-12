@@ -18,18 +18,33 @@ public class Test
     static void TestCircuit()
     {
         Circuit c = new Circuit(new PointInt(6, 6));
-        Gem source = new Gem.Source().Place(new PointInt(0, 3));
+        Gem source = new Gem.Source(new PointInt(1, 0)).Place(new PointInt(0, 3));
         c.Add(source);
 
         Gem drain = new Gem.Drain().Place(new PointInt(5, 3));
         c.Add(drain);
 
-        Particle p = new Particle(source.Location, null, Simplest.Zeros(1));
-        while (p.Location != drain.Location)
-        {
-            p = c.Advect(p, false)[0];
-        }
-        Simplest manaOut = p.Mana[0];
+        c.Add(new Gem.Doubler().Place(new PointInt(1, 1)));
+        c.Add(new Gem.Mirror(false).Place(new PointInt(2, 0)));
+        c.Add(new Gem.Mirror(true).Place(new PointInt(3, 0)));
+        c.Add(new Gem.Stochastic(false).Place(new PointInt(3, 3)));
+        c.Add(new Gem.Focus(new PointInt(1, 0)).Place(new PointInt(2, 3)));
+
+        // for (int i = 0; i < 8; i++)
+        // {
+        //     Particle p = new Particle(source.Location, null, Simplest.Zeros(1));
+        //     p.Mana[0].K = 1;
+        //     while (!p.Location.Equals(drain.Location))
+        //     {
+        //         p = c.Advect(p, false, true)[0];
+        //     }
+        //     Simplest manaOut = p.Mana[0];
+        //     Console.WriteLine(manaOut);
+        // }
+
+        CustomGem cG = new CustomGem();
+        cG.MyCircuit = c;
+        Simplest manaOut = cG.MinimumSuperpositionEquilibrium(1);
         Console.WriteLine(manaOut);
     }
 
