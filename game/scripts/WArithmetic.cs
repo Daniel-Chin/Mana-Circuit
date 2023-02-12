@@ -248,6 +248,9 @@ public class Simplest
                 break;
         }
     }
+    public static Simplest One() {
+        return new Simplest(Rank.FINITE, 1);
+    }
     public static Simplest FromExpression(
         Expression expression, bool verbose
     )

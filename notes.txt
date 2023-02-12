@@ -2,7 +2,7 @@
 My power knows no bounds
 
 seq
-    collate gem 归一
+    focus gem
         allow dead loop
     stochastic gem
         50% pass through, 50% bounced
@@ -27,10 +27,16 @@ seq
 mana
 real-time preview of circuit flow
 CG: fast, weak, mean. 
+    minimum superposition equilibrium
 to implement mu
     linear system of eqs
 
 high fire rate will make inf attacks more prominent against finite attacks. 
+
+circuit: from radiator to mana crystalizer
+
+npc
+    give you fast travel Mk I, Mk II (20% buff! try it! you already have omega)
 
 Q
 what can typeless do
