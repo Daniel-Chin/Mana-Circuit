@@ -215,7 +215,7 @@ public enum Rank
 }
 
 public class Simplest
-{
+{   // immutable
     public Rank MyRank;
     public double K;
     public Simplest(

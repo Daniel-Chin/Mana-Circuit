@@ -1,3 +1,6 @@
+法力无边
+My power knows no bounds
+
 seq
     collate gem 归一
         allow dead loop
@@ -26,6 +29,8 @@ real-time preview of circuit flow
 CG: fast, weak, mean. 
 to implement mu
     linear system of eqs
+
+high fire rate will make inf attacks more prominent against finite attacks. 
 
 Q
 what can typeless do

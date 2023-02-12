@@ -11,10 +11,18 @@ public class MagicProblem {
         Simplest[] solution = new Simplest[n];
         Vector<double> x = SolveFinite();
         if (x != null) {
-            // todo
+            for (int i = 0; i < n; i++)
+            {
+                solution[i] = new Simplest(Rank.FINITE, x[i]);
+            }
             return solution;
         }
         Simplest simplest = SolveInfinite();
+        for (int i = 0; i < n; i++)
+        {
+            solution[i] = simplest;
+        }
+        return solution;
     }
 
     private Vector<double> SolveFinite() {
@@ -66,7 +74,26 @@ public class MagicProblem {
     }
     private bool SolveRank(Rank rank, int k)
     {
-
+        int n = LeftHandSide.Count;
+        Simplest x = new Simplest(rank, k);
+        bool doAccept = true;
+        for (int i = 0; i < n; i++)
+        {
+            Simplest acc = new Simplest(Rank.FINITE, 0);
+            for (int j = 0; j < n; j++)
+            {
+                acc = Simplest.Eval(
+                    acc, Operator.PLUS, Simplest.Eval(
+                        x, Operator.TIMES, LeftHandSide[i][j]
+                    )
+                );
+            }
+            if (! acc.Equals(x)) {
+                doAccept = false;
+                break;
+            }
+        }
+        return doAccept;
     }
 
     public static void Test() {
