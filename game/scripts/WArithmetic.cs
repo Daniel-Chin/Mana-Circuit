@@ -248,9 +248,6 @@ public class Simplest
                 break;
         }
     }
-    public static Simplest One() {
-        return new Simplest(Rank.FINITE, 1);
-    }
     public static Simplest FromExpression(
         Expression expression, bool verbose
     )
@@ -451,5 +448,35 @@ public class Simplest
             default:
                 throw new Shared.ObjectStateIllegal();
         }
+    }
+
+    public static Simplest Zero()
+    {
+        return new Simplest(Rank.FINITE, 0);
+    }
+    public static Simplest One()
+    {
+        return new Simplest(Rank.FINITE, 1);
+    }
+    public static Simplest[] Zeros(int len)
+    {
+        Simplest[] x = new Simplest[len];
+        for (int i = 0; i < len; i++)
+        {
+            x[i] = Zero();
+        }
+        return x;
+    }
+    public static Simplest[,] Zeros(int nRows, int nCols)
+    {
+        Simplest[,] x = new Simplest[nRows, nCols];
+        for (int i = 0; i < nRows; i++)
+        {
+            for (int j = 0; j < nCols; j++)
+            {
+                x[i, j] = Zero();
+            }
+        }
+        return x;
     }
 }

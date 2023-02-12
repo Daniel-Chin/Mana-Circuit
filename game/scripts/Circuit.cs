@@ -5,7 +5,7 @@ using MathNet.Numerics.LinearAlgebra;
 public class Circuit
 {
     public Vector<int> Size;
-    public Gem[,] Matrix;
+    public Gem[,] Field;
     public List<Gem> Gems;
 
     class Collision : Exception { }
@@ -13,16 +13,16 @@ public class Circuit
     public Circuit(Vector<int> size)
     {
         Size = size;
-        Matrix = new Gem[size[0], size[1]];
+        Field = new Gem[size[0], size[1]];
         Gems = new List<Gem>();
     }
 
     public void Add(Gem gem)
     {
         if (
-            gem.Location[0] < 0 || 
-            gem.Location[1] < 0 || 
-            gem.Location[0] + gem.Size[0] >= Size[0] || 
+            gem.Location[0] < 0 ||
+            gem.Location[1] < 0 ||
+            gem.Location[0] + gem.Size[0] >= Size[0] ||
             gem.Location[1] + gem.Size[1] >= Size[1]
         )
             throw new Collision();
@@ -47,36 +47,79 @@ public class Circuit
             {
                 int x = location[0] + dx;
                 int y = location[1] + dy;
-                if (action == null) {
+                if (action == null)
+                {
                     // check
-                    if (Matrix[x, y] != null)
+                    if (Field[x, y] != null)
                         return false;
-                } else {
+                }
+                else
+                {
                     // fill
-                    Matrix[x, y] = action;
+                    Field[x, y] = action;
                 }
             }
         }
         return true;
     }
 
-    public void Remove(Gem gem) {
+    public void Remove(Gem gem)
+    {
         Gems.Remove(gem);
         IterRect(null, gem.Location, gem.Size);
     }
 
-    public Particle Advect(Particle particle, Gem lastGem) {
-
-    }
-
-    public List<Gem.Source> FindSources() {
-        List<Gem.Source> sources = new List<Gem.Source>();
-        foreach (Gem gem in Gems)
+    public Particle[] Advect(
+        Particle particle, bool superposition
+    )
+    {
+        Gem gem = Seek(particle.Location);
+        Particle[] results;
+        if (gem == particle.LastGem)
         {
-            if (gem is Gem.Source source) {
-                sources.Add(source);
+            results = new Particle[1];
+            results[0] = particle;
+        }
+        else
+        {
+            if (superposition && gem is Gem.Stochastic stochastic)
+            {
+                results = stochastic.Superposition(particle);
+            }
+            else
+            {
+                results = new Particle[1];
+                results[0] = gem.Apply(particle);
             }
         }
-        return sources;
+        if (results[0] == null)
+        {
+            // wall
+            return new Particle[0];
+        }
+        foreach (Particle p in results)
+        {
+            p.Location += p.Direction;
+            p.LastGem = gem;
+        }
+        return results;
+    }
+
+    public List<T> FindAll<T>()
+    {
+        List<T> matches = new List<T>();
+        foreach (Gem gem in Gems)
+        {
+            if (gem is T t)
+            {
+                matches.Add(t);
+            }
+        }
+        return matches;
+    }
+
+    public Gem Seek(Vector<int> location)
+    {
+        return Field[location[0], location[1]];
     }
 }

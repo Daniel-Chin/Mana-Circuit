@@ -1,47 +1,61 @@
 using System;
-using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
-public class MagicProblem {
-    public List<List<Simplest>> LeftHandSide;
+public class MagicProblem
+{
+    public int N;
+    public Simplest[,] AWithoutDiag;
+    public Simplest[] MinusB;
 
-    public Simplest[] Solve() {
-        int n = LeftHandSide.Count;
-        Simplest[] solution = new Simplest[n];
+    public MagicProblem(int n)
+    {
+        N = n;
+        AWithoutDiag = Simplest.Zeros(N, N);
+        MinusB = Simplest.Zeros(N);
+    }
+
+    public Simplest[] Solve()
+    {
+        Simplest[] solution = new Simplest[N];
         Vector<double> x = SolveFinite();
-        if (x != null) {
-            for (int i = 0; i < n; i++)
+        if (x != null)
+        {
+            for (int i = 0; i < N; i++)
             {
                 solution[i] = new Simplest(Rank.FINITE, x[i]);
             }
             return solution;
         }
         Simplest simplest = SolveInfinite();
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < N; i++)
         {
             solution[i] = simplest;
         }
         return solution;
     }
 
-    private Vector<double> SolveFinite() {
-        int n = LeftHandSide.Count;
-        Simplest[] solution = new Simplest[n];
-        Matrix<double> A = Matrix<double>.Build.Dense(n, n);
-        for (int i = 0; i < n; i++)
+    private Vector<double> SolveFinite()
+    {
+        Simplest[] solution = new Simplest[N];
+        Matrix<double> A = Matrix<double>.Build.Dense(N, N);
+        for (int i = 0; i < N; i++)
         {
-            for (int j = 0; j < n; j++)
+            for (int j = 0; j < N; j++)
             {
-                Simplest s = LeftHandSide[i][j];
+                Simplest s = AWithoutDiag[i, j];
                 if (s.MyRank != Rank.FINITE)
                     return null;
                 A[i, j] = s.K;
                 if (i == j)
-                    A[i, j] --;
+                    A[i, j]--;
             }
         }
-        Vector<double> b = Vector<double>.Build.Dense(n);
+        Vector<double> b = Vector<double>.Build.Dense(N);
+        for (int i = 0; i < N; i++)
+        {
+            b[i] = -MinusB[i].K;
+        }
         Vector<double> x = A.Solve(b);
         if (double.IsNaN(x.Minimum()) || x.Minimum() < 0)
             return null;    // reject NaN & negative solutions
@@ -50,11 +64,12 @@ public class MagicProblem {
 
     private Simplest SolveInfinite()
     {
-        if (SolveRank(Rank.TWO_TO_THE_W, -1)) {
+        if (SolveRank(Rank.TWO_TO_THE_W, -1))
+        {
             ExponentialSearch eSearch = new ExponentialSearch(2333);
             try
             {
-                while (! eSearch.Feedback(SolveRank(Rank.W_TO_THE_K, eSearch.Acc)))
+                while (!eSearch.Feedback(SolveRank(Rank.W_TO_THE_K, eSearch.Acc)))
                 { }
             }
             catch (ExponentialSearch.SearchFailed)
@@ -62,7 +77,9 @@ public class MagicProblem {
                 return new Simplest(Rank.TWO_TO_THE_W, -1);
             }
             return new Simplest(Rank.W_TO_THE_K, eSearch.Acc + 1);
-        } else {
+        }
+        else
+        {
             for (int k = 0; k < 69; k++)
             {
                 if (SolveRank(Rank.STACK_W, k))
@@ -74,21 +91,24 @@ public class MagicProblem {
     }
     private bool SolveRank(Rank rank, int k)
     {
-        int n = LeftHandSide.Count;
         Simplest x = new Simplest(rank, k);
         bool doAccept = true;
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < N; i++)
         {
-            Simplest acc = new Simplest(Rank.FINITE, 0);
-            for (int j = 0; j < n; j++)
+            Simplest acc = Simplest.Zero();
+            for (int j = 0; j < N; j++)
             {
                 acc = Simplest.Eval(
                     acc, Operator.PLUS, Simplest.Eval(
-                        x, Operator.TIMES, LeftHandSide[i][j]
+                        x, Operator.TIMES, AWithoutDiag[i, j]
                     )
                 );
             }
-            if (! acc.Equals(x)) {
+            acc = Simplest.Eval(
+                acc, Operator.PLUS, MinusB[i]
+            );
+            if (!acc.Equals(x))
+            {
                 doAccept = false;
                 break;
             }
@@ -96,7 +116,8 @@ public class MagicProblem {
         return doAccept;
     }
 
-    public static void Test() {
+    public static void Test()
+    {
         // Matrix<double> A = DenseMatrix.OfArray(new double[,] {
         //         {1,1,1,1},
         //         {1,2,3,4},
