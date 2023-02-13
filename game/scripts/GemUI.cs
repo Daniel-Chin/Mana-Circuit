@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class GemUI : TextureRect
+public class GemUI : TextureButton
 {
     private Gem _gem = null;
     private static Shader _flipper = GD.Load<Shader>("res://Flip.gdshader");
@@ -50,7 +50,7 @@ public class GemUI : TextureRect
             default:
                 throw new Shared.ValueError();
         }
-        Texture = GD.Load<Texture>($"res://texture/{filename}.png");
+        TextureNormal = GD.Load<Texture>($"res://texture/{filename}.png");
     }
     private void SetDirection(PointInt direction)
     {

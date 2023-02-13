@@ -15,6 +15,7 @@ public class CircuitUI : Node2D
     private Circuit _circuit;
     private GridContainer _grid;
     private PackedScene _gemUIPrefab;
+    private PocketScene _pocket;
     private List<ParticleAndTrail> _pAndTs;
     private Queue<ParticleAndTrail> _pAndTsToFree;
     private class ParticleAndTrail
@@ -44,8 +45,8 @@ public class CircuitUI : Node2D
                 {
                     // wall or drain
                     Parent._pAndTsToFree.Enqueue(this);
-                    Console.Write("Drain got mana ");
-                    Console.WriteLine(MyParticle.Mana[0]);
+                    // Console.Write("Drain got mana ");
+                    // Console.WriteLine(MyParticle.Mana[0]);
                 }
                 else
                 {
@@ -68,8 +69,9 @@ public class CircuitUI : Node2D
     }
     public override void _Ready()
     {
-        _grid = GetNode<GridContainer>("MyGrid");
         _gemUIPrefab = GD.Load<PackedScene>("res://GemUI.tscn");
+        _grid = GetNode<GridContainer>("MyGrid");
+        _pocket = GetNode<PocketScene>("MyPocket");
         _pAndTs = new List<ParticleAndTrail>();
         _pAndTsToFree = new Queue<ParticleAndTrail>();
         _vh_sep = _grid.GetConstant("vseparation");
@@ -114,6 +116,10 @@ public class CircuitUI : Node2D
                 _grid.AddChild(gemUI);
                 Gem gem = _circuit.Field[i, j];
                 gemUI.Set(gem);
+                gemUI.Connect(
+                    "pressed", this, "OnClickGem",
+                    new Godot.Collections.Array() { i, j }
+                );
             }
         }
     }
@@ -147,7 +153,12 @@ public class CircuitUI : Node2D
 
     private Vector2 ToUICoords(Vector2 circuitCoords)
     {
-        int unit = (int)(_grid.GetChildren()[0] as TextureRect).RectSize.x + _vh_sep;
+        int unit = (int)(_grid.GetChildren()[0] as GemUI).RectSize.x + _vh_sep;
         return (circuitCoords + HALF) * unit;
+    }
+
+    public void OnClickGem(int i, int j)
+    {
+        _pocket.MyDialog.Popup_();
     }
 }

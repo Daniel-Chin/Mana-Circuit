@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/CircuitUI.cs" type="Script" id=1]
 [ext_resource path="res://GemUI.tscn" type="PackedScene" id=2]
+[ext_resource path="res://PocketScene.tscn" type="PackedScene" id=3]
 
 [node name="CircuitUI" type="Node2D"]
 script = ExtResource( 1 )
@@ -32,3 +33,5 @@ margin_left = 250.0
 margin_top = 250.0
 margin_right = 499.0
 margin_bottom = 499.0
+
+[node name="MyPocket" parent="." instance=ExtResource( 3 )]
