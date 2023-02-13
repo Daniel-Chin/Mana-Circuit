@@ -35,6 +35,25 @@ public class Circuit
             throw new Collision();
         }
     }
+    public bool Add(Gem gem, bool swallowCollision)
+    {
+        if (swallowCollision)
+        {
+            try
+            {
+                Add(gem);
+            }
+            catch (Collision)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            Add(gem);
+        }
+        return true;
+    }
 
     private bool IterRect(
         Gem action, PointInt location, PointInt size
