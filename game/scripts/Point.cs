@@ -1,4 +1,5 @@
 using System;
+using Godot;
 using MathNet.Numerics.LinearAlgebra;
 
 public class Point : IComparable<Point>
@@ -151,5 +152,9 @@ public class PointInt : Point
     public static PointInt FromVector(Vector<double> v)
     {
         return new PointInt((int)v[0], (int)v[1]);
+    }
+    public Vector2 ToVector2()
+    {
+        return new Vector2((float)X, (float)Y);
     }
 }

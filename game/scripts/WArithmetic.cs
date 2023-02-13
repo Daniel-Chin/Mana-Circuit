@@ -467,6 +467,15 @@ public class Simplest
         }
         return x;
     }
+    public static Simplest[] Ones(int len)
+    {
+        Simplest[] x = new Simplest[len];
+        for (int i = 0; i < len; i++)
+        {
+            x[i] = One();
+        }
+        return x;
+    }
     public static Simplest[,] Zeros(int nRows, int nCols)
     {
         Simplest[,] x = new Simplest[nRows, nCols];

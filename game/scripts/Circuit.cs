@@ -117,7 +117,7 @@ public class Circuit
         }
         if (results[0] == null)
         {
-            // wall
+            // wall or drain
             return new Particle[0];
         }
         foreach (Particle p in results)

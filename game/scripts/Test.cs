@@ -1,16 +1,21 @@
-﻿using System;
+﻿using Godot;
+using System;
 using System.Diagnostics;
 using System.Text;
 using MathNet.Numerics.LinearAlgebra;
 
-public class Test
+public class Test : Node2D
 {
-    static public void Main()
+    public override void _Ready()
+    {
+        Main();
+    }
+    public void Main()
     {
         Console.WriteLine("begin");
         // TestMath();
         // MagicProblem.Test();
-        TestCircuit();
+        // TestCircuit();
         Console.WriteLine("end");
         Console.ReadKey();
     }
