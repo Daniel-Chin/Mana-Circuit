@@ -7,28 +7,28 @@
 script = ExtResource( 1 )
 
 [node name="MyGrid" type="GridContainer" parent="."]
-margin_right = 600.0
-margin_bottom = 600.0
+margin_right = 500.0
+margin_bottom = 500.0
 custom_constants/vseparation = 1
 custom_constants/hseparation = 1
 columns = 2
 
 [node name="GemUI" parent="MyGrid" instance=ExtResource( 2 )]
-margin_right = 299.0
-margin_bottom = 299.0
+margin_right = 249.0
+margin_bottom = 249.0
 
 [node name="GemUI2" parent="MyGrid" instance=ExtResource( 2 )]
-margin_left = 300.0
-margin_right = 599.0
-margin_bottom = 299.0
+margin_left = 250.0
+margin_right = 499.0
+margin_bottom = 249.0
 
 [node name="GemUI3" parent="MyGrid" instance=ExtResource( 2 )]
-margin_top = 300.0
-margin_right = 299.0
-margin_bottom = 599.0
+margin_top = 250.0
+margin_right = 249.0
+margin_bottom = 499.0
 
 [node name="GemUI4" parent="MyGrid" instance=ExtResource( 2 )]
-margin_left = 300.0
-margin_top = 300.0
-margin_right = 599.0
-margin_bottom = 599.0
+margin_left = 250.0
+margin_top = 250.0
+margin_right = 499.0
+margin_bottom = 499.0

@@ -11,16 +11,16 @@ public class GemUI : TextureRect
     public void Set(Gem gem)
     {
         _gem = gem;
-        if (gem == null)
-        {
-            Texture = null;
-            return;
-        }
         string filename;
         switch (gem)
         {
+            case null:
+                filename = "black";
+                break;
             case Gem.Wall g:
                 filename = "wall";
+                FlipH = Shared.Rand.Next() % 2 == 0;
+                FlipV = Shared.Rand.Next() % 2 == 0;
                 break;
             case Gem.Source g:
                 filename = "source";
@@ -41,11 +41,11 @@ public class GemUI : TextureRect
                 break;
             case Gem.Stochastic g:
                 filename = "stochastic";
-                SetFlip(!g.Orientation);
+                FlipV = !g.Orientation;
                 break;
             case Gem.Mirror g:
                 filename = "mirror";
-                SetFlip(!g.Orientation);
+                FlipV = !g.Orientation;
                 break;
             default:
                 throw new Shared.ValueError();
@@ -66,7 +66,7 @@ public class GemUI : TextureRect
         else if (direction.IntX == 1 && direction.IntY == 0)
         {
             SetFlip(true);
-            FlipH = true;
+            FlipV = true;
         }
         else if (direction.IntX == -1 && direction.IntY == 0)
         {

@@ -1,5 +1,7 @@
 shader_type canvas_item;
 
-void fragment() {
-    COLOR = texture(TEXTURE, vec2(UV.y, UV.x));
+void vertex() {
+    float t = VERTEX.x;
+    VERTEX.x = VERTEX.y;
+    VERTEX.y = t;
 }
