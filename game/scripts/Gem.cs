@@ -17,7 +17,7 @@ public abstract class Gem
 
     public class Source : Gem
     {
-        PointInt Direction;
+        public PointInt Direction;
         public Source(PointInt direction) : base()
         {
             Direction = direction;
@@ -74,7 +74,7 @@ public abstract class Gem
     }
     public class Focus : Gem
     {
-        PointInt Direction;
+        public PointInt Direction;
         public Focus(PointInt direction) : base()
         {
             Direction = direction;
@@ -87,12 +87,14 @@ public abstract class Gem
     }
     public class Mirror : Gem
     {
-        Matrix<double> Transform;
+        public bool Orientation;
+        private Matrix<double> _transform;
         public Mirror(bool orientation) : base()
         {
+            Orientation = orientation;
             if (orientation)
             {
-                Transform = Matrix<double>.Build.DenseOfArray(
+                _transform = Matrix<double>.Build.DenseOfArray(
                     new double[2, 2] {
                         {0, 1},
                         {1, 0},
@@ -101,7 +103,7 @@ public abstract class Gem
             }
             else
             {
-                Transform = Matrix<double>.Build.DenseOfArray(
+                _transform = Matrix<double>.Build.DenseOfArray(
                     new double[2, 2] {
                         {0, -1},
                         {-1, 0},
@@ -112,7 +114,7 @@ public abstract class Gem
         public override Particle Apply(Particle input)
         {
             input.Direction = PointInt.FromVector(
-                Transform * input.Direction.ToVector()
+                _transform * input.Direction.ToVector()
             );
             return input;
         }
