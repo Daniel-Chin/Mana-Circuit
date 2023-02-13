@@ -1,5 +1,5 @@
 法力无边
-My power knows no bounds
+Your power knows no bounds
 
 seq
     focus gem
@@ -8,34 +8,85 @@ seq
         50% pass through, 50% bounced
         allow stochastic inf-mean mana
     custom gem
-        custom gem applies theoretical mean, then *=0.01
+        custom gem applies theoretical mean
         shoot NPC.
             class-1 attack -> unlock CG
             class-w attack -> unlock meta CG
             class-w^x attack -> unlock meta^x CG
             class-w^w attack -> unlock typeless CG
     make w
-        reach infinity
+        divergent series
     chain the CG to get w^2, w^3
     meta CG
-    make w ^ w
+    make 2 ^ w
         reach uncountability
     typeless CG
 
+CG
+    bg color: dark, R-G-B. 
+    typeless: rainbow, dark
+    recursive rendering. 
+     ^ 
+    ooo
+    ooo
+    ooo
+     ^
+
+$ dropped is prop to radius. 
 
 mana
 real-time preview of circuit flow
-CG: fast, weak, mean. 
-    minimum superposition equilibrium
-to implement mu
-    linear system of eqs
 
 high fire rate will make inf attacks more prominent against finite attacks. 
 
 circuit: from radiator to mana crystalizer
 
-npc
-    give you fast travel Mk I, Mk II (20% buff! try it! you already have omega)
+jump
+    NPC give you Jump Mk I
+    Mk II (20% buff! try it! but you already have omega)
+    螺旋升天
+
+shops and NPCs spawn seemingly stochastically, but actually scripted
+    when an event is active, spawn no more enemies, wait until all enemies dead, then spawns the event. 
+    if you leave the shop without buying anything, ok, spawn some enemies, then shop again. 
+    implementation: "next spawnable NPC". Can be probabilistic while spawning enemies. 
+
+UI
+    only reveals the prices you can afford
+
+skills
+    attack
+    jump
+    light
+
+attack
+    spell speed \propto mana. Leaves glowing trail. So, omega spells visually become lasers. 
+
+concentric circles
+    become parallel lines
+    hint destinations
+
+opening
+    "You feel the game will feature amazing plot twists in the story."
+    "However, you can't shake off the suspicion that your previous thought was injected by the narrator."
+
+wands
+    upgradable into the next tier at Wand Smiths.
+    Crude wand
+    Lucifer's secret
+    Rice cooker
+
+enemies spawn when you move, in the direction you are moving towards. 
+
+Gem Expert
+    "Nice try..."
+    "But I'm afraid that was still just as strong as a *class-x attack*."
+
+    "!!!"
+    "You just struck me with"
+    "a *class-X attack*."
+
+    if x >= w^2, "You see, if you hit me with a class-w^x attack, I will unlock Meta^x Custom Gems."
 
 Q
 what can typeless do

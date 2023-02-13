@@ -1,0 +1,131 @@
+opening
+    enters world. Some narrations. then, 
+    "You instictively know to hold RMB". 
+    "You feel the game will feature amazing plot twists in the story."
+    "However, you can't shake off the suspicion that your previous thought was injected by the narrator."
+
+Pick up wand_0
+    "It's a wand. "
+    "On one end, a *radiator*. A rare ore that naturally emits weak mana."
+    "On the other end, a *crystalizer*. A crystal to store unlimited mana."
+    unlock: attack
+    "Hold LMB to attack."
+    unlock: circuit screen
+    wand has 2 slots. 
+
+Once $4, shop spawns.
+    $4 -> +1 gem. 
+    "Remember: The further you go, the stronger the enemies!"
+
+$6 -> x1.4 gem
+    "There are more shops ahead. Don't worry, they appear quite frequently."
+
+$9 -> +1 gem
+
+$13 -> upgrade wand
+    three radiators
+    x!x
+    oox
+    oox
+    ooo
+    ^^^
+
+$10 -> focus
+$7 -> mirror
+$8 -> mirror
+$9 -> x1.4 gem
+
+once $19, jumper NPC spawns
+    "Hello! I make skateboards as a hobby."
+    "Check out my latest design: *Jumper MK-I*!!!"
+    skateboard moves from NPC to player
+    "It converts 10% of your mana to jumping power."
+    "Try it! Hold J to jump."
+
+    you jump very near. over-cool SFX. 
+
+    "What do you think?"
+    It's pathetic. / Hmm, I like the sound it makes.
+    "Hehe, exactly my thoughts. I'll take some time to improve the deisgn. You just wait and see!" / "I know right! ... Still, the jumping power is way too low. I need to take it back home and improve the design."
+    skateboard moves from player to NPC
+    NPC leaves
+
+$25 -> upgrade wand
+    xx!
+    ooo
+    ooo
+    ooo
+    ^^^
+    "Only few mages can realize its true potential."
+
+$9 -> x1.4 gem
+$20 -> stochastic gem
+
+Once $50, Gem Expert NPC spawns.
+    "Every one is so weak! I am so bored!!!"
+    "Now! Show me your strongest attack!"
+    If player doesn't attack, 
+    "Attack me!"
+
+    "Not bad. You just produced a *class-1 attack*. As your reward, I will now unlock *Custom Gems* for you."
+    "Custom Gem unlocked!"
+    "Custom Gems take the theoretical mean of anything stochastic inside them."
+    "Still, a *class-1* attack is nothing I'd call exciting. Come back when you are not this weak."
+
+$10 -> one copy of CG0. 
+
+$30 -> x1.5 gem
+
+Make w
+
+Fight 8 enemies
+
+Gem Expert: Meta Custom Gem
+"A Meta Custom Gem can be placed inside a Custom Gem."
+
+Fight 5 enemies. probabilistically spawn enemies with HP w. This is to hint those who hasn't discovered w. 
+
+afford -> one copy of CG0. 
+
+Record radius. All enemies outside are now >= w. 
+
+afford -> CG analyzer
+
+Gem Expert: Meta meta Custom Gem
+
+jumper NPC spawns
+    "I. AM. BACK."
+    "With the all new --- *Jumper MK-II*!!!"
+    "*Jumper MK-II* revolutionarily converts 12% of your mana to jumping power, i.e., a jarring 2% increase in efficiency."
+    "It's so powerful, it essentially ends the series. "
+    "As my beta tester, you get one for free. Now, try it! I'd like to see just how much it has improved."
+
+    talk again: "Hold J. In case you forgot."
+    If jumped with finite mana: 
+    "Unbelievable. You decreased your mana and used my Jumper MK-II, just like Author predicted!"
+    "How does he know everything?"
+
+    jump away to w
+
+$w -> stochastic gem
+// 要卡的
+
+make 2^w
+
+Gem Expert: Typeless Custom Gem
+    "!!!"
+    "You just struck me with"
+    "A class-w^w attack."
+    "..."
+    "..."
+    "Very well."
+    "As per our agreement, I now grant you the ability to make"
+    "Typeless Custom Gems"
+    Unlocked: typeless CG
+    "You know, you may just be strong enough to achieve what I couldn't."
+    "For all our lives, mages like me seek a way to produce epsilon_naught amount of mana. It is generally suspected to be related to the typeless custom gems."
+    "However, nobody knows for sure. Even Author has no idea how to produce epsilon_naught, or whether that is possible in this game."
+    "Still, if you manage to obtain epsilon_naught, the game has a mechanism to check for that."
+    "Well. I have taught you all that I know." 
+    "Time to go to sleep."
+    NPC sleeps.
