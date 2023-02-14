@@ -25,10 +25,10 @@ public class Circuit
             gem.Location.IntY + gem.Size.IntY > Size.IntY
         )
             throw new Collision();
-        if (IterRect(null, gem.Location, gem.Size))
+        if (IterRect(false, null, gem.Location, gem.Size))
         {
             Gems.Add(gem);
-            IterRect(gem, gem.Location, gem.Size);
+            IterRect(true, gem, gem.Location, gem.Size);
         }
         else
         {
@@ -56,7 +56,8 @@ public class Circuit
     }
 
     private bool IterRect(
-        Gem action, PointInt location, PointInt size
+        bool isPlaceNotCheck,
+        Gem toPlace, PointInt location, PointInt size
     )
     {
         for (int dx = 0; dx < size.IntX; dx++)
@@ -65,16 +66,16 @@ public class Circuit
             {
                 int x = location.IntX + dx;
                 int y = location.IntY + dy;
-                if (action == null)
+                if (isPlaceNotCheck)
                 {
-                    // check
-                    if (Field[x, y] != null)
-                        return false;
+                    Field[x, y] = toPlace;
                 }
                 else
                 {
-                    // fill
-                    Field[x, y] = action;
+                    if (Field[x, y] != null)
+                    {
+                        return false;
+                    }
                 }
             }
         }
@@ -84,7 +85,8 @@ public class Circuit
     public void Remove(Gem gem)
     {
         Gems.Remove(gem);
-        IterRect(null, gem.Location, gem.Size);
+        IterRect(true, null, gem.Location, gem.Size);
+        Gem g = Seek(gem.Location);
     }
     public void Remove(PointInt location)
     {

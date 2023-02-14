@@ -27,21 +27,41 @@ margin_bottom = 500.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GemUI" parent="MyDialog/MyScroll/MyVBox" instance=ExtResource( 2 )]
+[node name="HBox" type="HBoxContainer" parent="MyDialog/MyScroll/MyVBox"]
 margin_right = 300.0
-margin_bottom = 122.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 80, 80 )
 
-[node name="GemUI2" parent="MyDialog/MyScroll/MyVBox" instance=ExtResource( 2 )]
-margin_top = 126.0
+[node name="GemUI" parent="MyDialog/MyScroll/MyVBox/HBox" instance=ExtResource( 2 )]
+margin_right = 300.0
+margin_bottom = 80.0
+
+[node name="HBox2" type="HBoxContainer" parent="MyDialog/MyScroll/MyVBox"]
+margin_top = 84.0
+margin_right = 300.0
+margin_bottom = 164.0
+rect_min_size = Vector2( 80, 80 )
+
+[node name="GemUI" parent="MyDialog/MyScroll/MyVBox/HBox2" instance=ExtResource( 2 )]
+margin_right = 300.0
+margin_bottom = 80.0
+
+[node name="HBox3" type="HBoxContainer" parent="MyDialog/MyScroll/MyVBox"]
+margin_top = 168.0
 margin_right = 300.0
 margin_bottom = 248.0
+rect_min_size = Vector2( 80, 80 )
 
-[node name="GemUI3" parent="MyDialog/MyScroll/MyVBox" instance=ExtResource( 2 )]
+[node name="GemUI" parent="MyDialog/MyScroll/MyVBox/HBox3" instance=ExtResource( 2 )]
+margin_right = 300.0
+margin_bottom = 80.0
+
+[node name="HBox4" type="HBoxContainer" parent="MyDialog/MyScroll/MyVBox"]
 margin_top = 252.0
 margin_right = 300.0
-margin_bottom = 374.0
+margin_bottom = 332.0
+rect_min_size = Vector2( 80, 80 )
 
-[node name="GemUI4" parent="MyDialog/MyScroll/MyVBox" instance=ExtResource( 2 )]
-margin_top = 378.0
+[node name="GemUI" parent="MyDialog/MyScroll/MyVBox/HBox4" instance=ExtResource( 2 )]
 margin_right = 300.0
-margin_bottom = 500.0
+margin_bottom = 80.0

@@ -75,7 +75,7 @@ public class CircuitUI : Node2D
         _pAndTsToFree = new Queue<ParticleAndTrail>();
         _vh_sep = _grid.GetConstant("vseparation");
         _pocket.Connect(
-            "gemClicked", this, "onPocketGemSelect"
+            "gemSelected", this, "onPocketGemSelect"
         );
 
         Circuit c = new Circuit(new PointInt(8, 8));
@@ -162,15 +162,20 @@ public class CircuitUI : Node2D
     public void OnClickGem(int i, int j)
     {
         _selectedLocation = new PointInt(i, j);
+        _pocket.ListAll();
         _pocket.MyDialog.PopupCentered();
     }
 
-    public void onPocketGemSelect(int gemId)
+    public void onPocketGemSelect()
     {
         _circuit.Remove(_selectedLocation);
-        Gem gem = Gem.FromID(gemId);
-        gem.Location = _selectedLocation;
-        _circuit.Add(gem);
+        Gem gem = _pocket.SelectedGem;
+        if (gem != null)
+        {
+            gem.Location = _selectedLocation;
+            _circuit.Add(gem);
+            _pocket.SelectedGem = null;
+        }
         Rebuild();
     }
 }

@@ -57,25 +57,25 @@ public class GemUI : TextureButton
     {
         if (direction.IntX == 0 && direction.IntY == -1)
         {
-            SetFlip(false);
+            SetDiagFlip(false);
         }
         else if (direction.IntX == 0 && direction.IntY == 1)
         {
-            SetFlip(false);
+            SetDiagFlip(false);
             FlipV = true;
         }
         else if (direction.IntX == 1 && direction.IntY == 0)
         {
-            SetFlip(true);
+            SetDiagFlip(true);
             FlipV = true;
         }
         else if (direction.IntX == -1 && direction.IntY == 0)
         {
-            SetFlip(true);
+            SetDiagFlip(true);
         }
         else throw new Shared.ValueError();
     }
-    private void SetFlip(bool do_flip)
+    private void SetDiagFlip(bool do_flip)
     {
         if (do_flip)
         {
