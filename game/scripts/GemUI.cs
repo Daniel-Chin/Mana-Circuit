@@ -20,8 +20,8 @@ public class GemUI : TextureButton
                 break;
             case Gem.Wall g:
                 filename = "wall";
-                FlipH = Shared.Rand.Next() % 2 == 0;
-                FlipV = Shared.Rand.Next() % 2 == 0;
+                // FlipH = Shared.Rand.Next() % 2 == 0;
+                // FlipV = Shared.Rand.Next() % 2 == 0;
                 break;
             case Gem.Source g:
                 filename = "source";
