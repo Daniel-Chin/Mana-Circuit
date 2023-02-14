@@ -19,9 +19,9 @@ public class InstantMSE : Node2D
     {
         Console.WriteLine("mse0");
         Console.WriteLine();
-        Simplest mse0 = CustomGem.MinimumSuperpositionEquilibrium(_cui.MyCircuit, 0);
+        Simplest mse0 = _cui.MyCircuit.MinimumSuperpositionEquilibrium(0);
         Console.WriteLine("mse1");
-        Simplest mse1 = CustomGem.MinimumSuperpositionEquilibrium(_cui.MyCircuit, 1);
+        Simplest mse1 = _cui.MyCircuit.MinimumSuperpositionEquilibrium(1);
         Console.WriteLine();
         // Simplest first_order = Simplest.Eval(
         //     mse1, Operator.MINUS, mse0

@@ -47,7 +47,7 @@ public class Test : Node2D
         //     Console.WriteLine(manaOut);
         // }
 
-        Simplest manaOut = CustomGem.MinimumSuperpositionEquilibrium(c, 1);
+        Simplest manaOut = c.MinimumSuperpositionEquilibrium(1);
         Console.WriteLine(manaOut);
     }
 
