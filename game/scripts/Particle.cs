@@ -1,3 +1,5 @@
+using System.Text;
+
 public class Particle
 {
     public PointInt Location;
@@ -15,6 +17,21 @@ public class Particle
         LastGem = null;
     }
 
+    public override string ToString()
+    {
+        StringBuilder sB = new StringBuilder();
+        sB.Append("<Particle @ ");
+        sB.Append(Location);
+        sB.Append(" mana = ");
+        foreach (Simplest s in Mana)
+        {
+            sB.Append(s);
+            sB.Append(", ");
+        }
+        sB.Append(">");
+        return sB.ToString();
+    }
+
     public void Multiply(double k)
     {
         Simplest s = new Simplest(Rank.FINITE, k);
@@ -30,7 +47,9 @@ public class Particle
 
     public Particle Copy()
     {
-        Particle p = new Particle(Location, Direction, Mana);
+        Particle p = new Particle(
+            Location, Direction, (Simplest[])Mana.Clone()
+        );
         p.LastGem = LastGem;
         return p;
     }

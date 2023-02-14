@@ -42,7 +42,7 @@ public class Terminal
 
 public enum Operator
 {
-    PLUS, TIMES, POWER
+    PLUS, MINUS, TIMES, POWER
     // The order must represent precedence.  
 }
 
@@ -308,6 +308,17 @@ public class Simplest
                         Rank.FINITE, a.K + b.K
                     );
                 return b;
+            case Operator.MINUS:
+                if (left.MyRank > right.MyRank)
+                    return left;
+                if (left.MyRank == right.MyRank)
+                {
+                    if (a.MyRank == Rank.FINITE)
+                        return new Simplest(
+                            Rank.FINITE, left.K - right.K
+                        );
+                }
+                return Simplest.Zero();
             case Operator.TIMES:
                 switch (a.MyRank)
                 {

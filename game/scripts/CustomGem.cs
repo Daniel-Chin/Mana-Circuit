@@ -13,10 +13,12 @@ class CustomGem : Gem
         input.Multiply(CachedMultiplier);
         return input;
     }
-    public Simplest MinimumSuperpositionEquilibrium(int inputMana)
+    public static Simplest MinimumSuperpositionEquilibrium(
+        Circuit circuit, int inputMana
+    )
     {
-        Source source = MyCircuit.FindAll<Source>()[0];
-        List<Focus> focuses = MyCircuit.FindAll<Focus>();
+        Source source = circuit.FindAll<Source>()[0];
+        List<Focus> focuses = circuit.FindAll<Focus>();
         int n = focuses.Count;
         MagicProblem magicProblem = new MagicProblem(n);
         Dictionary<Focus, int> dictionary = new Dictionary<Focus, int>();
@@ -51,15 +53,17 @@ class CustomGem : Gem
             // Console.Write("particles.Count ");
             // Console.WriteLine(particles.Count);
             Particle p = particles.Dequeue();
-            Gem gem = MyCircuit.Seek(p.Location);
+            Gem gem = circuit.Seek(p.Location);
             if (gem is Drain drain)
             {
-                drainMana = p.Mana;
-                // Console.WriteLine("drain hit");
+                Console.WriteLine("drain got");
+                Console.WriteLine(p);
+                drainMana = (Simplest[])p.Mana.Clone();
             }
             else if (gem is Focus focus)
             {
-                // Console.WriteLine("focus hit");
+                Console.WriteLine("focus got");
+                Console.WriteLine(p);
                 int iFocus = dictionary[focus];
                 for (int j = 0; j < n; j++)
                 {
@@ -75,22 +79,27 @@ class CustomGem : Gem
             }
             else
             {
-                foreach (Particle newP in MyCircuit.Advect(p, true, false))
+                foreach (Particle newP in circuit.Advect(p, true, false))
                 {
                     particles.Enqueue(newP);
                 }
             }
         }
 
+        if (drainMana == null)
+            return Simplest.Zero();
         magicProblem.Print();
-        Simplest[] solution = magicProblem.Solve();
         Simplest acc = drainMana[0];
-        for (int i = 0; i < n; i++)
+        if (n != 0)
         {
-            acc = Simplest.Eval(
-                acc, Operator.PLUS,
-                Simplest.Eval(solution[i], Operator.TIMES, drainMana[i + 1])
-            );
+            Simplest[] solution = magicProblem.Solve();
+            for (int i = 0; i < n; i++)
+            {
+                acc = Simplest.Eval(
+                    acc, Operator.PLUS,
+                    Simplest.Eval(solution[i], Operator.TIMES, drainMana[i + 1])
+                );
+            }
         }
 
         return acc;

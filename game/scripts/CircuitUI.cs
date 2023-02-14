@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class CircuitUI : Node2D
 {
+    [Signal] public delegate void modified();
     private static readonly int MAX_PARTICLES = 8;
     private static readonly double EMIT_LAMBDA = .5;
     private static readonly double ADVECT_LAMBDA = 8;
@@ -12,7 +13,7 @@ public class CircuitUI : Node2D
     private static readonly float NOISE_MULT = 1.5f;
     private static readonly Vector2 HALF = new Vector2(.5f, .5f);
     private int _vh_sep;
-    private Circuit _circuit;
+    public Circuit MyCircuit;
     private GridContainer _grid;
     private PocketScene _pocket;
     private List<ParticleAndTrail> _pAndTs;
@@ -40,7 +41,7 @@ public class CircuitUI : Node2D
             Vector2 d = MyParticle.Location.ToVector2() - Follower;
             if (d.Length() < ADVECT_LEN)
             {
-                Particle[] ps = Parent._circuit.Advect(MyParticle, false, false);
+                Particle[] ps = Parent.MyCircuit.Advect(MyParticle, false, false);
                 if (ps.Length == 0)
                 {
                     // wall or drain
@@ -98,7 +99,7 @@ public class CircuitUI : Node2D
         c.Add(new Gem.Mirror(true).Place(new PointInt(4, 1)));
         c.Add(new Gem.Stochastic(false).Place(new PointInt(4, 4)));
         c.Add(new Gem.Focus(new PointInt(1, 0)).Place(new PointInt(3, 4)));
-        _circuit = c;
+        MyCircuit = c;
 
         Rebuild();
     }
@@ -109,14 +110,14 @@ public class CircuitUI : Node2D
         {
             x.QueueFree();
         }
-        _grid.Columns = _circuit.Size.IntX;
-        for (int j = 0; j < _circuit.Size.IntY; j++)
+        _grid.Columns = MyCircuit.Size.IntX;
+        for (int j = 0; j < MyCircuit.Size.IntY; j++)
         {
-            for (int i = 0; i < _circuit.Size.IntX; i++)
+            for (int i = 0; i < MyCircuit.Size.IntX; i++)
             {
                 GemUI gemUI = GemUI.ThisScene.Instance<GemUI>();
                 _grid.AddChild(gemUI);
-                Gem gem = _circuit.Field[i, j];
+                Gem gem = MyCircuit.Field[i, j];
                 gemUI.Set(gem);
                 gemUI.Connect(
                     "pressed", this, "OnClickGem",
@@ -146,7 +147,7 @@ public class CircuitUI : Node2D
         {
             // spawn new particle
             // Console.WriteLine("spawn new particle");
-            List<Gem.Source> sources = _circuit.FindAll<Gem.Source>();
+            List<Gem.Source> sources = MyCircuit.FindAll<Gem.Source>();
             Gem.Source s = sources[Shared.Rand.Next(sources.Count)];
             ParticleAndTrail pT = new ParticleAndTrail(this, s);
             _pAndTs.Add(pT);
@@ -168,14 +169,15 @@ public class CircuitUI : Node2D
 
     public void onPocketGemSelect()
     {
-        _circuit.Remove(_selectedLocation);
+        MyCircuit.Remove(_selectedLocation);
         Gem gem = _pocket.SelectedGem;
         if (gem != null)
         {
             gem.Location = _selectedLocation;
-            _circuit.Add(gem);
+            MyCircuit.Add(gem);
             _pocket.SelectedGem = null;
         }
         Rebuild();
+        EmitSignal("modified");
     }
 }

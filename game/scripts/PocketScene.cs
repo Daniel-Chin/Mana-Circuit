@@ -69,9 +69,13 @@ public class PocketScene : Node2D
                 Add(new Gem.Focus(new PointInt(0, 1)));
                 Add(new Gem.Focus(new PointInt(0, -1)));
                 break;
-            case Gem.Mirror _:
+            case Gem.Stochastic _:
                 Add(new Gem.Stochastic(true));
                 Add(new Gem.Stochastic(false));
+                break;
+            case Gem.Mirror _:
+                Add(new Gem.Mirror(true));
+                Add(new Gem.Mirror(false));
                 break;
             default:
                 return false;
