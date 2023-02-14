@@ -12,10 +12,6 @@ public class Main : Node2D
         Singleton = this;
         WorldTime = 0f;
         // Test.Main();
-        PackedScene pS = GD.Load<PackedScene>("res://GemUI.tscn");
-        GemUI gemUI = pS.Instance<GemUI>();
-        AddChild(gemUI);
-        gemUI.Set(new Gem.Source(new PointInt(0, 1)));
     }
 
     public override void _Process(float delta)

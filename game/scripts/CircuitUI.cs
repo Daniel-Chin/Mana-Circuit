@@ -14,10 +14,10 @@ public class CircuitUI : Node2D
     private int _vh_sep;
     private Circuit _circuit;
     private GridContainer _grid;
-    private PackedScene _gemUIPrefab;
     private PocketScene _pocket;
     private List<ParticleAndTrail> _pAndTs;
     private Queue<ParticleAndTrail> _pAndTsToFree;
+    private PointInt _selectedLocation;
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -69,12 +69,14 @@ public class CircuitUI : Node2D
     }
     public override void _Ready()
     {
-        _gemUIPrefab = GD.Load<PackedScene>("res://GemUI.tscn");
         _grid = GetNode<GridContainer>("MyGrid");
         _pocket = GetNode<PocketScene>("MyPocket");
         _pAndTs = new List<ParticleAndTrail>();
         _pAndTsToFree = new Queue<ParticleAndTrail>();
         _vh_sep = _grid.GetConstant("vseparation");
+        _pocket.Connect(
+            "gemClicked", this, "onPocketGemSelect"
+        );
 
         Circuit c = new Circuit(new PointInt(8, 8));
         for (int i = 0; i < 8; i++)
@@ -112,7 +114,7 @@ public class CircuitUI : Node2D
         {
             for (int i = 0; i < _circuit.Size.IntX; i++)
             {
-                GemUI gemUI = _gemUIPrefab.Instance<GemUI>();
+                GemUI gemUI = GemUI.ThisScene.Instance<GemUI>();
                 _grid.AddChild(gemUI);
                 Gem gem = _circuit.Field[i, j];
                 gemUI.Set(gem);
@@ -159,6 +161,16 @@ public class CircuitUI : Node2D
 
     public void OnClickGem(int i, int j)
     {
-        _pocket.MyDialog.Popup_();
+        _selectedLocation = new PointInt(i, j);
+        _pocket.MyDialog.PopupCentered();
+    }
+
+    public void onPocketGemSelect(int gemId)
+    {
+        _circuit.Remove(_selectedLocation);
+        Gem gem = Gem.FromID(gemId);
+        gem.Location = _selectedLocation;
+        _circuit.Add(gem);
+        Rebuild();
     }
 }

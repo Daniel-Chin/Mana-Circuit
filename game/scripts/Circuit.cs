@@ -86,6 +86,12 @@ public class Circuit
         Gems.Remove(gem);
         IterRect(null, gem.Location, gem.Size);
     }
+    public void Remove(PointInt location)
+    {
+        Gem gem = Seek(location);
+        if (gem != null)
+            Remove(gem);
+    }
 
     public Particle[] Advect(
         Particle particle, bool superposition, bool verbose

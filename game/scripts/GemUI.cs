@@ -3,6 +3,7 @@ using System;
 
 public class GemUI : TextureButton
 {
+    public static PackedScene ThisScene = GD.Load<PackedScene>("res://GemUI.tscn");
     private Gem _gem = null;
     private static Shader _flipper = GD.Load<Shader>("res://Flip.gdshader");
     public override void _Ready()

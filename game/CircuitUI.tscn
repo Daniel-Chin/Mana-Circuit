@@ -15,23 +15,23 @@ custom_constants/hseparation = 1
 columns = 2
 
 [node name="GemUI" parent="MyGrid" instance=ExtResource( 2 )]
-margin_right = 249.0
-margin_bottom = 249.0
+margin_right = 250.0
+margin_bottom = 250.0
 
 [node name="GemUI2" parent="MyGrid" instance=ExtResource( 2 )]
-margin_left = 250.0
-margin_right = 499.0
-margin_bottom = 249.0
+margin_left = 251.0
+margin_right = 500.0
+margin_bottom = 250.0
 
 [node name="GemUI3" parent="MyGrid" instance=ExtResource( 2 )]
-margin_top = 250.0
-margin_right = 249.0
-margin_bottom = 499.0
+margin_top = 251.0
+margin_right = 250.0
+margin_bottom = 500.0
 
 [node name="GemUI4" parent="MyGrid" instance=ExtResource( 2 )]
-margin_left = 250.0
-margin_top = 250.0
-margin_right = 499.0
-margin_bottom = 499.0
+margin_left = 251.0
+margin_top = 251.0
+margin_right = 500.0
+margin_bottom = 500.0
 
 [node name="MyPocket" parent="." instance=ExtResource( 3 )]

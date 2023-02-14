@@ -1,9 +1,23 @@
+using System.Diagnostics;
 using MathNet.Numerics.LinearAlgebra;
 
 public abstract class Gem
 {
     public PointInt Location;
     public PointInt Size;
+    static Gem()
+    {
+        // verify consistency
+        FromID(N_IDS - 1);
+        bool ok = true;
+        try
+        {
+            FromID(N_IDS);
+            ok = false;
+        }
+        catch (Shared.ValueError) { }
+        Debug.Assert(ok);
+    }
     public Gem()
     {
         Size = new PointInt(1, 1);
@@ -140,6 +154,30 @@ public abstract class Gem
             particles[0] = input.Copy();
             particles[1] = base.Apply(input);
             return particles;
+        }
+    }
+
+    public static readonly int N_IDS = 7;
+    public static Gem FromID(int id)
+    {
+        switch (id)
+        {
+            case 0:
+                return new Source(new PointInt(0, 1));
+            case 1:
+                return new Drain();
+            case 2:
+                return new AddOne();
+            case 3:
+                return new WeakMult();
+            case 4:
+                return new Focus(new PointInt(0, 1));
+            case 5:
+                return new Mirror(true);
+            case 6:
+                return new Stochastic(true);
+            default:
+                throw new Shared.ValueError();
         }
     }
 }
