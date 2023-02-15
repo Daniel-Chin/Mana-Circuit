@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-class CustomGem : Gem
+public class CustomGem : Gem
 {
     public Simplest MetaLevel;
     public Circuit MyCircuit;  // only one source one drain
@@ -27,6 +27,8 @@ class CustomGem : Gem
     public void Eval()
     {
         CachedAdder = null;
+        if (MetaLevel.MyRank != Rank.FINITE)
+            EvalTypeless();
         Simplest mse1 = MyCircuit.MinimumSuperpositionEquilibrium(1);
         if (mse1.MyRank == Rank.FINITE)
         {
@@ -38,5 +40,24 @@ class CustomGem : Gem
         {
             CachedMultiplier = mse1;
         }
+    }
+
+    public void EvalTypeless()
+    {
+        // todo
+    }
+
+    public override string DisplayName()
+    {
+        if (MetaLevel.MyRank != Rank.FINITE)
+            return "Typeless Custom Gem";
+        int k = (int)MetaLevel.K;
+        if (k == 0)
+            return "Custom Gem";
+        if (k == 1)
+            return "Meta Custom Gem";
+        if (k == 2)
+            return "Meta Meta Custom Gem";
+        return $"Meta^{k} Custom Gem";
     }
 }

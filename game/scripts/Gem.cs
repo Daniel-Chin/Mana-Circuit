@@ -28,6 +28,7 @@ public abstract class Gem
         return this;
     }
     public abstract Particle Apply(Particle input);
+    public abstract string DisplayName();
 
     public class Source : Gem
     {
@@ -41,6 +42,10 @@ public abstract class Gem
             input.Direction = Direction;
             return input;
         }
+        public override string DisplayName()
+        {
+            return "Radiator Gem";
+        }
     }
     public class Drain : Gem
     {
@@ -48,12 +53,20 @@ public abstract class Gem
         {
             return null;
         }
+        public override string DisplayName()
+        {
+            return "Mana Crystalizer";
+        }
     }
     public class Wall : Gem
     {
         public override Particle Apply(Particle input)
         {
             return null;
+        }
+        public override string DisplayName()
+        {
+            return "Blockage";
         }
     }
     public class AddOne : Gem
@@ -65,27 +78,36 @@ public abstract class Gem
             );
             return input;
         }
+        public override string DisplayName()
+        {
+            return "+1 Gem";
+        }
     }
     public class WeakMult : Gem
     {
+        private static readonly double MULT = 1.4;  // 1.4**2 < 2
         public override Particle Apply(Particle input)
         {
-            input.Multiply(1.4);    // 1.4**2 < 2
+            input.Multiply(MULT);
             return input;
         }
-    }
-    public class Doubler : Gem
-    {
-        public Doubler() : base()
+        public override string DisplayName()
         {
-            Size = new PointInt(2, 2);
-        }
-        public override Particle Apply(Particle input)
-        {
-            input.Multiply(2);
-            return input;
+            return $"x{MULT} Gem";
         }
     }
+    // public class Doubler : Gem
+    // {
+    //     public Doubler() : base()
+    //     {
+    //         Size = new PointInt(2, 2);
+    //     }
+    //     public override Particle Apply(Particle input)
+    //     {
+    //         input.Multiply(2);
+    //         return input;
+    //     }
+    // }
     public class Focus : Gem
     {
         public PointInt Direction;
@@ -97,6 +119,10 @@ public abstract class Gem
         {
             input.Direction = Direction;
             return input;
+        }
+        public override string DisplayName()
+        {
+            return "Focus Gem";
         }
     }
     public class Mirror : Gem
@@ -132,6 +158,10 @@ public abstract class Gem
             );
             return input;
         }
+        public override string DisplayName()
+        {
+            return "Mirror Gem";
+        }
     }
     public class Stochastic : Mirror
     {
@@ -154,6 +184,10 @@ public abstract class Gem
             particles[0] = input.Copy();
             particles[1] = base.Apply(input);
             return particles;
+        }
+        public override string DisplayName()
+        {
+            return "Stochastic Gem";
         }
     }
 
