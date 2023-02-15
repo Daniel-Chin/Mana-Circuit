@@ -250,6 +250,18 @@ public class Simplest
         if (MyRank == Rank.TWO_TO_THE_W)
             Debug.Assert(K == -1);
     }
+    public static bool operator <=(Simplest a, Simplest b)
+    {
+        if (a.MyRank < b.MyRank) return true;
+        if (a.MyRank > b.MyRank) return false;
+        return a.K <= b.K;
+    }
+    public static bool operator >=(Simplest a, Simplest b)
+    {
+        if (a.MyRank > b.MyRank) return true;
+        if (a.MyRank < b.MyRank) return false;
+        return a.K >= b.K;
+    }
     public static Simplest FromExpression(
         Expression expression, bool verbose
     )
@@ -289,10 +301,7 @@ public class Simplest
     )
     {
         Simplest a; Simplest b;
-        if (
-            left.MyRank < right.MyRank
-            || (left.MyRank == right.MyRank && left.K < right.K)
-        )
+        if (left <= right)
         {
             a = left; b = right;
         }
