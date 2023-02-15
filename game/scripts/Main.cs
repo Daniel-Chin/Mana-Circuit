@@ -11,7 +11,6 @@ public class Main : Node2D
         Debug.Assert(Singleton == null);
         Singleton = this;
         WorldTime = 0f;
-        // Test.Main();
     }
 
     public override void _Process(float delta)

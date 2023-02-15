@@ -211,7 +211,7 @@ public class Expression
 
 public enum Rank
 {
-    FINITE, W_TO_THE_K, TWO_TO_THE_W, STACK_W
+    FINITE, KW, W_TO_THE_K, TWO_TO_THE_W, STACK_W
 }
 
 public class Simplest
@@ -233,6 +233,7 @@ public class Simplest
                         MyRank = Rank.FINITE;
                         K = 1;
                         break;
+                    case Rank.KW:
                     case Rank.STACK_W:
                         throw new Shared.ObjectStateIllegal();
                 }
@@ -240,8 +241,9 @@ public class Simplest
             case 1:
                 switch (rank)
                 {
+                    case Rank.W_TO_THE_K:
                     case Rank.STACK_W:
-                        MyRank = Rank.W_TO_THE_K;
+                        MyRank = Rank.KW;
                         K = 1;
                         break;
                 }
@@ -258,7 +260,7 @@ public class Simplest
             if (terminalType == TerminalType.NUMBER)
                 return new Simplest(Rank.FINITE, expression.MyTerminal.MyNumber);
             if (terminalType == TerminalType.OMEGA)
-                return new Simplest(Rank.W_TO_THE_K, 1);
+                return new Simplest(Rank.KW, 1);
         }
         Simplest left = FromExpression(expression.Left, verbose);
         Simplest right = FromExpression(expression.Right, verbose);
@@ -326,6 +328,20 @@ public class Simplest
                         if (b.MyRank == Rank.FINITE)
                             return new Simplest(
                                 Rank.FINITE, a.K * b.K
+                            );
+                        if (b.MyRank == Rank.KW)
+                            return new Simplest(
+                                Rank.KW, a.K * b.K
+                            );
+                        return b;
+                    case Rank.KW:
+                        if (b.MyRank == Rank.KW)
+                            return new Simplest(
+                                Rank.W_TO_THE_K, 2
+                            );
+                        if (b.MyRank == Rank.W_TO_THE_K)
+                            return new Simplest(
+                                Rank.W_TO_THE_K, b.K + 1
                             );
                         return b;
                     case Rank.W_TO_THE_K:
@@ -448,9 +464,11 @@ public class Simplest
         {
             case Rank.FINITE:
                 return K.ToString("##.0");
-            case Rank.W_TO_THE_K:
+            case Rank.KW:
                 if (K == 1)
                     return "w";
+                return $"{K}w";
+            case Rank.W_TO_THE_K:
                 return $"w^{K}";
             case Rank.TWO_TO_THE_W:
                 return "2^w";
