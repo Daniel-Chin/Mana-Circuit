@@ -247,6 +247,8 @@ public class Simplest
                 }
                 break;
         }
+        if (MyRank == Rank.TWO_TO_THE_W)
+            Debug.Assert(K == -1);
     }
     public static Simplest FromExpression(
         Expression expression, bool verbose
