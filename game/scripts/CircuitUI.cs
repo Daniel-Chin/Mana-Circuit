@@ -163,12 +163,6 @@ public class CircuitUI : Node2D
     public void OnClickGem(int i, int j)
     {
         _selectedLocation = new PointInt(i, j);
-        _GemList.ListAll();
-        _GemList.MyDialog.PopupCentered();
-    }
-
-    public void onGemListGemSelect()
-    {
         switch (MyCircuit.Seek(_selectedLocation))
         {
             case Gem.Wall w:
@@ -176,6 +170,12 @@ public class CircuitUI : Node2D
             case Gem.Drain d:
                 return;
         }
+        _GemList.ListAll();
+        _GemList.MyDialog.PopupCentered();
+    }
+
+    public void onGemListGemSelect()
+    {
         MyCircuit.Remove(_selectedLocation);
         Gem gem = _GemList.SelectedGem;
         if (gem != null)
