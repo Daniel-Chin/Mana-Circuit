@@ -28,7 +28,7 @@ public class MagicProblem
             return solution;
         }
         Console.WriteLine("No finite solution.");
-        Simplest simplest = SolveInfinite();
+        Simplest simplest = new SolveInfinite(this).Search();
         for (int i = 0; i < N; i++)
         {
             solution[i] = simplest;
@@ -63,66 +63,43 @@ public class MagicProblem
         return x;
     }
 
-    private Simplest SolveInfinite()
+    private class SolveInfinite : EstimateLFS
     {
-        if (SolveRank(Rank.TWO_TO_THE_W, -1))
+        public MagicProblem Parent;
+        public SolveInfinite(MagicProblem parent)
         {
-            // Console.WriteLine("TWO_TO_THE_W is a solution.");
-            ExponentialSearch eSearch = new ExponentialSearch(2333);
-            try
+            Parent = parent;
+        }
+        public override bool SolveRank(Rank rank, int k)
+        {
+            Simplest x = new Simplest(rank, k);
+            Console.Write("Trying ");
+            Console.WriteLine(x);
+            bool doAccept = true;
+            for (int i = 0; i < Parent.N; i++)
             {
-                while (true)
+                Simplest acc = Simplest.Zero();
+                for (int j = 0; j < Parent.N; j++)
                 {
-                    if (eSearch.Feedback(SolveRank(Rank.W_TO_THE_K, eSearch.Acc)))
-                        break;
+                    acc = Simplest.Eval(
+                        acc, Operator.PLUS, Simplest.Eval(
+                            x, Operator.TIMES, Parent.AWithoutDiag[i, j]
+                        )
+                    );
+                }
+                acc = Simplest.Eval(
+                    acc, Operator.PLUS, Parent.MinusB[i]
+                );
+                if (!acc.Equals(x))
+                {
+                    doAccept = false;
+                    break;
                 }
             }
-            catch (ExponentialSearch.SearchFailed)
-            {
-                return new Simplest(Rank.TWO_TO_THE_W, -1);
-            }
-            return new Simplest(Rank.W_TO_THE_K, eSearch.High);
+            Console.Write("Accept? ");
+            Console.WriteLine(doAccept);
+            return doAccept;
         }
-        else
-        {
-            for (int k = 0; k < 69; k++)
-            {
-                if (SolveRank(Rank.STACK_W, k))
-                    return new Simplest(Rank.STACK_W, k);
-            }
-            throw new Shared.PlayerCreatedEpsilonNaught();
-            // and I don't know how they did it
-        }
-    }
-    private bool SolveRank(Rank rank, int k)
-    {
-        Simplest x = new Simplest(rank, k);
-        Console.Write("Trying ");
-        Console.WriteLine(x);
-        bool doAccept = true;
-        for (int i = 0; i < N; i++)
-        {
-            Simplest acc = Simplest.Zero();
-            for (int j = 0; j < N; j++)
-            {
-                acc = Simplest.Eval(
-                    acc, Operator.PLUS, Simplest.Eval(
-                        x, Operator.TIMES, AWithoutDiag[i, j]
-                    )
-                );
-            }
-            acc = Simplest.Eval(
-                acc, Operator.PLUS, MinusB[i]
-            );
-            if (!acc.Equals(x))
-            {
-                doAccept = false;
-                break;
-            }
-        }
-        Console.Write("Accept? ");
-        Console.WriteLine(doAccept);
-        return doAccept;
     }
 
     public static void Test()

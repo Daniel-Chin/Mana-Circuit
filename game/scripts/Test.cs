@@ -17,7 +17,7 @@ public class Test : Node2D
         // MagicProblem.Test();
         // TestCircuit();
         Console.WriteLine("end");
-        Console.ReadKey();
+        // Console.ReadKey();
     }
 
     static void TestCircuit()
@@ -29,7 +29,7 @@ public class Test : Node2D
         Gem drain = new Gem.Drain().Place(new PointInt(5, 3));
         c.Add(drain);
 
-        c.Add(new Gem.Doubler().Place(new PointInt(1, 1)));
+        // c.Add(new Gem.Doubler().Place(new PointInt(1, 1)));
         c.Add(new Gem.Mirror(false).Place(new PointInt(2, 0)));
         c.Add(new Gem.Mirror(true).Place(new PointInt(3, 0)));
         c.Add(new Gem.Stochastic(false).Place(new PointInt(3, 3)));

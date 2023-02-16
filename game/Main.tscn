@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/Main.cs" type="Script" id=1]
-[ext_resource path="res://debug/InstantMSE.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Test.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/FPSLabel.cs" type="Script" id=3]
 
 [node name="Main" type="Node2D"]
@@ -16,4 +16,4 @@ margin_bottom = 14.0
 text = "FPS: 48"
 script = ExtResource( 3 )
 
-[node name="InstantMSE" parent="." instance=ExtResource( 2 )]
+[node name="Test" parent="." instance=ExtResource( 2 )]
