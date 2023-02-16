@@ -15,7 +15,7 @@ public class CircuitUI : Node2D
     private int _vh_sep;
     public Circuit MyCircuit;
     private GridContainer _grid;
-    private PocketScene _pocket;
+    private GemListScene _GemList;
     private List<ParticleAndTrail> _pAndTs;
     private Queue<ParticleAndTrail> _pAndTsToFree;
     private PointInt _selectedLocation;
@@ -71,12 +71,12 @@ public class CircuitUI : Node2D
     public override void _Ready()
     {
         _grid = GetNode<GridContainer>("MyGrid");
-        _pocket = GetNode<PocketScene>("MyPocket");
+        _GemList = GetNode<GemListScene>("MyGemList");
         _pAndTs = new List<ParticleAndTrail>();
         _pAndTsToFree = new Queue<ParticleAndTrail>();
         _vh_sep = _grid.GetConstant("vseparation");
-        _pocket.Connect(
-            "gemSelected", this, "onPocketGemSelect"
+        _GemList.Connect(
+            "gemSelected", this, "onGemListGemSelect"
         );
 
         Circuit c = new Circuit(new PointInt(8, 8));
@@ -163,19 +163,26 @@ public class CircuitUI : Node2D
     public void OnClickGem(int i, int j)
     {
         _selectedLocation = new PointInt(i, j);
-        _pocket.ListAll();
-        _pocket.MyDialog.PopupCentered();
+        _GemList.ListAll();
+        _GemList.MyDialog.PopupCentered();
     }
 
-    public void onPocketGemSelect()
+    public void onGemListGemSelect()
     {
+        switch (MyCircuit.Seek(_selectedLocation))
+        {
+            case Gem.Wall w:
+            case Gem.Source s:
+            case Gem.Drain d:
+                return;
+        }
         MyCircuit.Remove(_selectedLocation);
-        Gem gem = _pocket.SelectedGem;
+        Gem gem = _GemList.SelectedGem;
         if (gem != null)
         {
             gem.Location = _selectedLocation;
             MyCircuit.Add(gem);
-            _pocket.SelectedGem = null;
+            _GemList.SelectedGem = null;
         }
         Rebuild();
         EmitSignal("modified");

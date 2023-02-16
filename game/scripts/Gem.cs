@@ -28,6 +28,7 @@ public abstract class Gem
         return this;
     }
     public abstract Particle Apply(Particle input);
+    public abstract string Name();
     public abstract string DisplayName();
 
     public class Source : Gem
@@ -42,6 +43,10 @@ public abstract class Gem
             input.Direction = Direction;
             return input;
         }
+        public override string Name()
+        {
+            return "source";
+        }
         public override string DisplayName()
         {
             return "Radiator Gem";
@@ -53,6 +58,10 @@ public abstract class Gem
         {
             return null;
         }
+        public override string Name()
+        {
+            return "drain";
+        }
         public override string DisplayName()
         {
             return "Mana Crystalizer";
@@ -63,6 +72,10 @@ public abstract class Gem
         public override Particle Apply(Particle input)
         {
             return null;
+        }
+        public override string Name()
+        {
+            return "wall";
         }
         public override string DisplayName()
         {
@@ -78,6 +91,10 @@ public abstract class Gem
             );
             return input;
         }
+        public override string Name()
+        {
+            return "addOne";
+        }
         public override string DisplayName()
         {
             return "+1 Gem";
@@ -90,6 +107,10 @@ public abstract class Gem
         {
             input.Multiply(MULT);
             return input;
+        }
+        public override string Name()
+        {
+            return "weakMult";
         }
         public override string DisplayName()
         {
@@ -119,6 +140,10 @@ public abstract class Gem
         {
             input.Direction = Direction;
             return input;
+        }
+        public override string Name()
+        {
+            return "focus";
         }
         public override string DisplayName()
         {
@@ -158,6 +183,10 @@ public abstract class Gem
             );
             return input;
         }
+        public override string Name()
+        {
+            return "mirror";
+        }
         public override string DisplayName()
         {
             return "Mirror Gem";
@@ -184,6 +213,10 @@ public abstract class Gem
             particles[0] = input.Copy();
             particles[1] = base.Apply(input);
             return particles;
+        }
+        public override string Name()
+        {
+            return "stochastic";
         }
         public override string DisplayName()
         {

@@ -8,10 +8,37 @@ public class CustomGem : Gem
     public Circuit MyCircuit;  // only one source one drain
     public Simplest CachedAdder;
     public Simplest CachedMultiplier;
-    public CustomGem() : base()
+    public CustomGem(Simplest metaLevel) : base()
     {
+        MetaLevel = metaLevel;
         CachedAdder = null;
         CachedMultiplier = null;
+        initCircuit();
+    }
+    private void initCircuit()
+    {
+        int n = 5;
+        MyCircuit = new Circuit(new PointInt(n, n));
+        for (int i = 0; i < n; i++)
+        {
+            MyCircuit.Add(new Gem.Wall().Place(new PointInt(0, i)), true);
+            MyCircuit.Add(new Gem.Wall().Place(new PointInt(n - 1, i)), true);
+            MyCircuit.Add(new Gem.Wall().Place(new PointInt(i, 0)), true);
+            MyCircuit.Add(new Gem.Wall().Place(new PointInt(i, n - 1)), true);
+        }
+
+        PointInt location;
+        location = new PointInt(n / 2, 0);
+        MyCircuit.Remove(location);
+        MyCircuit.Add(new Gem.Source(new PointInt(0, 1)).Place(location));
+
+        location = new PointInt(n / 2, n - 1);
+        MyCircuit.Remove(location);
+        MyCircuit.Add(new Gem.Drain().Place(location));
+    }
+    public override string Name()
+    {
+        return "custom";
     }
     public override Particle Apply(Particle input)
     {

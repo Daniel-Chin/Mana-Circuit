@@ -61,6 +61,9 @@ $25 -> upgrade wand
 $9 -> x1.4 gem
 $20 -> stochastic gem
 
+NPC:
+    "A good mage needs 1% grinding and 99% thinking. "
+
 Once $50, Gem Expert NPC spawns.
     "Every one is so weak! I am so bored!!!"
     "Now! Show me your strongest attack!"

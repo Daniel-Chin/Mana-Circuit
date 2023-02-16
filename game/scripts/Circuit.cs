@@ -91,6 +91,7 @@ public class Circuit
     }
     public void Remove(PointInt location)
     {
+        // if empty already, silent.
         Gem gem = Seek(location);
         if (gem != null)
             Remove(gem);

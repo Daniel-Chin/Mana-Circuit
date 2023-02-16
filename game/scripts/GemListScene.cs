@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class PocketScene : Node2D
+public class GemListScene : Node2D
 {
     [Signal] public delegate void gemSelected();
     public WindowDialog MyDialog;
@@ -14,7 +14,7 @@ public class PocketScene : Node2D
     public override void _Ready()
     {
         MyDialog = GetNode<WindowDialog>("MyDialog");
-        MyVBox = GetNode<VBoxContainer>("MyDialog/MyScroll/MyVBox");
+        MyVBox = GetNode<VBoxContainer>("MyDialog/TabContainer/Gems/MyVBox");
         _gems = new List<Gem>();
     }
 

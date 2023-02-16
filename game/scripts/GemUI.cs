@@ -13,43 +13,28 @@ public class GemUI : TextureButton
     {
         _gem = gem;
         string filename;
+        if (gem == null)
+        {
+            filename = "black";
+        }
+        else
+        {
+            filename = gem.Name();
+        }
         switch (gem)
         {
-            case null:
-                filename = "black";
-                break;
-            case Gem.Wall g:
-                filename = "wall";
-                // FlipH = Shared.Rand.Next() % 2 == 0;
-                // FlipV = Shared.Rand.Next() % 2 == 0;
-                break;
             case Gem.Source g:
-                filename = "source";
                 SetDirection(g.Direction);
                 break;
-            case Gem.Drain g:
-                filename = "drain";
-                break;
-            case Gem.AddOne g:
-                filename = "addOne";
-                break;
-            case Gem.WeakMult g:
-                filename = "weakMult";
-                break;
             case Gem.Focus g:
-                filename = "focus";
                 SetDirection(g.Direction);
                 break;
             case Gem.Stochastic g:
-                filename = "stochastic";
                 FlipV = !g.Orientation;
                 break;
             case Gem.Mirror g:
-                filename = "mirror";
                 FlipV = !g.Orientation;
                 break;
-            default:
-                throw new Shared.ValueError();
         }
         TextureNormal = GD.Load<Texture>($"res://texture/{filename}.png");
     }
