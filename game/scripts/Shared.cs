@@ -8,7 +8,8 @@ public class Shared
     public class PlayerCreatedEpsilonNaught : Exception { }
     public static Random Rand = new Random();
     public static readonly Font FONT = GD.Load<Theme>("res://misc/theme.tres").DefaultFont;
-    public static readonly float FONT_HEIGHT = FONT.GetHeight();
+    public static readonly float FONT_SCALE = FONT.GetHeight() / 7f / 2f;
+    // 7f is the font's # of pixels in height
 
     public static void QFreeChildren(Node node)
     {

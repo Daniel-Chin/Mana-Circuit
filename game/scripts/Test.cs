@@ -16,10 +16,7 @@ public class Test : Node2D
         // TestMath();
         // MagicProblem.Test();
         // TestCircuit();
-
-        Console.Write("Font height = ");
-        Console.WriteLine(Shared.FONT_HEIGHT);
-
+        TestMathBB();
         Console.WriteLine("end");
         // Console.ReadKey();
     }
@@ -96,5 +93,39 @@ public class Test : Node2D
             Console.WriteLine();
             Console.ReadKey();
         }
+    }
+
+    private void TestMathBB()
+    {
+        Console.Write("Font height = ");
+        Console.WriteLine(Shared.FONT_SCALE);
+        var l = new RichTextLabel();
+        AddChild(l);
+        l.BbcodeEnabled = true;
+        string s = "";
+        s += "hello, \n hello, ";
+        s += "world! Damage of class-";
+        s += MathBB.Build(Simplest.Zero());
+        s += ", class-";
+        s += MathBB.Build(Simplest.One());
+        s += ", class-";
+        s += MathBB.Build(new Simplest(Rank.W_TO_THE_K, 1));
+        s += ", class-";
+        s += MathBB.Build(new Simplest(Rank.W_TO_THE_K, 2));
+        s += ", class-";
+        s += MathBB.Build(new Simplest(Rank.W_TO_THE_K, 69));
+        s += MathBB.Build(new Simplest(Rank.W_TO_THE_K, 6.9));
+        s += ", and class-";
+        s += MathBB.Build(new Simplest(Rank.TWO_TO_THE_W, -1));
+        s += ". Whatever ";
+        s += MathBB.Build(new Simplest(Rank.STACK_W, 2));
+        s += " is ok. ";
+        s += MathBB.Build(new Simplest(Rank.STACK_W, 3));
+        s += " and ";
+        s += MathBB.Build(new Simplest(Rank.STACK_W, 4));
+        s += " and ";
+        s += MathBB.Build(new Simplest(Rank.STACK_W, 11));
+        l.BbcodeText = s;
+        l.RectMinSize = new Vector2(700, 400);
     }
 }
