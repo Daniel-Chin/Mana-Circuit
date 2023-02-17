@@ -215,7 +215,7 @@ public class CustomGem : Gem
         }
         else
         {
-            return "Typeless Custom Gem.";
+            return "Typeless Custom Gem. Can embed up to Typeless Custom Gems.";
         }
     }
 }
