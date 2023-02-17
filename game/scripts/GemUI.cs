@@ -35,6 +35,9 @@ public class GemUI : TextureButton
             case Gem.Mirror g:
                 FlipV = !g.Orientation;
                 break;
+            case null:
+                StretchMode = StretchModeEnum.Tile;
+                break;
         }
         TextureNormal = GD.Load<Texture>($"res://texture/gem/{filename}.png");
     }
