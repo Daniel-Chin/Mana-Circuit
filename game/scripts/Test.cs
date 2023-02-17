@@ -16,7 +16,7 @@ public class Test : Node2D
         // TestMath();
         // MagicProblem.Test();
         // TestCircuit();
-        TestMathBB();
+        // TestMathBB();
         Console.WriteLine("end");
         // Console.ReadKey();
     }

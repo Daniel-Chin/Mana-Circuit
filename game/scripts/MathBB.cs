@@ -33,9 +33,9 @@ public class MathBB
             sB.Append(Char);
             sB.Append(".png");
             string imagePath = sB.ToString();
-            Image i = new Image();
-            i.Load(imagePath);
-            float width = Shared.FONT_SCALE * i.GetWidth();
+            float width = Shared.FONT_SCALE * GD.Load<Texture>(
+                imagePath
+            ).GetWidth();
             return $"[img={width}]{imagePath}[/img]";
         }
     }
