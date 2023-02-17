@@ -20,10 +20,7 @@ public class GemListScene : Node2D
 
     private void Clear()
     {
-        foreach (Node x in MyVBox.GetChildren())
-        {
-            x.QueueFree();
-        }
+        Shared.QFreeChildren(MyVBox);
         _gems.Clear();
     }
 
@@ -31,24 +28,30 @@ public class GemListScene : Node2D
     {
         int gemI = _gems.Count;
         _gems.Add(gem);
-        GemUI gemUI = GemUI.ThisScene.Instance<GemUI>();
-        gemUI.Set(gem);
-        gemUI.Connect(
+        GemEntry gemEntry = new GemEntry();
+        MyVBox.AddChild(gemEntry);
+        gemEntry.MyGemUI.Set(gem);
+        gemEntry.MyGemUI.Connect(
             "pressed", this, "OnClickGem",
             new Godot.Collections.Array() { gemI }
         );
-        HBoxContainer hBox = new HBoxContainer();
-        MyVBox.AddChild(hBox);
-        hBox.AddChild(gemUI);
-        hBox.RectMinSize = new Vector2(80, 80);
-        hBox.RectSize = new Vector2(80, 80);
-        hBox.SizeFlagsHorizontal = (int)Control.SizeFlags.Expand;
+        if (gem == null) return;
+        gemEntry.Labels[3].Text = gem.Explain();
     }
 
     public void ListAll()
     {
         _rotated = false;
         Clear();
+        // headder
+        GemEntry gemEntry = new GemEntry();
+        MyVBox.AddChild(gemEntry);
+        gemEntry.MyGemUI.Empty();
+        gemEntry.Labels[0].Text = "Free /\n In {wand} /\n In Custom Gems";
+        gemEntry.Labels[0].RectMinSize = new Vector2(
+            gemEntry.Labels[0].RectMinSize.x * 3, 0
+        );
+        // contents
         Add(null);
         Add(new Gem.AddOne());
         Add(new Gem.WeakMult());

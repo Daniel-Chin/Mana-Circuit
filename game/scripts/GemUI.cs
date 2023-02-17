@@ -38,6 +38,10 @@ public class GemUI : TextureButton
         }
         TextureNormal = GD.Load<Texture>($"res://texture/{filename}.png");
     }
+    public void Empty()
+    {
+        TextureNormal = null;
+    }
     private void SetDirection(PointInt direction)
     {
         if (direction.IntX == 0 && direction.IntY == -1)

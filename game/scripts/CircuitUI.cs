@@ -106,10 +106,7 @@ public class CircuitUI : Node2D
 
     private void Rebuild()
     {
-        foreach (Node x in _grid.GetChildren())
-        {
-            x.QueueFree();
-        }
+        Shared.QFreeChildren(_grid);
         _grid.Columns = MyCircuit.Size.IntX;
         for (int j = 0; j < MyCircuit.Size.IntY; j++)
         {

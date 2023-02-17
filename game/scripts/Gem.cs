@@ -30,6 +30,7 @@ public abstract class Gem
     public abstract Particle Apply(Particle input);
     public abstract string Name();
     public abstract string DisplayName();
+    public abstract string Explain();
 
     public class Source : Gem
     {
@@ -51,6 +52,10 @@ public abstract class Gem
         {
             return "Radiator Gem";
         }
+        public override string Explain()
+        {
+            return "";
+        }
     }
     public class Drain : Gem
     {
@@ -66,6 +71,10 @@ public abstract class Gem
         {
             return "Mana Crystalizer";
         }
+        public override string Explain()
+        {
+            return "";
+        }
     }
     public class Wall : Gem
     {
@@ -80,6 +89,10 @@ public abstract class Gem
         public override string DisplayName()
         {
             return "Blockage";
+        }
+        public override string Explain()
+        {
+            return "";
         }
     }
     public class AddOne : Gem
@@ -99,6 +112,10 @@ public abstract class Gem
         {
             return "+1 Gem";
         }
+        public override string Explain()
+        {
+            return "Add one mana.";
+        }
     }
     public class WeakMult : Gem
     {
@@ -115,6 +132,10 @@ public abstract class Gem
         public override string DisplayName()
         {
             return $"x{MULT} Gem";
+        }
+        public override string Explain()
+        {
+            return $"Multiply mana by {MULT:.1}.";
         }
     }
     // public class Doubler : Gem
@@ -148,6 +169,10 @@ public abstract class Gem
         public override string DisplayName()
         {
             return "Focus Gem";
+        }
+        public override string Explain()
+        {
+            return "Mana can enter from different directions and join forces.";
         }
     }
     public class Mirror : Gem
@@ -191,6 +216,10 @@ public abstract class Gem
         {
             return "Mirror Gem";
         }
+        public override string Explain()
+        {
+            return "Reflect mana.";
+        }
     }
     public class Stochastic : Mirror
     {
@@ -221,6 +250,10 @@ public abstract class Gem
         public override string DisplayName()
         {
             return "Stochastic Gem";
+        }
+        public override string Explain()
+        {
+            return "Reflect mana with probability = 50%.";
         }
     }
 

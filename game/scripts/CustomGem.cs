@@ -180,4 +180,8 @@ public class CustomGem : Gem
             return "Meta Meta Custom Gem";
         return $"Meta^{k} Custom Gem";
     }
+    public override string Explain()
+    {
+        throw new NotImplementedException();
+    }
 }
