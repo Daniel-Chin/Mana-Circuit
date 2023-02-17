@@ -109,7 +109,7 @@ public class CircuitUI : AspectRatioContainer
         if (BackColor == null)
         {
             TextureRect _rect = new TextureRect();
-            _rect.Texture = null;
+            _rect.Texture = GD.Load<Texture>("res://texture/gem/wall.png");
             _rect.Expand = true;
             _rect.StretchMode = TextureRect.StretchModeEnum.Scale;
             ShaderMaterial mat = new ShaderMaterial();
@@ -123,6 +123,8 @@ public class CircuitUI : AspectRatioContainer
             _rect.Color = (Color)BackColor;
             _bgRect = _rect;
         }
+        AddChild(_bgRect);
+        MoveChild(_bgRect, 0);
         Ratio = MyCircuit.Size.IntY / (float)MyCircuit.Size.IntX;
         if (RecursionDepth > Shared.MAX_RECURSION)
             return;
