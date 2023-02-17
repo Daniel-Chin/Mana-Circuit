@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
 
@@ -178,10 +179,43 @@ public class CustomGem : Gem
             return "Meta Custom Gem";
         if (k == 2)
             return "Meta Meta Custom Gem";
-        return $"Meta^{k} Custom Gem";
+        StringBuilder sB = new StringBuilder();
+        sB.Append("Meta");
+        MathBB.BuildExp(k, sB);
+        sB.Append(" Custom Gem");
+        return sB.ToString();
     }
     public override string Explain()
     {
-        throw new NotImplementedException();
+        if (MetaLevel.MyRank == Rank.FINITE)
+        {
+            StringBuilder sB = new StringBuilder();
+            sB.Append(DisplayName());
+            sB.Append(". Can embed ");
+            switch (MetaLevel.K)
+            {
+                case 0:
+                    sB.Append("gems. ");
+                    break;
+                case 1:
+                    sB.Append("gems and Custom Gems. ");
+                    break;
+                case 2:
+                    sB.Append("gems, Custom Gems, and Meta Custom Gems. ");
+                    break;
+                default:
+                    sB.Append("up to ");
+                    sB.Append(new CustomGem(new Simplest(
+                        Rank.FINITE, MetaLevel.K - 1
+                    )).DisplayName());
+                    sB.Append("s. ");
+                    break;
+            }
+            return sB.ToString();
+        }
+        else
+        {
+            return "Typeless Custom Gem.";
+        }
     }
 }

@@ -39,6 +39,16 @@ public class MathBB
             return $"[img={width}]{imagePath}[/img]";
         }
     }
+    public static void BuildExp(double ex, StringBuilder sB)
+    {
+        if (ex >= 2)
+        {
+            foreach (char c in ex.ToString())
+            {
+                sB.Append(new RaisableChar(c, 1));
+            }
+        }
+    }
     public static string Build(Simplest simplest)
     {
         StringBuilder sB = new StringBuilder();
@@ -50,11 +60,7 @@ public class MathBB
                 break;
             case Rank.W_TO_THE_K:
                 sB.Append(new RaisableChar('w', 0));
-                if (k >= 2)
-                    foreach (char c in k.ToString())
-                    {
-                        sB.Append(new RaisableChar(c, 1));
-                    }
+                BuildExp(k, sB);
                 break;
             case Rank.TWO_TO_THE_W:
                 sB.Append(2);

@@ -7,7 +7,8 @@ public class GemListScene : Node2D
 {
     [Signal] public delegate void gemSelected();
     public WindowDialog MyDialog;
-    public VBoxContainer MyVBox;
+    public VBoxContainer GemVBox;
+    public VBoxContainer CGVBox;
     private List<Gem> _gems;
     public Gem SelectedGem;
     private bool _rotated;
@@ -15,28 +16,24 @@ public class GemListScene : Node2D
     public override void _Ready()
     {
         MyDialog = GetNode<WindowDialog>("MyDialog");
-        MyVBox = GetNode<VBoxContainer>("MyDialog/TabContainer/Gems/MyVBox");
+        GemVBox = GetNode<VBoxContainer>("MyDialog/TabContainer/Gems/MyVBox");
+        CGVBox = GetNode<VBoxContainer>("MyDialog/TabContainer/Custom Gems/MyVBox");
         _gems = new List<Gem>();
         // MyDialog.RectMinSize = new Vector2(WIDTH, 500);
         // GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize = new Vector2(WIDTH, 500);
     }
 
-    private void Clear()
-    {
-        Shared.QFreeChildren(MyVBox);
-        _gems.Clear();
-    }
-
-    private void Add(Gem gem)
+    private void Add(VBoxContainer vBox, Gem gem)
     {
         int gemI = _gems.Count;
+        bool gemIsCG = vBox == CGVBox;
         _gems.Add(gem);
         GemEntry gemEntry = new GemEntry(gem);
         MaskButton maskButton = new MaskButton(gemEntry);
-        MyVBox.AddChild(maskButton);
+        vBox.AddChild(maskButton);
         maskButton.Mask.Connect(
             "pressed", this, "OnClickGem",
-            new Godot.Collections.Array() { gemI }
+            new Godot.Collections.Array() { gemIsCG, gemI }
         );
         if (gem == null)
         {
@@ -68,11 +65,18 @@ public class GemListScene : Node2D
 
     public void ListAll()
     {
+        _gems.Clear();
+        ListAll(GemVBox);
+        ListAll(CGVBox);
+    }
+    public void ListAll(VBoxContainer vBox)
+    {
         _rotated = false;
-        Clear();
+        Shared.QFreeChildren(vBox);
+
         // header
         GemEntry gemEntry = new GemEntry(null);
-        MyVBox.AddChild(gemEntry);
+        vBox.AddChild(gemEntry);
         gemEntry.MyGemUI.Empty();
         gemEntry.Labels[0].BbcodeText = (
             "[center][color=lime]Available[/color] /\n"
@@ -87,21 +91,36 @@ public class GemListScene : Node2D
             label.QueueFree();
         }
         // contents
-        Add(null);
-        Add(new Gem.AddOne());
-        Add(new Gem.WeakMult());
-        Add(new Gem.Focus(new PointInt(0, 1)));
-        Add(new Gem.Mirror(true));
-        Add(new Gem.Stochastic(true));
+        if (vBox == GemVBox)
+        {
+            Add(vBox, null);
+            Add(vBox, new Gem.AddOne());
+            Add(vBox, new Gem.WeakMult());
+            Add(vBox, new Gem.Focus(new PointInt(0, 1)));
+            Add(vBox, new Gem.Mirror(true));
+            Add(vBox, new Gem.Stochastic(true));
+        }
+        else
+        {
+            if (GameState.Persistent.MyTypelessGem is CustomGem cG)
+            {
+                Add(vBox, cG);
+            }
+            foreach (var entry in GameState.Persistent.HasCustomGems)
+            {
+                Add(vBox, entry.Value);
+            }
+        }
     }
 
     private bool AskRotate()
     {
         Gem gem = SelectedGem;
-        Clear();
+        _gems.Clear();
+        Shared.QFreeChildren(GemVBox);
         // header
         GemEntry gemEntry = new GemEntry(null);
-        MyVBox.AddChild(gemEntry);
+        GemVBox.AddChild(gemEntry);
         gemEntry.MyGemUI.Empty();
         gemEntry.Labels[0].BbcodeText = "[center]Which way?[/center]";
         gemEntry.Labels[0].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
@@ -113,18 +132,18 @@ public class GemListScene : Node2D
         switch (gem)
         {
             case Gem.Focus _:
-                Add(new Gem.Focus(new PointInt(1, 0)));
-                Add(new Gem.Focus(new PointInt(-1, 0)));
-                Add(new Gem.Focus(new PointInt(0, 1)));
-                Add(new Gem.Focus(new PointInt(0, -1)));
+                Add(GemVBox, new Gem.Focus(new PointInt(1, 0)));
+                Add(GemVBox, new Gem.Focus(new PointInt(-1, 0)));
+                Add(GemVBox, new Gem.Focus(new PointInt(0, 1)));
+                Add(GemVBox, new Gem.Focus(new PointInt(0, -1)));
                 break;
             case Gem.Stochastic _:
-                Add(new Gem.Stochastic(true));
-                Add(new Gem.Stochastic(false));
+                Add(GemVBox, new Gem.Stochastic(true));
+                Add(GemVBox, new Gem.Stochastic(false));
                 break;
             case Gem.Mirror _:
-                Add(new Gem.Mirror(true));
-                Add(new Gem.Mirror(false));
+                Add(GemVBox, new Gem.Mirror(true));
+                Add(GemVBox, new Gem.Mirror(false));
                 break;
             default:
                 return false;
@@ -132,10 +151,10 @@ public class GemListScene : Node2D
         return true;
     }
 
-    public void OnClickGem(int gemI)
+    public void OnClickGem(bool gemIsCG, int gemI)
     {
         SelectedGem = _gems[gemI];
-        if (!_rotated)
+        if (!gemIsCG && !_rotated)
         {
             _rotated = true;
             if (AskRotate())

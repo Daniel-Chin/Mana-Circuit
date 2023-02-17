@@ -90,7 +90,7 @@ public class CircuitUI : AspectRatioContainer
         _grid.AddConstantOverride("hseparation", 0);
         _pAndTs = new List<ParticleAndTrail>();
         _pAndTsToFree = new Queue<ParticleAndTrail>();
-        if (recursionDepth == 0)
+        if (RecursionDepth == 0)
         {
             _GemList = GD.Load<PackedScene>("res://GemListScene.tscn").Instance<GemListScene>();
             AddChild(_GemList);
@@ -134,10 +134,13 @@ public class CircuitUI : AspectRatioContainer
                 Gem gem = MyCircuit.Field[i, j];
                 GemUI gemUI = new GemUI(gem, RecursionDepth);
                 _grid.AddChild(gemUI);
-                gemUI.Button.Connect(
-                    "pressed", this, "OnClickGem",
-                    new Godot.Collections.Array() { i, j }
-                );
+                if (RecursionDepth == 0)
+                {
+                    gemUI.Button.Connect(
+                        "pressed", this, "OnClickGem",
+                        new Godot.Collections.Array() { i, j }
+                    );
+                }
             }
         }
     }
