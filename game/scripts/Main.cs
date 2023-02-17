@@ -6,10 +6,15 @@ public class Main : Node2D
 {
     public static Main Singleton = null;
     public static float WorldTime;
-    public override void _Ready()
+    public Main() : base()
     {
         Debug.Assert(Singleton == null);
         Singleton = this;
+        GameState.Persistent.Init();
+        GameState.Transient.Init();
+    }
+    public override void _Ready()
+    {
         WorldTime = 0f;
         // Test.Main();
     }

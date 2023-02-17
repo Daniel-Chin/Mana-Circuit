@@ -55,19 +55,20 @@ public class GemListScene : Node2D
         }
         else
         {
-            gemEntry.Labels[0].BbcodeText = "[color=lime][center]0[/center][/color]";
+            int nInWand = CountGemsInWand(gem);
+            int nInCGs = CountGemsInCGs(gem);
+            int nAvailable = CountGemsOwned(gem) - nInWand - nInCGs;
+            gemEntry.Labels[0].BbcodeText = $"[color=lime][center]{nAvailable}[/center][/color]";
             gemEntry.Labels[1].BbcodeText = "[center]/[/center]";
-            gemEntry.Labels[2].BbcodeText = "[color=aqua][center]0[/center][/color]";
+            gemEntry.Labels[2].BbcodeText = $"[color=aqua][center]{nInWand}[/center][/color]";
             gemEntry.Labels[3].BbcodeText = "[center]/[/center]";
-            gemEntry.Labels[4].BbcodeText = "[color=yellow][center]0[/center][/color]";
+            gemEntry.Labels[4].BbcodeText = $"[color=yellow][center]{nInCGs}[/center][/color]";
             gemEntry.Labels[5].BbcodeText = gem.Explain();
         }
     }
 
     public void ListAll()
     {
-        Console.Write(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize);
-        Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
         _rotated = false;
         Clear();
         // header
@@ -87,16 +88,12 @@ public class GemListScene : Node2D
             label.QueueFree();
         }
         // contents
-        Console.Write(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize);
-        Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
         Add(null);
         Add(new Gem.AddOne());
         Add(new Gem.WeakMult());
         Add(new Gem.Focus(new PointInt(0, 1)));
         Add(new Gem.Mirror(true));
         Add(new Gem.Stochastic(true));
-        Console.Write(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize);
-        Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
     }
 
     private bool AskRotate()
@@ -148,9 +145,76 @@ public class GemListScene : Node2D
         MyDialog.Visible = false;
         EmitSignal("gemSelected");
     }
-    public override void _Process(float delta)
+
+    private int CountGemsOwned(Gem gem)
     {
-        // Console.Write(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize);
-        // Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
+        if (gem is CustomGem cG)
+        {
+            CustomGem HasCG = null;
+            if (cG.MetaLevel.MyRank == Rank.FINITE)
+            {
+                GameState.Persistent.HasCustomGems.TryGetValue(
+                    (int)cG.MetaLevel.K, out HasCG
+                );
+                if (HasCG == null)
+                    return 0;
+                return 1;
+            }
+            else
+            {
+                // typeless
+                if (GameState.Persistent.MyTypelessGem == null)
+                    return 0;
+                return 1;
+            }
+        }
+        int n = 0;
+        GameState.Persistent.HasGems.TryGetValue(gem.Name(), out n);
+        return n;
+    }
+
+    private int CountGemsInCircuit(Gem gem, Circuit circuit)
+    {
+        int acc = 0;
+        foreach (Gem g in circuit.Gems)
+        {
+            if (gem is CustomGem customGem)
+            {
+                if (g is CustomGem cG)
+                {
+                    if (cG.MetaLevel.Equals(customGem.MetaLevel))
+                        acc++;
+                }
+            }
+            else
+            {
+                if (g.GetType() == gem.GetType())
+                    acc++;
+            }
+        }
+        return acc;
+    }
+    private int CountGemsInWand(Gem gem)
+    {
+        return CountGemsInCircuit(gem, GameState.Persistent.MyWand.MyCircuit);
+    }
+    private int CountGemsInCGs(Gem gem)
+    {
+        int acc = 0;
+        CustomGem cG;
+        foreach (var entry in GameState.Persistent.HasCustomGems)
+        {
+            cG = entry.Value;
+            if (cG != null)
+            {
+                acc += CountGemsInCircuit(gem, cG.MyCircuit);
+            }
+        }
+        cG = GameState.Persistent.MyTypelessGem;
+        if (cG != null)
+        {
+            acc += CountGemsInCircuit(gem, cG.MyCircuit);
+        }
+        return acc;
     }
 }

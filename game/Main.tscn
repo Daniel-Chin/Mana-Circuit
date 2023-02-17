@@ -19,7 +19,7 @@ z_index = 5
 [node name="FPS" type="Label" parent="Control/FPSNode"]
 margin_right = 46.0
 margin_bottom = 14.0
-text = "FPS: 48"
+text = "FPS: 60"
 script = ExtResource( 3 )
 
 [node name="Test" parent="Control" instance=ExtResource( 2 )]

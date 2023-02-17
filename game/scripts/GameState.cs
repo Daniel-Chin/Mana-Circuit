@@ -6,17 +6,19 @@ namespace GameState
     {
         public static Simplest Money;
         public static (Simplest, Simplest) Location;
-        public static int WandID;
+        public static Wand MyWand;
         public static Dictionary<string, int> HasGems;
         public static Dictionary<int, CustomGem> HasCustomGems;
-        public static CustomGem HasTypelessGem;
+        public static CustomGem MyTypelessGem;
         public static void Init()
         {
             HasGems = new Dictionary<string, int>();
             HasCustomGems = new Dictionary<int, CustomGem>();
-            HasTypelessGem = null;
+            MyTypelessGem = null;
 
             // debug
+            MyWand = new Wand.Test();
+            MyWand.Init();
             HasGems.Add("addOne", 1);
             HasGems.Add("weakMult", 9);
             HasGems.Add("focus", 99);
@@ -26,7 +28,7 @@ namespace GameState
             HasCustomGems.Add(1, new CustomGem(new Simplest(Rank.FINITE, 1)));
             HasCustomGems.Add(3, new CustomGem(new Simplest(Rank.FINITE, 3)));
             HasCustomGems.Add(6, new CustomGem(new Simplest(Rank.FINITE, 6)));
-            HasTypelessGem = new CustomGem(new Simplest(Rank.W_TO_THE_K, 1));
+            MyTypelessGem = new CustomGem(new Simplest(Rank.W_TO_THE_K, 1));
         }
         public static void WriteDisk() { }
         public static void LoadDisk() { }
