@@ -1,13 +1,25 @@
 using Godot;
 using System;
 
-public class GemUI : TextureButton
+public class GemUI : MarginContainer
 {
-    public static PackedScene ThisScene = GD.Load<PackedScene>("res://GemUI.tscn");
+    // code-defined
+    public TextureButton Button;
     private Gem _gem = null;
     private static Shader _flipper = GD.Load<Shader>("res://Flip.gdshader");
-    public override void _Ready()
+    public GemUI() : base() { }
+    public GemUI(Gem gem) : base()
     {
+        _gem = gem;
+        SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
+        Button = new TextureButton();
+        Button.Expand = true;
+        Button.StretchMode = TextureButton.StretchModeEnum.KeepAspectCentered;
+        Button.SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        Button.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
+        AddChild(Button);
+        Set(gem);
     }
     public void Set(Gem gem)
     {
@@ -30,20 +42,17 @@ public class GemUI : TextureButton
                 SetDirection(g.Direction);
                 break;
             case Gem.Stochastic g:
-                FlipV = !g.Orientation;
+                Button.FlipV = !g.Orientation;
                 break;
             case Gem.Mirror g:
-                FlipV = !g.Orientation;
-                break;
-            case null:
-                StretchMode = StretchModeEnum.Tile;
+                Button.FlipV = !g.Orientation;
                 break;
         }
-        TextureNormal = GD.Load<Texture>($"res://texture/gem/{filename}.png");
+        Button.TextureNormal = GD.Load<Texture>($"res://texture/gem/{filename}.png");
     }
     public void Empty()
     {
-        TextureNormal = null;
+        Button.TextureNormal = null;
     }
     private void SetDirection(PointInt direction)
     {
@@ -54,12 +63,12 @@ public class GemUI : TextureButton
         else if (direction.IntX == 0 && direction.IntY == 1)
         {
             SetDiagFlip(false);
-            FlipV = true;
+            Button.FlipV = true;
         }
         else if (direction.IntX == 1 && direction.IntY == 0)
         {
             SetDiagFlip(true);
-            FlipV = true;
+            Button.FlipV = true;
         }
         else if (direction.IntX == -1 && direction.IntY == 0)
         {

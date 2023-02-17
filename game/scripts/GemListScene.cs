@@ -31,10 +31,9 @@ public class GemListScene : Node2D
     {
         int gemI = _gems.Count;
         _gems.Add(gem);
-        GemEntry gemEntry = new GemEntry();
+        GemEntry gemEntry = new GemEntry(gem);
         MaskButton maskButton = new MaskButton(gemEntry);
         MyVBox.AddChild(maskButton);
-        gemEntry.MyGemUI.Set(gem);
         maskButton.Mask.Connect(
             "pressed", this, "OnClickGem",
             new Godot.Collections.Array() { gemI }
@@ -72,7 +71,7 @@ public class GemListScene : Node2D
         _rotated = false;
         Clear();
         // header
-        GemEntry gemEntry = new GemEntry();
+        GemEntry gemEntry = new GemEntry(null);
         MyVBox.AddChild(gemEntry);
         gemEntry.MyGemUI.Empty();
         gemEntry.Labels[0].BbcodeText = (
@@ -101,7 +100,7 @@ public class GemListScene : Node2D
         Gem gem = SelectedGem;
         Clear();
         // header
-        GemEntry gemEntry = new GemEntry();
+        GemEntry gemEntry = new GemEntry(null);
         MyVBox.AddChild(gemEntry);
         gemEntry.MyGemUI.Empty();
         gemEntry.Labels[0].BbcodeText = "[center]Which way?[/center]";

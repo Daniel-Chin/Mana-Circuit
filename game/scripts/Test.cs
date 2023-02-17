@@ -17,6 +17,7 @@ public class Test : Node2D
         // MagicProblem.Test();
         // TestCircuit();
         // TestMathBB();
+        // GetNode<PanelContainer>("PanelContainer").AddChild(new GemUI(new Gem.Wall()));
         Console.WriteLine("end");
         // Console.ReadKey();
     }

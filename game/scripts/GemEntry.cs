@@ -7,11 +7,12 @@ public class GemEntry : HBoxContainer
     private static readonly int SIZE = 80;
     public GemUI MyGemUI;
     public RichTextLabel[] Labels;
-    public GemEntry() : base()
+    public GemEntry() : base() { }
+    public GemEntry(Gem gem) : base()
     {
         SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         RectMinSize = new Vector2(0, SIZE);
-        MyGemUI = GemUI.ThisScene.Instance<GemUI>();
+        MyGemUI = new GemUI(gem);
         AddChild(MyGemUI);
         MyGemUI.RectMinSize = new Vector2(SIZE, SIZE);
         MyGemUI.SizeFlagsHorizontal = (int)Container.SizeFlags.Fill;

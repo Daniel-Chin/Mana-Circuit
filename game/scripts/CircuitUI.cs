@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class CircuitUI : Node2D
 {
+    // code-defined
     [Signal] public delegate void modified();
     private static readonly int MAX_PARTICLES = 8;
     private static readonly double EMIT_LAMBDA = .5;
@@ -14,11 +15,14 @@ public class CircuitUI : Node2D
     private static readonly Vector2 HALF = new Vector2(.5f, .5f);
     private int _vh_sep;
     public Circuit MyCircuit;
+    public int RecursionDepth;
+    private ColorRect _bgRect;
     private GridContainer _grid;
     private GemListScene _GemList;
     private List<ParticleAndTrail> _pAndTs;
     private Queue<ParticleAndTrail> _pAndTsToFree;
     private PointInt _selectedLocation;
+    public Color BackColor;
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -68,9 +72,17 @@ public class CircuitUI : Node2D
             MyTrail.QueueFree();
         }
     }
+    public CircuitUI() : base() { }
+    public CircuitUI(Circuit circuit, int recursionDepth) : base()
+    {
+        MyCircuit = circuit;
+        RecursionDepth = recursionDepth;
+        Rebuild();
+    }
     public override void _Ready()
     {
-        _grid = GetNode<GridContainer>("PanelContainer/MyGrid");
+        _bgRect = GetNode<ColorRect>("Container/BG");
+        _grid = GetNode<GridContainer>("Container/MyGrid");
         _GemList = GetNode<GemListScene>("MyGemList");
         _pAndTs = new List<ParticleAndTrail>();
         _pAndTsToFree = new Queue<ParticleAndTrail>();
@@ -79,24 +91,23 @@ public class CircuitUI : Node2D
             "gemSelected", this, "onGemListGemSelect"
         );
 
-        MyCircuit = GameState.Persistent.MyWand.MyCircuit;
-
-        Rebuild();
+        if (MyCircuit != null)
+            Rebuild();
     }
 
-    private void Rebuild()
+    public void Rebuild()
     {
         Shared.QFreeChildren(_grid);
+        _bgRect.Color = BackColor;
         _grid.Columns = MyCircuit.Size.IntX;
         for (int j = 0; j < MyCircuit.Size.IntY; j++)
         {
             for (int i = 0; i < MyCircuit.Size.IntX; i++)
             {
-                GemUI gemUI = GemUI.ThisScene.Instance<GemUI>();
-                _grid.AddChild(gemUI);
                 Gem gem = MyCircuit.Field[i, j];
-                gemUI.Set(gem);
-                gemUI.Connect(
+                GemUI gemUI = new GemUI(gem);
+                _grid.AddChild(gemUI);
+                gemUI.Button.Connect(
                     "pressed", this, "OnClickGem",
                     new Godot.Collections.Array() { i, j }
                 );
