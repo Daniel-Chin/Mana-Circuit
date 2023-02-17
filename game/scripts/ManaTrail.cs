@@ -7,6 +7,7 @@ public class ManaTrail : Node2D
     private static readonly float LIFETIME = .5f;
 
     // public bool IsReady = false;
+    public float LineWidth;
     private Queue<LineWithAge> _lines;
     private Vector2? _head;
 
@@ -35,7 +36,7 @@ public class ManaTrail : Node2D
             line.AddPoint(head);
             line.AddPoint(location);
             // line.DefaultColor = Colors.White;
-            line.Width = 3;
+            line.Width = LineWidth;
         }
         _head = location;
     }

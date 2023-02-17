@@ -38,6 +38,7 @@ public class CircuitUI : AspectRatioContainer
             Follower = s.Location.ToVector2();
             MyTrail = new ManaTrail();
             parent.AddChild(MyTrail);
+            MyTrail.LineWidth = (float)(3 * Math.Exp(-parent.RecursionDepth));
         }
         public void Follow()
         {
@@ -129,10 +130,21 @@ public class CircuitUI : AspectRatioContainer
         if (RecursionDepth > Shared.MAX_RECURSION)
             return;
         _grid.Columns = MyCircuit.Size.IntX;
+        if (RecursionDepth >= 1)
+        {
+            _grid.Columns -= 2;
+        }
         for (int j = 0; j < MyCircuit.Size.IntY; j++)
         {
             for (int i = 0; i < MyCircuit.Size.IntX; i++)
             {
+                if (RecursionDepth >= 1 && (
+                    j == 0 || j == MyCircuit.Size.IntY - 1 ||
+                    i == 0 || i == MyCircuit.Size.IntX - 1
+                ))
+                {
+                    continue;
+                }
                 Gem gem = MyCircuit.Field[i, j];
                 GemUI gemUI = new GemUI(gem, RecursionDepth);
                 _grid.AddChild(gemUI);
@@ -177,7 +189,9 @@ public class CircuitUI : AspectRatioContainer
     private Vector2 ToUICoords(Vector2 circuitCoords)
     {
         int unit = (int)(_grid.GetChildren()[0] as GemUI).RectSize.x;
-        return (circuitCoords + HALF) * unit;
+        if (RecursionDepth == 0)
+            return (circuitCoords + HALF) * unit;
+        return (circuitCoords - HALF) * unit;
     }
 
     public void OnClickGem(int i, int j)
