@@ -1,78 +1,52 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/GemListScene.cs" type="Script" id=1]
-[ext_resource path="res://GemUI.tscn" type="PackedScene" id=2]
+[ext_resource path="res://MaskButton.tscn" type="PackedScene" id=2]
+[ext_resource path="res://misc/theme.tres" type="Theme" id=3]
 
 [node name="GemListScene" type="Node2D"]
 script = ExtResource( 1 )
 
 [node name="MyDialog" type="WindowDialog" parent="."]
 visible = true
-margin_right = 126.0
-margin_bottom = 1.0
-rect_min_size = Vector2( 300, 500 )
+rect_min_size = Vector2( 600, 500 )
 size_flags_horizontal = 12
 size_flags_vertical = 12
-window_title = "Title"
+theme = ExtResource( 3 )
 
 [node name="TabContainer" type="TabContainer" parent="MyDialog"]
-margin_right = 8.0
-margin_bottom = 36.0
+margin_right = 520.0
+margin_bottom = 500.0
 
 [node name="Gems" type="ScrollContainer" parent="MyDialog/TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
-margin_top = 32.0
+margin_top = 47.0
 margin_right = -4.0
 margin_bottom = -4.0
-rect_min_size = Vector2( 300, 500 )
+rect_min_size = Vector2( 592, 449 )
 scroll_horizontal_enabled = false
 
 [node name="MyVBox" type="VBoxContainer" parent="MyDialog/TabContainer/Gems"]
-margin_right = 300.0
-margin_bottom = 500.0
+margin_right = 580.0
+margin_bottom = 908.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBox" type="HBoxContainer" parent="MyDialog/TabContainer/Gems/MyVBox"]
-margin_right = 300.0
-margin_bottom = 80.0
-rect_min_size = Vector2( 80, 80 )
+[node name="MaskButton" parent="MyDialog/TabContainer/Gems/MyVBox" instance=ExtResource( 2 )]
+margin_right = 580.0
+margin_bottom = 300.0
 
-[node name="GemUI" parent="MyDialog/TabContainer/Gems/MyVBox/HBox" instance=ExtResource( 2 )]
-margin_right = 300.0
-margin_bottom = 80.0
+[node name="MaskButton2" parent="MyDialog/TabContainer/Gems/MyVBox" instance=ExtResource( 2 )]
+margin_top = 304.0
+margin_right = 580.0
+margin_bottom = 604.0
 
-[node name="HBox2" type="HBoxContainer" parent="MyDialog/TabContainer/Gems/MyVBox"]
-margin_top = 84.0
-margin_right = 300.0
-margin_bottom = 164.0
-rect_min_size = Vector2( 80, 80 )
-
-[node name="GemUI" parent="MyDialog/TabContainer/Gems/MyVBox/HBox2" instance=ExtResource( 2 )]
-margin_right = 300.0
-margin_bottom = 80.0
-
-[node name="HBox3" type="HBoxContainer" parent="MyDialog/TabContainer/Gems/MyVBox"]
-margin_top = 168.0
-margin_right = 300.0
-margin_bottom = 248.0
-rect_min_size = Vector2( 80, 80 )
-
-[node name="GemUI" parent="MyDialog/TabContainer/Gems/MyVBox/HBox3" instance=ExtResource( 2 )]
-margin_right = 300.0
-margin_bottom = 80.0
-
-[node name="HBox4" type="HBoxContainer" parent="MyDialog/TabContainer/Gems/MyVBox"]
-margin_top = 252.0
-margin_right = 300.0
-margin_bottom = 332.0
-rect_min_size = Vector2( 80, 80 )
-
-[node name="GemUI" parent="MyDialog/TabContainer/Gems/MyVBox/HBox4" instance=ExtResource( 2 )]
-margin_right = 300.0
-margin_bottom = 80.0
+[node name="MaskButton3" parent="MyDialog/TabContainer/Gems/MyVBox" instance=ExtResource( 2 )]
+margin_top = 608.0
+margin_right = 580.0
+margin_bottom = 908.0
 
 [node name="Custom Gems" type="ScrollContainer" parent="MyDialog/TabContainer"]
 visible = false
@@ -81,51 +55,12 @@ anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
-margin_bottom = -4.0
-rect_min_size = Vector2( 300, 500 )
+margin_bottom = -19.0
+rect_min_size = Vector2( 592, 449 )
 scroll_horizontal_enabled = false
 
 [node name="MyVBox" type="VBoxContainer" parent="MyDialog/TabContainer/Custom Gems"]
-margin_right = 300.0
-margin_bottom = 500.0
+margin_right = 592.0
+margin_bottom = 449.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="HBox" type="HBoxContainer" parent="MyDialog/TabContainer/Custom Gems/MyVBox"]
-margin_right = 300.0
-margin_bottom = 80.0
-rect_min_size = Vector2( 80, 80 )
-
-[node name="GemUI" parent="MyDialog/TabContainer/Custom Gems/MyVBox/HBox" instance=ExtResource( 2 )]
-margin_right = 300.0
-margin_bottom = 80.0
-
-[node name="HBox2" type="HBoxContainer" parent="MyDialog/TabContainer/Custom Gems/MyVBox"]
-margin_top = 84.0
-margin_right = 300.0
-margin_bottom = 164.0
-rect_min_size = Vector2( 80, 80 )
-
-[node name="GemUI" parent="MyDialog/TabContainer/Custom Gems/MyVBox/HBox2" instance=ExtResource( 2 )]
-margin_right = 300.0
-margin_bottom = 80.0
-
-[node name="HBox3" type="HBoxContainer" parent="MyDialog/TabContainer/Custom Gems/MyVBox"]
-margin_top = 168.0
-margin_right = 300.0
-margin_bottom = 248.0
-rect_min_size = Vector2( 80, 80 )
-
-[node name="GemUI" parent="MyDialog/TabContainer/Custom Gems/MyVBox/HBox3" instance=ExtResource( 2 )]
-margin_right = 300.0
-margin_bottom = 80.0
-
-[node name="HBox4" type="HBoxContainer" parent="MyDialog/TabContainer/Custom Gems/MyVBox"]
-margin_top = 252.0
-margin_right = 300.0
-margin_bottom = 332.0
-rect_min_size = Vector2( 80, 80 )
-
-[node name="GemUI" parent="MyDialog/TabContainer/Custom Gems/MyVBox/HBox4" instance=ExtResource( 2 )]
-margin_right = 300.0
-margin_bottom = 80.0

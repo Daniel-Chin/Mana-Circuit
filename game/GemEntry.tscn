@@ -1,12 +1,15 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://GemUI.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/GemEntry.cs" type="Script" id=2]
+[ext_resource path="res://misc/theme.tres" type="Theme" id=3]
 
 [node name="GemEntry" type="HBoxContainer"]
-margin_right = 359.0
+margin_right = 409.0
 margin_bottom = 80.0
+rect_min_size = Vector2( 0, 80 )
 size_flags_horizontal = 3
+theme = ExtResource( 3 )
 script = ExtResource( 2 )
 
 [node name="GemUI" parent="." instance=ExtResource( 1 )]
@@ -18,37 +21,41 @@ size_flags_vertical = 1
 
 [node name="Label" type="Label" parent="."]
 margin_left = 84.0
-margin_top = 33.0
+margin_top = 25.0
 margin_right = 114.0
-margin_bottom = 47.0
+margin_bottom = 54.0
 rect_min_size = Vector2( 30, 0 )
 text = "hi"
 align = 1
 
 [node name="Label2" type="Label" parent="."]
 margin_left = 118.0
-margin_top = 33.0
+margin_top = 25.0
 margin_right = 148.0
-margin_bottom = 47.0
+margin_bottom = 54.0
 rect_min_size = Vector2( 30, 0 )
 text = "hi"
 align = 1
 
 [node name="Label3" type="Label" parent="."]
 margin_left = 152.0
-margin_top = 33.0
+margin_top = 25.0
 margin_right = 182.0
-margin_bottom = 47.0
+margin_bottom = 54.0
 rect_min_size = Vector2( 30, 0 )
 text = "hi"
 align = 1
 
-[node name="Label4" type="Label" parent="."]
+[node name="Label4" type="RichTextLabel" parent="."]
 margin_left = 186.0
-margin_top = 33.0
-margin_right = 359.0
-margin_bottom = 47.0
+margin_top = 25.0
+margin_right = 409.0
+margin_bottom = 55.0
 rect_min_size = Vector2( 30, 0 )
 size_flags_horizontal = 3
-text = "hi"
-align = 1
+size_flags_vertical = 4
+bbcode_enabled = true
+bbcode_text = "asvw war asdf"
+text = "asvw war asdf"
+fit_content_height = true
+scroll_active = false

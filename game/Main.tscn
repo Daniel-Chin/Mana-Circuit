@@ -23,4 +23,4 @@ text = "FPS: 48"
 script = ExtResource( 3 )
 
 [node name="Test" parent="Control" instance=ExtResource( 2 )]
-position = Vector2( 176, 146 )
+position = Vector2( 14, 41 )

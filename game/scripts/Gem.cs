@@ -135,7 +135,7 @@ public abstract class Gem
         }
         public override string Explain()
         {
-            return $"Multiply mana by {MULT:.1}.";
+            return $"Multiply mana by {MULT:#.#}.";
         }
     }
     // public class Doubler : Gem
@@ -172,7 +172,7 @@ public abstract class Gem
         }
         public override string Explain()
         {
-            return "Mana can enter from different directions and join forces.";
+            return "Focus mana from different directions.";
         }
     }
     public class Mirror : Gem

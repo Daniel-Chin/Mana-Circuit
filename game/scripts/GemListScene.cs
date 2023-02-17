@@ -16,6 +16,8 @@ public class GemListScene : Node2D
         MyDialog = GetNode<WindowDialog>("MyDialog");
         MyVBox = GetNode<VBoxContainer>("MyDialog/TabContainer/Gems/MyVBox");
         _gems = new List<Gem>();
+        // MyDialog.RectMinSize = new Vector2(WIDTH, 500);
+        // GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize = new Vector2(WIDTH, 500);
     }
 
     private void Clear()
@@ -29,14 +31,24 @@ public class GemListScene : Node2D
         int gemI = _gems.Count;
         _gems.Add(gem);
         GemEntry gemEntry = new GemEntry();
-        MyVBox.AddChild(gemEntry);
+        MaskButton maskButton = new MaskButton(gemEntry);
+        MyVBox.AddChild(maskButton);
         gemEntry.MyGemUI.Set(gem);
-        gemEntry.MyGemUI.Connect(
+        maskButton.Mask.Connect(
             "pressed", this, "OnClickGem",
             new Godot.Collections.Array() { gemI }
         );
-        if (gem == null) return;
-        gemEntry.Labels[3].Text = gem.Explain();
+        if (gem == null)
+        {
+            gemEntry.Labels[5].Text = "Empty space.";
+            return;
+        }
+        gemEntry.Labels[0].BbcodeText = "[color=lime][center]0[/center][/color]";
+        gemEntry.Labels[1].BbcodeText = "[center]/[/center]";
+        gemEntry.Labels[2].BbcodeText = "[color=aqua][center]0[/center][/color]";
+        gemEntry.Labels[3].BbcodeText = "[center]/[/center]";
+        gemEntry.Labels[4].BbcodeText = "[color=yellow][center]0[/center][/color]";
+        gemEntry.Labels[5].BbcodeText = gem.Explain();
     }
 
     public void ListAll()
@@ -47,9 +59,14 @@ public class GemListScene : Node2D
         GemEntry gemEntry = new GemEntry();
         MyVBox.AddChild(gemEntry);
         gemEntry.MyGemUI.Empty();
-        gemEntry.Labels[0].Text = "Free /\n In {wand} /\n In Custom Gems";
+        // gemEntry.RectMinSize = new Vector2(0, 100);
+        gemEntry.Labels[0].BbcodeText = (
+            "[center][color=lime]Available[/color] /\n"
+            + "[color=aqua]In {wand}[/color] /\n"
+            + "[color=yellow]In Custom Gems[/color][/center]"
+        );
         gemEntry.Labels[0].RectMinSize = new Vector2(
-            gemEntry.Labels[0].RectMinSize.x * 3, 0
+            gemEntry.Labels[0].RectMinSize.x * 5, 0
         );
         // contents
         Add(null);
@@ -97,5 +114,9 @@ public class GemListScene : Node2D
         }
         MyDialog.Visible = false;
         EmitSignal("gemSelected");
+    }
+    public override void _Process(float delta)
+    {
+        Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
     }
 }

@@ -3,25 +3,30 @@ using System;
 
 public class GemEntry : HBoxContainer
 {
+    // code-defined
+    private static readonly int SIZE = 80;
     public GemUI MyGemUI;
-    public Label[] Labels;
+    public RichTextLabel[] Labels;
     public GemEntry() : base()
     {
-        Shared.QFreeChildren(this);
+        SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        RectMinSize = new Vector2(0, SIZE);
         MyGemUI = GemUI.ThisScene.Instance<GemUI>();
         AddChild(MyGemUI);
-        MyGemUI.RectMinSize = new Vector2(80, 80);
+        MyGemUI.RectMinSize = new Vector2(SIZE, SIZE);
         MyGemUI.SizeFlagsHorizontal = (int)Container.SizeFlags.Fill;
         MyGemUI.SizeFlagsVertical = (int)Container.SizeFlags.Fill;
-        Labels = new Label[4];
-        for (int i = 0; i < 4; i++)
+        Labels = new RichTextLabel[6];
+        for (int i = 0; i < 6; i++)
         {
-            Labels[i] = new Label();
+            Labels[i] = new RichTextLabel();
             AddChild(Labels[i]);
-            Labels[i].RectMinSize = new Vector2(30, 0);
-            Labels[i].Align = Label.AlignEnum.Center;
+            Labels[i].RectMinSize = new Vector2(50, 0);
+            Labels[i].BbcodeEnabled = true;
+            Labels[i].ScrollActive = false;
+            Labels[i].SizeFlagsVertical = (int)Container.SizeFlags.ShrinkCenter;
+            Labels[i].FitContentHeight = true;
         }
-        Labels[3].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
-        Labels[3].Autowrap = true;
+        Labels[5].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
     }
 }

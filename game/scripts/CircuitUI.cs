@@ -70,7 +70,7 @@ public class CircuitUI : Node2D
     }
     public override void _Ready()
     {
-        _grid = GetNode<GridContainer>("MyGrid");
+        _grid = GetNode<GridContainer>("PanelContainer/MyGrid");
         _GemList = GetNode<GemListScene>("MyGemList");
         _pAndTs = new List<ParticleAndTrail>();
         _pAndTsToFree = new Queue<ParticleAndTrail>();

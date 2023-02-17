@@ -4,7 +4,7 @@
 font_path = "res://misc/font/m5x7.ttf"
 
 [sub_resource type="DynamicFont" id=1]
-size = 48
+size = 36
 font_data = SubResource( 2 )
 
 [resource]
