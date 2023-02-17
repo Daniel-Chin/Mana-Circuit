@@ -29,11 +29,11 @@ public class CustomGem : Gem
         }
 
         PointInt location;
-        location = new PointInt(n / 2, 0);
+        location = new PointInt(0, n / 2);
         MyCircuit.Remove(location);
-        MyCircuit.Add(new Gem.Source(new PointInt(0, 1)).Place(location));
+        MyCircuit.Add(new Gem.Source(new PointInt(1, 0)).Place(location));
 
-        location = new PointInt(n / 2, n - 1);
+        location = new PointInt(n - 1, n / 2);
         MyCircuit.Remove(location);
         MyCircuit.Add(new Gem.Drain().Place(location));
     }

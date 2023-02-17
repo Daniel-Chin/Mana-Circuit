@@ -23,6 +23,7 @@ public class CircuitUI : AspectRatioContainer
     private Queue<ParticleAndTrail> _pAndTsToFree;
     private PointInt _selectedLocation;
     public Color? BackColor;
+    public bool IsInCG;
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -76,12 +77,13 @@ public class CircuitUI : AspectRatioContainer
     public CircuitUI() : base() { }
     public CircuitUI(
         Circuit circuit, int recursionDepth,
-        Color? backColor
+        Color? backColor, bool isInCG
     ) : base()
     {
         MyCircuit = circuit;
         RecursionDepth = recursionDepth;
         BackColor = backColor;
+        IsInCG = isInCG;
         AlignmentHorizontal = AlignMode.Begin;
         AlignmentVertical = AlignMode.Begin;
         _bgRect = new Control();
@@ -146,7 +148,7 @@ public class CircuitUI : AspectRatioContainer
                     continue;
                 }
                 Gem gem = MyCircuit.Field[i, j];
-                GemUI gemUI = new GemUI(gem, RecursionDepth);
+                GemUI gemUI = new GemUI(gem, RecursionDepth, IsInCG);
                 _grid.AddChild(gemUI);
                 if (RecursionDepth == 0)
                 {
