@@ -15,7 +15,7 @@ public class GemUI : TextureButton
         string filename;
         if (gem == null)
         {
-            filename = "black";
+            filename = "transparent";
         }
         else
         {
@@ -36,7 +36,7 @@ public class GemUI : TextureButton
                 FlipV = !g.Orientation;
                 break;
         }
-        TextureNormal = GD.Load<Texture>($"res://texture/{filename}.png");
+        TextureNormal = GD.Load<Texture>($"res://texture/gem/{filename}.png");
     }
     public void Empty()
     {

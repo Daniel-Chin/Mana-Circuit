@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public class GemListScene : Node2D
@@ -40,26 +41,39 @@ public class GemListScene : Node2D
         );
         if (gem == null)
         {
-            gemEntry.Labels[5].Text = "Empty space.";
+            gemEntry.Labels[5].Text = "Remove gem.";
             return;
         }
-        gemEntry.Labels[0].BbcodeText = "[color=lime][center]0[/center][/color]";
-        gemEntry.Labels[1].BbcodeText = "[center]/[/center]";
-        gemEntry.Labels[2].BbcodeText = "[color=aqua][center]0[/center][/color]";
-        gemEntry.Labels[3].BbcodeText = "[center]/[/center]";
-        gemEntry.Labels[4].BbcodeText = "[color=yellow][center]0[/center][/color]";
-        gemEntry.Labels[5].BbcodeText = gem.Explain();
+        if (_rotated)
+        {
+            gemEntry.Labels[0].BbcodeText = "[center]This way![/center]";
+            gemEntry.Labels[0].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+            foreach (var label in gemEntry.Labels.Skip(1))
+            {
+                label.QueueFree();
+            }
+        }
+        else
+        {
+            gemEntry.Labels[0].BbcodeText = "[color=lime][center]0[/center][/color]";
+            gemEntry.Labels[1].BbcodeText = "[center]/[/center]";
+            gemEntry.Labels[2].BbcodeText = "[color=aqua][center]0[/center][/color]";
+            gemEntry.Labels[3].BbcodeText = "[center]/[/center]";
+            gemEntry.Labels[4].BbcodeText = "[color=yellow][center]0[/center][/color]";
+            gemEntry.Labels[5].BbcodeText = gem.Explain();
+        }
     }
 
     public void ListAll()
     {
+        Console.Write(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize);
+        Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
         _rotated = false;
         Clear();
-        // headder
+        // header
         GemEntry gemEntry = new GemEntry();
         MyVBox.AddChild(gemEntry);
         gemEntry.MyGemUI.Empty();
-        // gemEntry.RectMinSize = new Vector2(0, 100);
         gemEntry.Labels[0].BbcodeText = (
             "[center][color=lime]Available[/color] /\n"
             + "[color=aqua]In {wand}[/color] /\n"
@@ -68,19 +82,38 @@ public class GemListScene : Node2D
         gemEntry.Labels[0].RectMinSize = new Vector2(
             gemEntry.Labels[0].RectMinSize.x * 5, 0
         );
+        foreach (var label in gemEntry.Labels.Skip(1))
+        {
+            label.QueueFree();
+        }
         // contents
+        Console.Write(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize);
+        Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
         Add(null);
         Add(new Gem.AddOne());
         Add(new Gem.WeakMult());
         Add(new Gem.Focus(new PointInt(0, 1)));
         Add(new Gem.Mirror(true));
         Add(new Gem.Stochastic(true));
+        Console.Write(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize);
+        Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
     }
 
     private bool AskRotate()
     {
         Gem gem = SelectedGem;
         Clear();
+        // header
+        GemEntry gemEntry = new GemEntry();
+        MyVBox.AddChild(gemEntry);
+        gemEntry.MyGemUI.Empty();
+        gemEntry.Labels[0].BbcodeText = "[center]Which way?[/center]";
+        gemEntry.Labels[0].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        foreach (var label in gemEntry.Labels.Skip(1))
+        {
+            label.QueueFree();
+        }
+        // contents
         switch (gem)
         {
             case Gem.Focus _:
@@ -117,6 +150,7 @@ public class GemListScene : Node2D
     }
     public override void _Process(float delta)
     {
-        Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
+        // Console.Write(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize);
+        // Console.WriteLine(GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectSize);
     }
 }

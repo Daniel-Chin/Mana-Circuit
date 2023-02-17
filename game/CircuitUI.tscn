@@ -5,7 +5,7 @@
 [ext_resource path="res://GemListScene.tscn" type="PackedScene" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.19, 0.19, 0.19, 1 )
+bg_color = Color( 0, 0, 0, 1 )
 
 [node name="CircuitUI" type="Node2D"]
 script = ExtResource( 1 )
@@ -21,8 +21,8 @@ margin_right = 500.0
 margin_bottom = 500.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/vseparation = 1
-custom_constants/hseparation = 1
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 columns = 2
 
 [node name="GemUI" parent="PanelContainer/MyGrid" instance=ExtResource( 2 )]
@@ -30,18 +30,18 @@ margin_right = 250.0
 margin_bottom = 250.0
 
 [node name="GemUI2" parent="PanelContainer/MyGrid" instance=ExtResource( 2 )]
-margin_left = 251.0
+margin_left = 250.0
 margin_right = 500.0
 margin_bottom = 250.0
 
 [node name="GemUI3" parent="PanelContainer/MyGrid" instance=ExtResource( 2 )]
-margin_top = 251.0
+margin_top = 250.0
 margin_right = 250.0
 margin_bottom = 500.0
 
 [node name="GemUI4" parent="PanelContainer/MyGrid" instance=ExtResource( 2 )]
-margin_left = 251.0
-margin_top = 251.0
+margin_left = 250.0
+margin_top = 250.0
 margin_right = 500.0
 margin_bottom = 500.0
 

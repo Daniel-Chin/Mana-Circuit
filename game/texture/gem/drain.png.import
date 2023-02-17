@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/drain.png-729b55823560cfd664d44423ea1b5deb.stex"
+path="res://.import/drain.png-4ed8ad62652f5dee853b4363c231f92f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://texture/drain.png"
-dest_files=[ "res://.import/drain.png-729b55823560cfd664d44423ea1b5deb.stex" ]
+source_file="res://texture/gem/drain.png"
+dest_files=[ "res://.import/drain.png-4ed8ad62652f5dee853b4363c231f92f.stex" ]
 
 [params]
 

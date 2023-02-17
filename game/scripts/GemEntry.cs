@@ -21,7 +21,7 @@ public class GemEntry : HBoxContainer
         {
             Labels[i] = new RichTextLabel();
             AddChild(Labels[i]);
-            Labels[i].RectMinSize = new Vector2(50, 0);
+            Labels[i].RectMinSize = new Vector2(45, 0);
             Labels[i].BbcodeEnabled = true;
             Labels[i].ScrollActive = false;
             Labels[i].SizeFlagsVertical = (int)Container.SizeFlags.ShrinkCenter;

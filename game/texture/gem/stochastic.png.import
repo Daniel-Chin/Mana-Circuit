@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/wall.png-69cf19ed52c6192aff7928b9896614fd.stex"
+path="res://.import/stochastic.png-7c500afabcf560496b304092dca03fc7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://texture/wall.png"
-dest_files=[ "res://.import/wall.png-69cf19ed52c6192aff7928b9896614fd.stex" ]
+source_file="res://texture/gem/stochastic.png"
+dest_files=[ "res://.import/stochastic.png-7c500afabcf560496b304092dca03fc7.stex" ]
 
 [params]
 
