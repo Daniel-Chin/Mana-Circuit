@@ -8,7 +8,10 @@ public class InstantMSE : MarginContainer
     public override void _Ready()
     {
         _label = GetNode<RichTextLabel>("Label");
-        _cui = new CircuitUI(GameState.Persistent.MyTypelessGem.MyCircuit, 0);
+        _cui = new CircuitUI(
+            GameState.Persistent.MyTypelessGem.MyCircuit, 0,
+            Colors.Black
+        );
         _cui.Connect(
             "modified", this, "circuitModified"
         );

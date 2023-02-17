@@ -1,16 +1,20 @@
 using Godot;
 using System;
 
-public class GemUI : MarginContainer
+public class GemUI : AspectRatioContainer
 {
     // code-defined
     public TextureButton Button;
+    public CircuitUI MyCircuitUI;
     private Gem _gem = null;
+    public int RecursionDepth;
     private static Shader _flipper = GD.Load<Shader>("res://Flip.gdshader");
     public GemUI() : base() { }
-    public GemUI(Gem gem) : base()
+    public GemUI(Gem gem, int recursionDepth) : base()
     {
         _gem = gem;
+        RecursionDepth = recursionDepth;
+        Ratio = 1f;
         SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
         Button = new TextureButton();
@@ -19,34 +23,45 @@ public class GemUI : MarginContainer
         Button.SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         Button.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
         AddChild(Button);
-        Set(gem);
+        Set();
     }
-    public void Set(Gem gem)
+    private void Set()
     {
-        _gem = gem;
         string filename;
-        if (gem == null)
+        if (_gem is CustomGem cG)
         {
             filename = "transparent";
+            MyCircuitUI = new CircuitUI(
+                cG.MyCircuit, RecursionDepth + 1, ColorOf(cG)
+            );
+            AddChild(MyCircuitUI);
+            MyCircuitUI.ShowBehindParent = true;
         }
         else
         {
-            filename = gem.Name();
-        }
-        switch (gem)
-        {
-            case Gem.Source g:
-                SetDirection(g.Direction);
-                break;
-            case Gem.Focus g:
-                SetDirection(g.Direction);
-                break;
-            case Gem.Stochastic g:
-                Button.FlipV = !g.Orientation;
-                break;
-            case Gem.Mirror g:
-                Button.FlipV = !g.Orientation;
-                break;
+            if (_gem == null)
+            {
+                filename = "transparent";
+            }
+            else
+            {
+                filename = _gem.Name();
+            }
+            switch (_gem)
+            {
+                case Gem.Source g:
+                    SetDirection(g.Direction);
+                    break;
+                case Gem.Focus g:
+                    SetDirection(g.Direction);
+                    break;
+                case Gem.Stochastic g:
+                    Button.FlipV = !g.Orientation;
+                    break;
+                case Gem.Mirror g:
+                    Button.FlipV = !g.Orientation;
+                    break;
+            }
         }
         Button.TextureNormal = GD.Load<Texture>($"res://texture/gem/{filename}.png");
     }
@@ -83,6 +98,22 @@ public class GemUI : MarginContainer
             ShaderMaterial mat = new ShaderMaterial();
             mat.Shader = _flipper;
             Material = mat;
+        }
+    }
+    private Color? ColorOf(CustomGem cG)
+    {
+        if (cG.MetaLevel.MyRank != Rank.FINITE)
+            return null;
+        switch (cG.MetaLevel.K % 3)
+        {
+            case 0:
+                return Color.FromHsv(.16f, 1f, .3f, 1f);
+            case 1:
+                return Color.FromHsv(.66f, 1f, .3f, 1f);
+            case 2:
+                return Color.FromHsv(.38f, 1f, .3f, 1f);
+            default:
+                throw new Shared.ValueError();
         }
     }
 }

@@ -13,15 +13,16 @@ public class CircuitUI : AspectRatioContainer
     private static readonly float ADVECT_LEN = .3f;
     private static readonly float NOISE_MULT = 1.5f;
     private static readonly Vector2 HALF = new Vector2(.5f, .5f);
+    private static Shader _rainbow = GD.Load<Shader>("res://Rainbow.gdshader");
     public Circuit MyCircuit;
     public int RecursionDepth;
-    private ColorRect _bgRect;
+    private Control _bgRect;
     private GridContainer _grid;
     private GemListScene _GemList;
     private List<ParticleAndTrail> _pAndTs;
     private Queue<ParticleAndTrail> _pAndTsToFree;
     private PointInt _selectedLocation;
-    public Color BackColor;
+    public Color? BackColor;
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -72,12 +73,17 @@ public class CircuitUI : AspectRatioContainer
         }
     }
     public CircuitUI() : base() { }
-    public CircuitUI(Circuit circuit, int recursionDepth) : base()
+    public CircuitUI(
+        Circuit circuit, int recursionDepth,
+        Color? backColor
+    ) : base()
     {
         MyCircuit = circuit;
         RecursionDepth = recursionDepth;
-        _bgRect = new ColorRect();
-        AddChild(_bgRect);
+        BackColor = backColor;
+        AlignmentHorizontal = AlignMode.Begin;
+        AlignmentVertical = AlignMode.Begin;
+        _bgRect = new Control();
         _grid = new GridContainer();
         AddChild(_grid);
         _grid.AddConstantOverride("vseparation", 0);
@@ -98,17 +104,35 @@ public class CircuitUI : AspectRatioContainer
 
     public void Rebuild()
     {
-        Console.WriteLine("rebuild");
         Shared.QFreeChildren(_grid);
-        _bgRect.Color = BackColor;
-        _grid.Columns = MyCircuit.Size.IntX;
+        _bgRect.QueueFree();
+        if (BackColor == null)
+        {
+            TextureRect _rect = new TextureRect();
+            _rect.Texture = null;
+            _rect.Expand = true;
+            _rect.StretchMode = TextureRect.StretchModeEnum.Scale;
+            ShaderMaterial mat = new ShaderMaterial();
+            mat.Shader = _rainbow;
+            _rect.Material = mat;
+            _bgRect = _rect;
+        }
+        else
+        {
+            ColorRect _rect = new ColorRect();
+            _rect.Color = (Color)BackColor;
+            _bgRect = _rect;
+        }
         Ratio = MyCircuit.Size.IntY / (float)MyCircuit.Size.IntX;
+        if (RecursionDepth > Shared.MAX_RECURSION)
+            return;
+        _grid.Columns = MyCircuit.Size.IntX;
         for (int j = 0; j < MyCircuit.Size.IntY; j++)
         {
             for (int i = 0; i < MyCircuit.Size.IntX; i++)
             {
                 Gem gem = MyCircuit.Field[i, j];
-                GemUI gemUI = new GemUI(gem);
+                GemUI gemUI = new GemUI(gem, RecursionDepth);
                 _grid.AddChild(gemUI);
                 gemUI.Button.Connect(
                     "pressed", this, "OnClickGem",
