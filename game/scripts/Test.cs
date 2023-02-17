@@ -16,6 +16,10 @@ public class Test : Node2D
         // TestMath();
         // MagicProblem.Test();
         // TestCircuit();
+
+        Console.Write("Font height = ");
+        Console.WriteLine(Shared.FONT_HEIGHT);
+
         Console.WriteLine("end");
         // Console.ReadKey();
     }
