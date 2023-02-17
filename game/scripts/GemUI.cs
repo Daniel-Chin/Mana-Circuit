@@ -110,7 +110,7 @@ public class GemUI : AspectRatioContainer
         {
             ShaderMaterial mat = new ShaderMaterial();
             mat.Shader = _flipper;
-            Material = mat;
+            Button.Material = mat;
         }
     }
     private Color? ColorOf(CustomGem cG)
