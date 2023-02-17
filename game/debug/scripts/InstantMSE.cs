@@ -1,19 +1,18 @@
 using Godot;
 using System;
 
-public class InstantMSE : Node2D
+public class InstantMSE : MarginContainer
 {
     private RichTextLabel _label;
     private CircuitUI _cui;
     public override void _Ready()
     {
         _label = GetNode<RichTextLabel>("Label");
-        _cui = GetNode<CircuitUI>("CircuitUI");
-        _cui.MyCircuit = GameState.Persistent.MyTypelessGem.MyCircuit;
-        _cui.Rebuild();
+        _cui = new CircuitUI(GameState.Persistent.MyTypelessGem.MyCircuit, 0);
         _cui.Connect(
             "modified", this, "circuitModified"
         );
+        AddChild(_cui);
         circuitModified();
     }
 

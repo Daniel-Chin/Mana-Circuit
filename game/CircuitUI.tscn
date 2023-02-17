@@ -1,49 +1,23 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scripts/CircuitUI.cs" type="Script" id=1]
 [ext_resource path="res://GemUI.tscn" type="PackedScene" id=2]
-[ext_resource path="res://GemListScene.tscn" type="PackedScene" id=3]
 
-[node name="CircuitUI" type="Node2D"]
+[node name="CircuitUI" type="AspectRatioContainer"]
 script = ExtResource( 1 )
 
-[node name="Container" type="MarginContainer" parent="."]
-margin_right = 500.0
-margin_bottom = 500.0
-rect_min_size = Vector2( 500, 500 )
-
-[node name="BG" type="ColorRect" parent="Container"]
-margin_right = 500.0
-margin_bottom = 500.0
+[node name="BG" type="ColorRect" parent="."]
 color = Color( 0, 0, 0, 1 )
 
-[node name="MyGrid" type="GridContainer" parent="Container"]
-margin_right = 500.0
-margin_bottom = 500.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="MyGrid" type="GridContainer" parent="."]
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 2
 
-[node name="GemUI" parent="Container/MyGrid" instance=ExtResource( 2 )]
-margin_right = 250.0
-margin_bottom = 250.0
+[node name="GemUI" parent="MyGrid" instance=ExtResource( 2 )]
 
-[node name="GemUI2" parent="Container/MyGrid" instance=ExtResource( 2 )]
-margin_left = 250.0
-margin_right = 500.0
-margin_bottom = 250.0
+[node name="GemUI2" parent="MyGrid" instance=ExtResource( 2 )]
 
-[node name="GemUI3" parent="Container/MyGrid" instance=ExtResource( 2 )]
-margin_top = 250.0
-margin_right = 250.0
-margin_bottom = 500.0
+[node name="GemUI3" parent="MyGrid" instance=ExtResource( 2 )]
 
-[node name="GemUI4" parent="Container/MyGrid" instance=ExtResource( 2 )]
-margin_left = 250.0
-margin_top = 250.0
-margin_right = 500.0
-margin_bottom = 500.0
-
-[node name="MyGemList" parent="." instance=ExtResource( 3 )]
+[node name="GemUI4" parent="MyGrid" instance=ExtResource( 2 )]

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class CircuitUI : Node2D
+public class CircuitUI : AspectRatioContainer
 {
     // code-defined
     [Signal] public delegate void modified();
@@ -13,7 +13,6 @@ public class CircuitUI : Node2D
     private static readonly float ADVECT_LEN = .3f;
     private static readonly float NOISE_MULT = 1.5f;
     private static readonly Vector2 HALF = new Vector2(.5f, .5f);
-    private int _vh_sep;
     public Circuit MyCircuit;
     public int RecursionDepth;
     private ColorRect _bgRect;
@@ -77,29 +76,33 @@ public class CircuitUI : Node2D
     {
         MyCircuit = circuit;
         RecursionDepth = recursionDepth;
-        Rebuild();
-    }
-    public override void _Ready()
-    {
-        _bgRect = GetNode<ColorRect>("Container/BG");
-        _grid = GetNode<GridContainer>("Container/MyGrid");
-        _GemList = GetNode<GemListScene>("MyGemList");
+        _bgRect = new ColorRect();
+        AddChild(_bgRect);
+        _grid = new GridContainer();
+        AddChild(_grid);
+        _grid.AddConstantOverride("vseparation", 0);
+        _grid.AddConstantOverride("hseparation", 0);
         _pAndTs = new List<ParticleAndTrail>();
         _pAndTsToFree = new Queue<ParticleAndTrail>();
-        _vh_sep = _grid.GetConstant("vseparation");
-        _GemList.Connect(
-            "gemSelected", this, "onGemListGemSelect"
-        );
+        if (recursionDepth == 0)
+        {
+            _GemList = GD.Load<PackedScene>("res://GemListScene.tscn").Instance<GemListScene>();
+            AddChild(_GemList);
+            _GemList.Connect(
+                "gemSelected", this, "onGemListGemSelect"
+            );
+        }
 
-        if (MyCircuit != null)
-            Rebuild();
+        Rebuild();
     }
 
     public void Rebuild()
     {
+        Console.WriteLine("rebuild");
         Shared.QFreeChildren(_grid);
         _bgRect.Color = BackColor;
         _grid.Columns = MyCircuit.Size.IntX;
+        Ratio = MyCircuit.Size.IntY / (float)MyCircuit.Size.IntX;
         for (int j = 0; j < MyCircuit.Size.IntY; j++)
         {
             for (int i = 0; i < MyCircuit.Size.IntX; i++)
@@ -144,7 +147,7 @@ public class CircuitUI : Node2D
 
     private Vector2 ToUICoords(Vector2 circuitCoords)
     {
-        int unit = (int)(_grid.GetChildren()[0] as GemUI).RectSize.x + _vh_sep;
+        int unit = (int)(_grid.GetChildren()[0] as GemUI).RectSize.x;
         return (circuitCoords + HALF) * unit;
     }
 
