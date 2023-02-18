@@ -11,6 +11,7 @@ public class GemListScene : Node2D
     public VBoxContainer CGVBox;
     private List<Gem> _gems;
     public Gem SelectedGem;
+    public Simplest MetaLevel;
     private bool _rotated;
 
     public override void _Ready()
@@ -51,10 +52,8 @@ public class GemListScene : Node2D
         }
         else
         {
-            int nInWand = CountGemsInWand(gem);
-            int nInCGs = CountGemsInCGs(gem);
-            int nAvailable = CountGemsOwned(gem) - nInWand - nInCGs;
-            gemEntry.Labels[0].BbcodeText = $"[color=lime][center]{nAvailable}[/center][/color]";
+            var (nInWand, nInCGs, nAvailable) = CountGems(gem);
+            gemEntry.Labels[0].BbcodeText = $"[color=lime][center]{MathBB.Build(nAvailable)}[/center][/color]";
             gemEntry.Labels[1].BbcodeText = "[center]/[/center]";
             gemEntry.Labels[2].BbcodeText = $"[color=aqua][center]{nInWand}[/center][/color]";
             gemEntry.Labels[3].BbcodeText = "[center]/[/center]";
@@ -63,9 +62,29 @@ public class GemListScene : Node2D
         }
     }
 
-    public void ListAll()
+    public (int, int, Simplest) CountGems(Gem gem)
+    {
+        int nInWand = CountGemsInWand(gem);
+        int nInCGs = CountGemsInCGs(gem);
+        Simplest nOwned = CountGemsOwned(gem);
+        Simplest nAvailable;
+        if (nOwned.MyRank == Rank.FINITE)
+        {
+            nAvailable = new Simplest(
+                Rank.FINITE, nOwned.K - nInWand - nInCGs
+            );
+        }
+        else
+        {
+            nAvailable = nOwned;
+        }
+        return (nInWand, nInCGs, nAvailable);
+    }
+
+    public void ListAll(Simplest metaLevel)
     {
         _gems.Clear();
+        MetaLevel = metaLevel;
         ListAll(GemVBox);
         ListAll(CGVBox);
     }
@@ -154,6 +173,25 @@ public class GemListScene : Node2D
     public void OnClickGem(bool gemIsCG, int gemI)
     {
         SelectedGem = _gems[gemI];
+        if (SelectedGem != null)
+        {
+            var (nInWand, nInCGs, nAvailable) = CountGems(SelectedGem);
+            if (nAvailable <= Simplest.Zero())
+            {
+                // No gem available
+                return;
+            }
+            if (
+                SelectedGem is CustomGem cG && (
+                    cG.MetaLevel >= MetaLevel
+                    && cG.MetaLevel.MyRank == Rank.FINITE
+                )
+            )
+            {
+                // Gem type illegal
+                return;
+            }
+        }
         if (!gemIsCG && !_rotated)
         {
             _rotated = true;
@@ -166,7 +204,7 @@ public class GemListScene : Node2D
         EmitSignal("gemSelected");
     }
 
-    private int CountGemsOwned(Gem gem)
+    private Simplest CountGemsOwned(Gem gem)
     {
         if (gem is CustomGem cG)
         {
@@ -177,20 +215,20 @@ public class GemListScene : Node2D
                     (int)cG.MetaLevel.K, out HasCG
                 );
                 if (HasCG == null)
-                    return 0;
-                return 1;
+                    return Simplest.Zero();
+                return Simplest.One();
             }
             else
             {
                 // typeless
                 if (GameState.Persistent.MyTypelessGem == null)
-                    return 0;
-                return 1;
+                    return Simplest.Zero();
+                return Simplest.W();
             }
         }
         int n = 0;
         GameState.Persistent.HasGems.TryGetValue(gem.Name(), out n);
-        return n;
+        return new Simplest(Rank.FINITE, n);
     }
 
     private int CountGemsInCircuit(Gem gem, Circuit circuit)

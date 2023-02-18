@@ -1,3 +1,5 @@
+using System;
+
 public abstract class EstimateLFS
 {
     public abstract bool SolveRank(Rank rank, int k);
@@ -5,7 +7,7 @@ public abstract class EstimateLFS
     {
         if (SolveRank(Rank.TWO_TO_THE_W, -1))
         {
-            // Console.WriteLine("TWO_TO_THE_W is a solution.");
+            Console.WriteLine("TWO_TO_THE_W is a solution.");
             ExponentialSearch eSearch = new ExponentialSearch(2333);
             try
             {
@@ -23,7 +25,7 @@ public abstract class EstimateLFS
         }
         else
         {
-            for (int k = 0; k < 69; k++)
+            for (int k = 2; k < 69; k++)
             {
                 if (SolveRank(Rank.STACK_W, k))
                     return new Simplest(Rank.STACK_W, k);

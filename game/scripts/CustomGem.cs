@@ -90,6 +90,7 @@ public class CustomGem : Gem
         }
         public override bool SolveRank(Rank rank, int k)
         {
+            Console.WriteLine("Tring " + rank + ", k=" + k);
             Simplest x = new Simplest(rank, k);
             Parent.CachedMultiplier = x;
             Source source = Parent.MyCircuit.FindAll<Source>()[0];
@@ -158,13 +159,28 @@ public class CustomGem : Gem
             }
 
             // return true if solution >= needed
-            if (drainMana == null)
-                return true;
-            if (drainMana <= x)
+            bool accepted = true;
+            foreach (Simplest s in lhs)
             {
-                return true;
+                if (!s.Equals(x))
+                {
+                    accepted = false;
+                    break;
+                }
             }
-            return false;
+            if (accepted)
+            {
+                if (drainMana == null || drainMana <= x)
+                {
+                    accepted = true;
+                }
+                else
+                {
+                    accepted = false;
+                }
+            }
+            Console.WriteLine("accept " + accepted);
+            return accepted;
         }
     }
 

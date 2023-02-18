@@ -510,4 +510,9 @@ public class Simplest
         }
         return x;
     }
+
+    public static Simplest W()
+    {
+        return new Simplest(Rank.W_TO_THE_K, 1);
+    }
 }

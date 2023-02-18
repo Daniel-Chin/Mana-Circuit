@@ -23,7 +23,7 @@ public class CircuitUI : AspectRatioContainer
     private Queue<ParticleAndTrail> _pAndTsToFree;
     private PointInt _selectedLocation;
     public Color? BackColor;
-    public bool IsInCG;
+    public Simplest MetaLevel;
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -77,13 +77,13 @@ public class CircuitUI : AspectRatioContainer
     public CircuitUI() : base() { }
     public CircuitUI(
         Circuit circuit, int recursionDepth,
-        Color? backColor, bool isInCG
+        Color? backColor, Simplest metaLevel
     ) : base()
     {
         MyCircuit = circuit;
         RecursionDepth = recursionDepth;
         BackColor = backColor;
-        IsInCG = isInCG;
+        MetaLevel = metaLevel;
         AlignmentHorizontal = AlignMode.Begin;
         AlignmentVertical = AlignMode.Begin;
         _bgRect = new Control();
@@ -149,7 +149,7 @@ public class CircuitUI : AspectRatioContainer
                     continue;
                 }
                 Gem gem = MyCircuit.Field[i, j];
-                GemUI gemUI = new GemUI(gem, RecursionDepth, IsInCG);
+                GemUI gemUI = new GemUI(gem, RecursionDepth, MetaLevel >= Simplest.Zero());
                 _grid.AddChild(gemUI);
                 if (RecursionDepth == 0)
                 {
@@ -218,7 +218,7 @@ public class CircuitUI : AspectRatioContainer
             case Gem.Drain d:
                 return;
         }
-        _GemList.ListAll();
+        _GemList.ListAll(MetaLevel);
         _GemList.MyDialog.PopupCentered();
     }
 
