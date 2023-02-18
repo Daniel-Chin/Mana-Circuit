@@ -37,7 +37,7 @@ public class GemUI : AspectRatioContainer
                 cG.MyCircuit, RecursionDepth + 1, ColorOf(cG), true
             );
             AddChild(MyCircuitUI);
-            MyCircuitUI.ShowBehindParent = true;
+            MoveChild(MyCircuitUI, 0);
         }
         else
         {

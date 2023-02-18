@@ -16,6 +16,7 @@ public class InstantMSE : MarginContainer
             "modified", this, "circuitModified"
         );
         AddChild(_cui);
+        MoveChild(_label, 2);
         circuitModified();
     }
 
