@@ -107,6 +107,7 @@ public class CircuitUI : AspectRatioContainer
 
     public void Rebuild()
     {
+        // Console.WriteLine("Rebuild start");
         Shared.QFreeChildren(_grid);
         _bgRect.QueueFree();
         if (BackColor == null)
@@ -159,10 +160,14 @@ public class CircuitUI : AspectRatioContainer
                 }
             }
         }
+        // Console.WriteLine("Rebuild end");
     }
 
     public override void _Process(float delta)
     {
+        if (RecursionDepth > Shared.MAX_RECURSION)
+            return;
+        // Console.WriteLine("Process begin");
         foreach (ParticleAndTrail pT in _pAndTs)
         {
             if (Shared.Rand.NextDouble() < ADVECT_LAMBDA * delta)
@@ -186,10 +191,17 @@ public class CircuitUI : AspectRatioContainer
             ParticleAndTrail pT = new ParticleAndTrail(this, s);
             _pAndTs.Add(pT);
         }
+        // Console.WriteLine("Process end");
     }
 
     private Vector2 ToUICoords(Vector2 circuitCoords)
     {
+        Godot.Collections.Array a = _grid.GetChildren();
+        if (a.Count == 0)
+        {
+            Console.WriteLine("count == 0");
+            Console.WriteLine(Name);
+        }
         int unit = (int)(_grid.GetChildren()[0] as GemUI).RectSize.x;
         if (RecursionDepth == 0)
             return (circuitCoords + HALF) * unit;
