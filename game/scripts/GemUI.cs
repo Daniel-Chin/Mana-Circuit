@@ -38,6 +38,7 @@ public class GemUI : AspectRatioContainer
             );
             AddChild(MyCircuitUI);
             MoveChild(MyCircuitUI, 0);
+            MyCircuitUI.Name += "_CG_CircuitUI";
         }
         else
         {

@@ -29,9 +29,26 @@ namespace GameState
             HasCustomGems.Add(3, new CustomGem(new Simplest(Rank.FINITE, 3)));
             HasCustomGems.Add(6, new CustomGem(new Simplest(Rank.FINITE, 6)));
             MyTypelessGem = new CustomGem(new Simplest(Rank.W_TO_THE_K, 1));
+
+            Ready();
         }
         public static void WriteDisk() { }
-        public static void LoadDisk() { }
+        public static void LoadDisk()
+        {
+            Ready();
+        }
+        public static void Ready()
+        {
+            foreach (var item in HasCustomGems)
+            {
+                item.Value.Eval();
+            }
+            if (MyTypelessGem != null)
+            {
+                MyTypelessGem.Eval();
+            }
+
+        }
     }
     public static class Transient
     {

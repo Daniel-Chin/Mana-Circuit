@@ -161,6 +161,8 @@ public class GemListScene : Node2D
                 return;
         }
         MyDialog.Visible = false;
+        Shared.QFreeChildren(GemVBox);
+        Shared.QFreeChildren(CGVBox);
         EmitSignal("gemSelected");
     }
 
