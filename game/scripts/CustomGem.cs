@@ -61,9 +61,17 @@ public class CustomGem : Gem
             // typeless custom gem
             // recursion makes the system of eq. non-linear, 
             // so I can't solve for finite solutions just by 
-            // matrix division. Give up. Only get 
-            // infinite solutions. 
+            // matrix division. Give up. Just brute force. 
             EvalTypeless eT = new EvalTypeless(this);
+            for (int i = 0; i < 3; i++)
+            {
+                if (eT.SolveRank(Rank.FINITE, i))
+                {
+                    CachedMultiplier = new Simplest(Rank.FINITE, i);
+                    return;
+                }
+
+            }
             CachedMultiplier = eT.Search();
             return;
         }
@@ -158,29 +166,18 @@ public class CustomGem : Gem
                 }
             }
 
-            // return true if solution >= needed
-            bool accepted = true;
+            if (drainMana == null)
+                return x.Equals(Simplest.Zero());
             foreach (Simplest s in lhs)
             {
                 if (!s.Equals(x))
-                {
-                    accepted = false;
-                    break;
-                }
+                    return false;
             }
-            if (accepted)
-            {
-                if (drainMana == null || drainMana <= x)
-                {
-                    accepted = true;
-                }
-                else
-                {
-                    accepted = false;
-                }
-            }
-            Console.WriteLine("accept " + accepted);
-            return accepted;
+            if (!x.Equals(drainMana))
+                return false;
+            return true;
+            // Console.WriteLine("accept " + accepted);
+            // return accepted;
         }
     }
 

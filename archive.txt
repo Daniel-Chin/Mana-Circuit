@@ -1,0 +1,9 @@
+2/18 
+we cannot use binary search to gain LFS solutions. When a solution is rejected, you don't know if you should increase or decrease the guess. e.g. a constant-value mana stream enters a focuser. 
+
+what we really need is the least F-closed superposition.
+x: the superposition guess.
+F: eval the mana flow given the guess. 
+F(x) yields the entry mana for all focusers. 
+if F(x) <= x for all focusers, then accept. 
+My hope: if x_0 is accepted, then any x_1 > x_0 is also accepted. 
