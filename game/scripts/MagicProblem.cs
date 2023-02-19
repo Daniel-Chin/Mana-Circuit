@@ -15,28 +15,7 @@ public class MagicProblem
         MinusB = Simplest.Zeros(N);
     }
 
-    public Simplest[] Solve()
-    {
-        Simplest[] solution = new Simplest[N];
-        Vector<double> x = SolveFinite();
-        if (x != null)
-        {
-            for (int i = 0; i < N; i++)
-            {
-                solution[i] = new Simplest(Rank.FINITE, x[i]);
-            }
-            return solution;
-        }
-        Console.WriteLine("No finite solution.");
-        Simplest simplest = new SolveInfinite(this).Search();
-        for (int i = 0; i < N; i++)
-        {
-            solution[i] = simplest;
-        }
-        return solution;
-    }
-
-    private Vector<double> SolveFinite()
+    public Vector<double> SolveFinite()
     {
         Simplest[] solution = new Simplest[N];
         Matrix<double> A = Matrix<double>.Build.Dense(N, N);
@@ -61,45 +40,6 @@ public class MagicProblem
         if (double.IsNaN(x.Minimum()) || x.Minimum() < 0)
             return null;    // reject NaN & negative solutions
         return x;
-    }
-
-    private class SolveInfinite : EstimateLFS
-    {
-        public MagicProblem Parent;
-        public SolveInfinite(MagicProblem parent)
-        {
-            Parent = parent;
-        }
-        public override bool SolveRank(Rank rank, int k)
-        {
-            Simplest x = new Simplest(rank, k);
-            Console.Write("Trying ");
-            Console.WriteLine(x);
-            bool doAccept = true;
-            for (int i = 0; i < Parent.N; i++)
-            {
-                Simplest acc = Simplest.Zero();
-                for (int j = 0; j < Parent.N; j++)
-                {
-                    acc = Simplest.Eval(
-                        acc, Operator.PLUS, Simplest.Eval(
-                            x, Operator.TIMES, Parent.AWithoutDiag[i, j]
-                        )
-                    );
-                }
-                acc = Simplest.Eval(
-                    acc, Operator.PLUS, Parent.MinusB[i]
-                );
-                if (!acc.Equals(x))
-                {
-                    doAccept = false;
-                    break;
-                }
-            }
-            Console.Write("Accept? ");
-            Console.WriteLine(doAccept);
-            return doAccept;
-        }
     }
 
     public static void Test()

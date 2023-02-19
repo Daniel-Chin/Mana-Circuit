@@ -156,16 +156,25 @@ public class Circuit
         return Field[location.IntX, location.IntY];
     }
 
-    public Simplest MinimumSuperpositionEquilibrium(int inputMana)
+    public (MagicProblem, Simplest[]) StaticAnalysis(
+        Simplest guess, // =null to denote each static source as an unknown
+        int inputMana
+    )
     {
         Gem.Source source = FindAll<Gem.Source>()[0];
+        List<Gem.Stochastic> stochastics = FindAll<Gem.Stochastic>();
         List<Gem.Focus> focuses = FindAll<Gem.Focus>();
-        int n = focuses.Count;
+        int n = stochastics.Count * 4 + focuses.Count;
         MagicProblem magicProblem = new MagicProblem(n);
-        Dictionary<Gem.Focus, int> dictionary = new Dictionary<Gem.Focus, int>();
+        Dictionary<Gem, int> dictionary = new Dictionary<Gem, int>();
         {
             int i = 0;
-            foreach (Gem.Focus focus in focuses)
+            foreach (Gem stochastic in stochastics)
+            {
+                dictionary[stochastic] = i;
+                i += 4;
+            }
+            foreach (Gem focus in focuses)
             {
                 dictionary[focus] = i;
                 i++;
@@ -181,9 +190,28 @@ public class Circuit
         for (int i = 0; i < n; i++)
         {
             mana = Simplest.Zeros(n + 1);
-            mana[i + 1].K = 1;
-            Particle p = new Particle(focuses[i].Location, null, mana);
-            p = focuses[i].Apply(p);
+            if (guess == null)
+            {
+                mana[i + 1].K = 1;
+            }
+            else
+            {
+                mana[0] = guess;
+            }
+            Gem gem;
+            Particle p = new Particle(null, null, mana);
+            if (i < stochastics.Count * 4)
+            {
+                gem = stochastics[i / 4];
+                p.Location = gem.Location;
+                p.Direction = PointInt.PhaseToBaseVec(i % 4);
+            }
+            else
+            {
+                gem = focuses[i - stochastics.Count * 4];
+                p.Location = gem.Location;
+                p = gem.Apply(p);
+            }
             p.Location += p.Direction;
             particles.Enqueue(p);
         }
@@ -195,54 +223,68 @@ public class Circuit
             // Console.WriteLine(particles.Count);
             Particle p = particles.Dequeue();
             Gem gem = Seek(p.Location);
-            if (gem is Gem.Drain drain)
+            switch (gem)
             {
-                Console.WriteLine("drain got");
-                Console.WriteLine(p);
-                drainMana = (Simplest[])p.Mana.Clone();
-            }
-            else if (gem is Gem.Focus focus)
-            {
-                Console.WriteLine("focus got");
-                Console.WriteLine(p);
-                int iFocus = dictionary[focus];
-                for (int j = 0; j < n; j++)
-                {
-                    magicProblem.AWithoutDiag[iFocus, j] = Simplest.Eval(
-                        magicProblem.AWithoutDiag[iFocus, j],
-                        Operator.PLUS, p.Mana[j + 1]
-                    );
-                }
-                magicProblem.MinusB[iFocus] = Simplest.Eval(
-                    magicProblem.MinusB[iFocus],
-                    Operator.PLUS, p.Mana[0]
-                );
-            }
-            else
-            {
-                foreach (Particle newP in Advect(p, true, false))
-                {
-                    particles.Enqueue(newP);
-                }
+                case Gem.Drain drain:
+                    // Console.WriteLine("drain got " + p);
+                    drainMana = (Simplest[])p.Mana.Clone();
+                    break;
+                case Gem.Focus _:
+                case Gem.Stochastic _:
+                    // Console.WriteLine(gem + " got " + p);
+                    int i = dictionary[gem];
+                    if (gem is Gem.Focus)
+                    {
+                        JoinInto(magicProblem, i, p);
+                    }
+                    else if (gem is Gem.Stochastic stochastic)
+                    {
+                        p.Multiply(0.5);
+                        int j = i + PointInt.BaseVecToPhase(p.Direction);
+                        JoinInto(magicProblem, j, p);
+                        p = stochastic.ApplyMirror(p);
+                        j = i + PointInt.BaseVecToPhase(p.Direction);
+                        JoinInto(magicProblem, j, p);
+                    }
+                    break;
+                default:
+                    foreach (Particle newP in Advect(p, true, false))
+                    {
+                        particles.Enqueue(newP);
+                        // Console.WriteLine("new particle from " + gem);
+                    }
+                    break;
             }
         }
+        return (magicProblem, drainMana);
+    }
 
-        if (drainMana == null)
-            return Simplest.Zero();
-        magicProblem.Print();
-        Simplest acc = drainMana[0];
-        if (n != 0)
+    private void JoinInto(
+        MagicProblem magicProblem, int receiverI, Particle p
+    )
+    {
+        for (int j = 0; j < magicProblem.N; j++)
         {
-            Simplest[] solution = magicProblem.Solve();
-            for (int i = 0; i < n; i++)
-            {
-                acc = Simplest.Eval(
-                    acc, Operator.PLUS,
-                    Simplest.Eval(solution[i], Operator.TIMES, drainMana[i + 1])
-                );
-            }
+            magicProblem.AWithoutDiag[receiverI, j] = Simplest.Eval(
+                magicProblem.AWithoutDiag[receiverI, j],
+                Operator.PLUS, p.Mana[j + 1]
+            );
         }
+        magicProblem.MinusB[receiverI] = Simplest.Eval(
+            magicProblem.MinusB[receiverI],
+            Operator.PLUS, p.Mana[0]
+        );
+    }
 
-        return acc;
+    public bool DoSatisfy(
+        Simplest guess, MagicProblem magicProblem
+    )
+    {
+        foreach (Simplest s in magicProblem.MinusB)
+        {
+            if (!(s <= guess))
+                return false;
+        }
+        return true;
     }
 }

@@ -515,4 +515,21 @@ public class Simplest
     {
         return new Simplest(Rank.W_TO_THE_K, 1);
     }
+
+    public static Simplest Bottom(Rank rank)
+    {
+        switch (rank)
+        {
+            case Rank.FINITE:
+                return Simplest.Zero();
+            case Rank.W_TO_THE_K:
+                return new Simplest(rank, 1);
+            case Rank.TWO_TO_THE_W:
+                return new Simplest(rank, -1);
+            case Rank.STACK_W:
+                return new Simplest(rank, 2);
+            default:
+                throw new Shared.ValueError();
+        }
+    }
 }

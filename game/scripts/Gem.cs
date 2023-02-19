@@ -224,6 +224,10 @@ public abstract class Gem
     public class Stochastic : Mirror
     {
         public Stochastic(bool orientation) : base(orientation) { }
+        public Particle ApplyMirror(Particle input)
+        {
+            return base.Apply(input);
+        }
         public override Particle Apply(Particle input)
         {
             if (Shared.Rand.Next() % 2 == 0)

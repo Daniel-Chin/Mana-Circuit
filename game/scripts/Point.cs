@@ -157,4 +157,18 @@ public class PointInt : Point
     {
         return new Vector2((float)X, (float)Y);
     }
+    private static readonly PointInt[] BASE_VECS = new PointInt[] {
+        new PointInt(1, 0),
+        new PointInt(0, 1),
+        new PointInt(-1, 0),
+        new PointInt(0, -1),
+    };
+    public static PointInt PhaseToBaseVec(int phase)
+    {
+        return BASE_VECS[phase];
+    }
+    public static int BaseVecToPhase(PointInt baseVec)
+    {
+        return Array.IndexOf(BASE_VECS, baseVec);
+    }
 }

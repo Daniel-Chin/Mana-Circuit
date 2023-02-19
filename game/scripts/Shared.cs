@@ -3,6 +3,8 @@ using Godot;
 
 public class Shared
 {
+    public static readonly bool DEBUG = true;
+
     public class ObjectStateIllegal : Exception { }
     public class ValueError : Exception { }
     public class PlayerCreatedEpsilonNaught : Exception { }

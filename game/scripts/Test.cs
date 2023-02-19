@@ -48,7 +48,7 @@ public class Test : Node2D
         //     Console.WriteLine(manaOut);
         // }
 
-        Simplest manaOut = c.MinimumSuperpositionEquilibrium(1);
+        Simplest manaOut = new EstimateLFS.Typed(c, 1).Solve();
         Console.WriteLine(manaOut);
     }
 

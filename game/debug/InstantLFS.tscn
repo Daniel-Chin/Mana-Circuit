@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://debug/scripts/InstantMSE.cs" type="Script" id=2]
+[ext_resource path="res://debug/scripts/InstantLFS.cs" type="Script" id=2]
 
-[node name="InstantMSE" type="MarginContainer"]
+[node name="InstantLFS" type="MarginContainer"]
 script = ExtResource( 2 )
 
 [node name="Label" type="RichTextLabel" parent="."]

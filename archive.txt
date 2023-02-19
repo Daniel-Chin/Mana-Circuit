@@ -7,3 +7,8 @@ F: eval the mana flow given the guess.
 F(x) yields the entry mana for all focusers. 
 if F(x) <= x for all focusers, then accept. 
 My hope: if x_0 is accepted, then any x_1 > x_0 is also accepted. 
+
+and OMG, the stochastic gem has focuser capability. 
+I noticed this when the static analysis entered a dead loop. 
+Solution: Allow this! enhance the analyzer to treat stochastic gems as unknowns.
+Let's leave the fosuer available, so that the puzzle is not too difficult (to create inf). 

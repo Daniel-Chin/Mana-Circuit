@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class InstantMSE : MarginContainer
+public class InstantLFS : MarginContainer
 {
     private RichTextLabel _label;
     private CircuitUI _cui;
