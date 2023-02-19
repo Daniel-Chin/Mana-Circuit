@@ -34,7 +34,7 @@ public class GemUI : AspectRatioContainer
         {
             filename = "transparent";
             MyCircuitUI = new CircuitUI(
-                new UnionWandGem(cG), RecursionDepth + 1
+                cG, RecursionDepth + 1
             );
             AddChild(MyCircuitUI);
             MoveChild(MyCircuitUI, 0);

@@ -23,7 +23,7 @@ public class CircuitUI : AspectRatioContainer
     private List<ParticleAndTrail> _pAndTs;
     private Queue<ParticleAndTrail> _pAndTsToFree;
     private PointInt _selectedLocation;
-    public UnionWandGem MyUnionWandGem;
+    public MagicItem MyMagicItem;
     public Simplest MetaLevel;
     private class ParticleAndTrail
     {
@@ -77,12 +77,12 @@ public class CircuitUI : AspectRatioContainer
     }
     public CircuitUI() : base() { }
     public CircuitUI(
-        UnionWandGem unionWandGem, int recursionDepth
+        MagicItem magicItem, int recursionDepth
     ) : base()
     {
-        MyUnionWandGem = unionWandGem;
+        MyMagicItem = magicItem;
         RecursionDepth = recursionDepth;
-        switch (MyUnionWandGem.Item)
+        switch (MyMagicItem)
         {
             case Wand wand:
                 MetaLevel = new Simplest(Rank.FINITE, -1);
@@ -224,7 +224,7 @@ public class CircuitUI : AspectRatioContainer
     public void onGemListSelect()
     {
         MyCircuit.Remove(_selectedLocation);
-        Gem gem = (Gem)_GemList.Selected.Item;
+        Gem gem = (Gem)_GemList.Selected;
         if (gem != null)
         {
             gem.Location = _selectedLocation;
@@ -248,7 +248,7 @@ public class CircuitUI : AspectRatioContainer
             _bgRect = _tRect;
             return;
         }
-        if (MyUnionWandGem.Item is Wand wand)
+        if (MyMagicItem is Wand wand)
         {
             TextureRect _tRect = new TextureRect();
             _tRect.Texture = wand.Texture();

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using MathNet.Numerics.LinearAlgebra;
 
-public abstract class Gem
+public abstract class Gem : MagicItem
 {
     public PointInt Location;
     public PointInt Size;

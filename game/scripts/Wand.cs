@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public abstract class Wand
+public abstract class Wand : MagicItem
 {
     public Circuit MyCircuit;
     public static Type[] Types = new Type[] {

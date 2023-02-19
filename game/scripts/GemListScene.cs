@@ -14,7 +14,7 @@ public class GemListScene : WindowDialog
     public VBoxContainer CGVBox;
     private List<Gem> _gems;
     public Simplest MetaLevel;
-    public UnionWandGem Selected;
+    public MagicItem Selected;
     private bool _rotated;
 
     public GemListScene() : base()
@@ -140,7 +140,7 @@ public class GemListScene : WindowDialog
 
     private bool AskRotate()
     {
-        Gem gem = (Gem)Selected.Item;
+        Gem gem = (Gem)Selected;
         _gems.Clear();
         Shared.QFreeChildren(GemVBox);
         // header
@@ -174,17 +174,17 @@ public class GemListScene : WindowDialog
 
     public void OnClickGem(bool gemIsCG, int gemI)
     {
-        Selected = new UnionWandGem(_gems[gemI]);
+        Selected = (_gems[gemI]);
         if (Selected != null)
         {
-            var (nInWand, nInCGs, nAvailable) = CountGems((Gem)Selected.Item);
+            var (nInWand, nInCGs, nAvailable) = CountGems((Gem)Selected);
             if (nAvailable <= Simplest.Zero())
             {
                 // No gem available
                 return;
             }
             if (
-                Selected.Item is CustomGem cG && (
+                Selected is CustomGem cG && (
                     cG.MetaLevel >= MetaLevel
                     && cG.MetaLevel.MyRank == Rank.FINITE
                 )
@@ -298,7 +298,7 @@ public class GemListScene : WindowDialog
 
     public void OnClickWand()
     {
-        Selected = new UnionWandGem(GameState.Persistent.MyWand);
+        Selected = GameState.Persistent.MyWand;
         Finish();
     }
 

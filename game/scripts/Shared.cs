@@ -23,3 +23,5 @@ public class Shared
         }
     }
 }
+
+public interface MagicItem { }
