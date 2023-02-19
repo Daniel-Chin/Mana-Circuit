@@ -346,8 +346,22 @@ public class Simplest
                             );
                         return b;
                     case Rank.TWO_TO_THE_W:
-                        return b;
+                        // this is mathematically wrong, but allows w^w^w to be easily created
+                        if (b.MyRank == Rank.TWO_TO_THE_W)
+                            return new Simplest(
+                                Rank.STACK_W, 3
+                            );
+                        if (b.MyRank == Rank.STACK_W)
+                            return new Simplest(
+                                Rank.STACK_W, b.K + 1
+                            );
+                        throw new Shared.ObjectStateIllegal();
                     case Rank.STACK_W:
+                        // this is mathematically wrong, but allows w^w^w to be easily created
+                        if (a.K == b.K)
+                            return new Simplest(
+                                Rank.STACK_W, a.K + 1
+                            );
                         return b;
                 }
                 break;
