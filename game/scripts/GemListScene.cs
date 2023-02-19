@@ -3,10 +3,11 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-public class GemListScene : Node2D
+public class GemListScene : WindowDialog
 {
+    // code-defined
     [Signal] public delegate void gemSelected();
-    public WindowDialog MyDialog;
+    private static readonly Vector2 SIZE = new Vector2(800, 500);
     public VBoxContainer GemVBox;
     public VBoxContainer CGVBox;
     private List<Gem> _gems;
@@ -14,14 +15,29 @@ public class GemListScene : Node2D
     public Simplest MetaLevel;
     private bool _rotated;
 
-    public override void _Ready()
+    public GemListScene() : base()
     {
-        MyDialog = GetNode<WindowDialog>("MyDialog");
-        GemVBox = GetNode<VBoxContainer>("MyDialog/TabContainer/Gems/MyVBox");
-        CGVBox = GetNode<VBoxContainer>("MyDialog/TabContainer/Custom Gems/MyVBox");
         _gems = new List<Gem>();
-        // MyDialog.RectMinSize = new Vector2(WIDTH, 500);
-        // GetNode<ScrollContainer>("MyDialog/TabContainer/Gems").RectMinSize = new Vector2(WIDTH, 500);
+        TabContainer tabs = new TabContainer();
+        AddChild(tabs);
+        ScrollContainer gemScroll = new ScrollContainer();
+        ScrollContainer cgScroll = new ScrollContainer();
+        tabs.AddChild(gemScroll);
+        tabs.AddChild(cgScroll);
+        GemVBox = new VBoxContainer();
+        CGVBox = new VBoxContainer();
+        gemScroll.AddChild(GemVBox);
+        cgScroll.AddChild(CGVBox);
+        RectMinSize = SIZE;
+        Vector2 shrinked = new Vector2(SIZE.x - 8, SIZE.y - 51);
+        gemScroll.RectMinSize = shrinked;
+        cgScroll.RectMinSize = shrinked;
+        GemVBox.SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        GemVBox.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
+        CGVBox.SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        CGVBox.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
+        tabs.SetTabTitle(0, "Gems");
+        tabs.SetTabTitle(1, "Custom Gems");
     }
 
     private void Add(VBoxContainer vBox, Gem gem)
@@ -198,7 +214,7 @@ public class GemListScene : Node2D
             if (AskRotate())
                 return;
         }
-        MyDialog.Visible = false;
+        Visible = false;
         Shared.QFreeChildren(GemVBox);
         Shared.QFreeChildren(CGVBox);
         EmitSignal("gemSelected");

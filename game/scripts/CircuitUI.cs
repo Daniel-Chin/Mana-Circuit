@@ -95,7 +95,7 @@ public class CircuitUI : AspectRatioContainer
         _pAndTsToFree = new Queue<ParticleAndTrail>();
         if (RecursionDepth == 0)
         {
-            _GemList = GD.Load<PackedScene>("res://GemListScene.tscn").Instance<GemListScene>();
+            _GemList = new GemListScene();
             AddChild(_GemList);
             _GemList.Connect(
                 "gemSelected", this, "onGemListGemSelect"
@@ -219,7 +219,7 @@ public class CircuitUI : AspectRatioContainer
                 return;
         }
         _GemList.ListAll(MetaLevel);
-        _GemList.MyDialog.PopupCentered();
+        _GemList.PopupCentered();
     }
 
     public void onGemListGemSelect()
