@@ -214,10 +214,8 @@ public class GemListScene : WindowDialog
             if (AskRotate())
                 return;
         }
-        Visible = false;
-        Shared.QFreeChildren(GemVBox);
-        Shared.QFreeChildren(CGVBox);
         EmitSignal("gemSelected");
+        QueueFree();
     }
 
     private Simplest CountGemsOwned(Gem gem)
@@ -291,4 +289,6 @@ public class GemListScene : WindowDialog
         }
         return acc;
     }
+
+    // public void
 }
