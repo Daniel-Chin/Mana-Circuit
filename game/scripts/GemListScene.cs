@@ -1,43 +1,45 @@
 using Godot;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
 public class GemListScene : WindowDialog
 {
     // code-defined
-    [Signal] public delegate void gemSelected();
+    [Signal] public delegate void itemSelected();
     private static readonly Vector2 SIZE = new Vector2(800, 500);
+    public TabContainer Tabs;
+    public ScrollContainer GemScroll;
+    public ScrollContainer CGScroll;
     public VBoxContainer GemVBox;
     public VBoxContainer CGVBox;
     private List<Gem> _gems;
-    public Gem SelectedGem;
     public Simplest MetaLevel;
+    public UnionWandGem Selected;
     private bool _rotated;
 
     public GemListScene() : base()
     {
         _gems = new List<Gem>();
-        TabContainer tabs = new TabContainer();
-        AddChild(tabs);
-        ScrollContainer gemScroll = new ScrollContainer();
-        ScrollContainer cgScroll = new ScrollContainer();
-        tabs.AddChild(gemScroll);
-        tabs.AddChild(cgScroll);
+        Tabs = new TabContainer();
+        AddChild(Tabs);
+        GemScroll = new ScrollContainer();
+        CGScroll = new ScrollContainer();
+        Tabs.AddChild(GemScroll);
+        Tabs.AddChild(CGScroll);
         GemVBox = new VBoxContainer();
         CGVBox = new VBoxContainer();
-        gemScroll.AddChild(GemVBox);
-        cgScroll.AddChild(CGVBox);
+        GemScroll.AddChild(GemVBox);
+        CGScroll.AddChild(CGVBox);
         RectMinSize = SIZE;
         Vector2 shrinked = new Vector2(SIZE.x - 8, SIZE.y - 51);
-        gemScroll.RectMinSize = shrinked;
-        cgScroll.RectMinSize = shrinked;
+        GemScroll.RectMinSize = shrinked;
+        CGScroll.RectMinSize = shrinked;
         GemVBox.SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         GemVBox.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
         CGVBox.SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         CGVBox.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
-        tabs.SetTabTitle(0, "Gems");
-        tabs.SetTabTitle(1, "Custom Gems");
+        Tabs.SetTabTitle(0, "Gems");
+        Tabs.SetTabTitle(1, "Custom Gems");
     }
 
     private void Add(VBoxContainer vBox, Gem gem)
@@ -54,17 +56,13 @@ public class GemListScene : WindowDialog
         );
         if (gem == null)
         {
-            gemEntry.Labels[5].Text = "Remove gem.";
+            gemEntry.Labels[GemEntry.N_LABELS - 1].Text = "Remove gem.";
             return;
         }
         if (_rotated)
         {
+            gemEntry.ExpandFirstLabel(false);
             gemEntry.Labels[0].BbcodeText = "[center]This way![/center]";
-            gemEntry.Labels[0].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
-            foreach (var label in gemEntry.Labels.Skip(1))
-            {
-                label.QueueFree();
-            }
         }
         else
         {
@@ -99,7 +97,6 @@ public class GemListScene : WindowDialog
 
     public void ListAll(Simplest metaLevel)
     {
-        _gems.Clear();
         MetaLevel = metaLevel;
         ListAll(GemVBox);
         ListAll(CGVBox);
@@ -107,7 +104,6 @@ public class GemListScene : WindowDialog
     public void ListAll(VBoxContainer vBox)
     {
         _rotated = false;
-        Shared.QFreeChildren(vBox);
 
         // header
         GemEntry gemEntry = new GemEntry(null);
@@ -118,13 +114,7 @@ public class GemListScene : WindowDialog
             + "[color=aqua]In {wand}[/color] /\n"
             + "[color=yellow]In Custom Gems[/color][/center]"
         );
-        gemEntry.Labels[0].RectMinSize = new Vector2(
-            gemEntry.Labels[0].RectMinSize.x * 5, 0
-        );
-        foreach (var label in gemEntry.Labels.Skip(1))
-        {
-            label.QueueFree();
-        }
+        gemEntry.ExpandFirstLabel(true);
         // contents
         if (vBox == GemVBox)
         {
@@ -150,7 +140,7 @@ public class GemListScene : WindowDialog
 
     private bool AskRotate()
     {
-        Gem gem = SelectedGem;
+        Gem gem = (Gem)Selected.Item;
         _gems.Clear();
         Shared.QFreeChildren(GemVBox);
         // header
@@ -158,11 +148,7 @@ public class GemListScene : WindowDialog
         GemVBox.AddChild(gemEntry);
         gemEntry.MyGemUI.Empty();
         gemEntry.Labels[0].BbcodeText = "[center]Which way?[/center]";
-        gemEntry.Labels[0].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
-        foreach (var label in gemEntry.Labels.Skip(1))
-        {
-            label.QueueFree();
-        }
+        gemEntry.ExpandFirstLabel(false);
         // contents
         switch (gem)
         {
@@ -188,17 +174,17 @@ public class GemListScene : WindowDialog
 
     public void OnClickGem(bool gemIsCG, int gemI)
     {
-        SelectedGem = _gems[gemI];
-        if (SelectedGem != null)
+        Selected = new UnionWandGem(_gems[gemI]);
+        if (Selected != null)
         {
-            var (nInWand, nInCGs, nAvailable) = CountGems(SelectedGem);
+            var (nInWand, nInCGs, nAvailable) = CountGems((Gem)Selected.Item);
             if (nAvailable <= Simplest.Zero())
             {
                 // No gem available
                 return;
             }
             if (
-                SelectedGem is CustomGem cG && (
+                Selected.Item is CustomGem cG && (
                     cG.MetaLevel >= MetaLevel
                     && cG.MetaLevel.MyRank == Rank.FINITE
                 )
@@ -214,8 +200,7 @@ public class GemListScene : WindowDialog
             if (AskRotate())
                 return;
         }
-        EmitSignal("gemSelected");
-        QueueFree();
+        Finish();
     }
 
     private Simplest CountGemsOwned(Gem gem)
@@ -290,5 +275,36 @@ public class GemListScene : WindowDialog
         return acc;
     }
 
-    // public void
+    public void ListEditables()
+    {
+        MetaLevel = Simplest.W();
+
+        Wand wand = GameState.Persistent.MyWand;
+        GemEntry gemEntry = new GemEntry(null);
+        MaskButton maskButton = new MaskButton(gemEntry);
+        CGVBox.AddChild(maskButton);
+        maskButton.Mask.Connect(
+            "pressed", this, "OnClickWand"
+        );
+        gemEntry.MyGemUI.Button.TextureNormal = wand.Texture();
+        gemEntry.ExpandFirstLabel(false);
+        gemEntry.Labels[0].BbcodeText = wand.DisplayName();
+
+        ListAll(CGVBox);
+
+        GemScroll.QueueFree();
+        Tabs.SetTabTitle(0, "Which one to design?");
+    }
+
+    public void OnClickWand()
+    {
+        Selected = new UnionWandGem(GameState.Persistent.MyWand);
+        Finish();
+    }
+
+    private void Finish()
+    {
+        EmitSignal("itemSelected");
+        QueueFree();
+    }
 }

@@ -9,8 +9,7 @@ public class InstantLFS : MarginContainer
     {
         _label = GetNode<RichTextLabel>("Label");
         _cui = new CircuitUI(
-            GameState.Persistent.MyTypelessGem.MyCircuit, 0,
-            null, new Simplest(Rank.W_TO_THE_K, 1)
+            new UnionWandGem(GameState.Persistent.MyTypelessGem), 0
         );
         _cui.Connect(
             "modified", this, "circuitModified"

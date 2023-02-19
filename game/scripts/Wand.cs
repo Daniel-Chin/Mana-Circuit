@@ -1,4 +1,5 @@
 using System;
+using Godot;
 
 public abstract class Wand
 {
@@ -6,8 +7,13 @@ public abstract class Wand
     public static Type[] Types = new Type[] {
         typeof(Test),
     };
+    public abstract string Name();
     public abstract string DisplayName();
     public abstract void Init();
+    public Texture Texture()
+    {
+        return GD.Load<Texture>($"res://texture/wand/{Name()}.png");
+    }
     public int TypeID(Wand wand)
     {
         for (int i = 0; i < Types.Length; i++)
@@ -20,6 +26,10 @@ public abstract class Wand
 
     public class Test : Wand
     {
+        public override string Name()
+        {
+            return "test_wand";
+        }
         public override string DisplayName()
         {
             return "Test Wand";

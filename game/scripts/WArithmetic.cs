@@ -272,7 +272,7 @@ public class Simplest
             if (terminalType == TerminalType.NUMBER)
                 return new Simplest(Rank.FINITE, expression.MyTerminal.MyNumber);
             if (terminalType == TerminalType.OMEGA)
-                return new Simplest(Rank.W_TO_THE_K, 1);
+                return Simplest.W();
         }
         Simplest left = FromExpression(expression.Left, verbose);
         Simplest right = FromExpression(expression.Right, verbose);

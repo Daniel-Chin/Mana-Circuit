@@ -17,6 +17,8 @@ public class Test : Node2D
         // MagicProblem.Test();
         // TestCircuit();
         // TestMathBB();
+        CircuitEditor e = GetNode<CircuitEditor>("PanelContainer/CircuitEditor");
+        e.Popup();
         Console.WriteLine("end");
         // Console.ReadKey();
     }

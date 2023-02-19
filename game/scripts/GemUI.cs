@@ -34,7 +34,7 @@ public class GemUI : AspectRatioContainer
         {
             filename = "transparent";
             MyCircuitUI = new CircuitUI(
-                cG.MyCircuit, RecursionDepth + 1, ColorOf(cG), cG.MetaLevel
+                new UnionWandGem(cG), RecursionDepth + 1
             );
             AddChild(MyCircuitUI);
             MoveChild(MyCircuitUI, 0);
@@ -112,22 +112,6 @@ public class GemUI : AspectRatioContainer
             ShaderMaterial mat = new ShaderMaterial();
             mat.Shader = _flipper;
             Button.Material = mat;
-        }
-    }
-    private Color? ColorOf(CustomGem cG)
-    {
-        if (cG.MetaLevel.MyRank != Rank.FINITE)
-            return null;
-        switch (cG.MetaLevel.K % 3)
-        {
-            case 0:
-                return Color.FromHsv(.16f, 1f, .3f, 1f);
-            case 1:
-                return Color.FromHsv(.66f, 1f, .3f, 1f);
-            case 2:
-                return Color.FromHsv(.38f, 1f, .3f, 1f);
-            default:
-                throw new Shared.ValueError();
         }
     }
 }

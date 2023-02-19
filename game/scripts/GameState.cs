@@ -28,7 +28,7 @@ namespace GameState
             HasCustomGems.Add(1, new CustomGem(new Simplest(Rank.FINITE, 1)));
             HasCustomGems.Add(3, new CustomGem(new Simplest(Rank.FINITE, 3)));
             HasCustomGems.Add(6, new CustomGem(new Simplest(Rank.FINITE, 6)));
-            MyTypelessGem = new CustomGem(new Simplest(Rank.W_TO_THE_K, 1));
+            MyTypelessGem = new CustomGem(Simplest.W());
 
             Ready();
         }

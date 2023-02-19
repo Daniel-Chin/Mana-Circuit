@@ -1,9 +1,11 @@
 using Godot;
 using System;
+using System.Linq;
 
 public class GemEntry : HBoxContainer
 {
     // code-defined
+    public static readonly int N_LABELS = 6;
     private static readonly int SIZE = 80;
     public GemUI MyGemUI;
     public RichTextLabel[] Labels;
@@ -17,8 +19,8 @@ public class GemEntry : HBoxContainer
         MyGemUI.RectMinSize = new Vector2(SIZE, SIZE);
         MyGemUI.SizeFlagsHorizontal = (int)Container.SizeFlags.Fill;
         MyGemUI.SizeFlagsVertical = (int)Container.SizeFlags.Fill;
-        Labels = new RichTextLabel[6];
-        for (int i = 0; i < 6; i++)
+        Labels = new RichTextLabel[N_LABELS];
+        for (int i = 0; i < N_LABELS; i++)
         {
             Labels[i] = new RichTextLabel();
             AddChild(Labels[i]);
@@ -28,6 +30,24 @@ public class GemEntry : HBoxContainer
             Labels[i].SizeFlagsVertical = (int)Container.SizeFlags.ShrinkCenter;
             Labels[i].FitContentHeight = true;
         }
-        Labels[5].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        Labels[N_LABELS - 1].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+    }
+
+    public void ExpandFirstLabel(bool excludeLastLabel)
+    {
+        if (excludeLastLabel)
+        {
+            Labels[0].RectMinSize = new Vector2(
+                Labels[0].RectMinSize.x * (N_LABELS - 1), 0
+            );
+        }
+        else
+        {
+            Labels[0].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        }
+        foreach (var label in Labels.Skip(1))
+        {
+            label.QueueFree();
+        }
     }
 }

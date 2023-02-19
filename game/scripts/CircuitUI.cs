@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 
 public class CircuitUI : AspectRatioContainer
@@ -22,7 +23,7 @@ public class CircuitUI : AspectRatioContainer
     private List<ParticleAndTrail> _pAndTs;
     private Queue<ParticleAndTrail> _pAndTsToFree;
     private PointInt _selectedLocation;
-    public Color? BackColor;
+    public UnionWandGem MyUnionWandGem;
     public Simplest MetaLevel;
     private class ParticleAndTrail
     {
@@ -76,29 +77,43 @@ public class CircuitUI : AspectRatioContainer
     }
     public CircuitUI() : base() { }
     public CircuitUI(
-        Circuit circuit, int recursionDepth,
-        Color? backColor, Simplest metaLevel
+        UnionWandGem unionWandGem, int recursionDepth
     ) : base()
     {
-        MyCircuit = circuit;
+        MyUnionWandGem = unionWandGem;
         RecursionDepth = recursionDepth;
-        BackColor = backColor;
-        MetaLevel = metaLevel;
+        switch (MyUnionWandGem.Item)
+        {
+            case Wand wand:
+                MetaLevel = new Simplest(Rank.FINITE, -1);
+                MyCircuit = wand.MyCircuit;
+                break;
+            case CustomGem cG:
+                MetaLevel = cG.MetaLevel;
+                MyCircuit = cG.MyCircuit;
+                break;
+            case Gem _:
+            default:
+                throw new Shared.TypeError();
+        }
+        _pAndTs = new List<ParticleAndTrail>();
+        _pAndTsToFree = new Queue<ParticleAndTrail>();
+
         AlignmentHorizontal = AlignMode.Begin;
         AlignmentVertical = AlignMode.Begin;
+        SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
         _bgRect = new Control();
         _grid = new GridContainer();
         AddChild(_grid);
         _grid.AddConstantOverride("vseparation", 0);
         _grid.AddConstantOverride("hseparation", 0);
-        _pAndTs = new List<ParticleAndTrail>();
-        _pAndTsToFree = new Queue<ParticleAndTrail>();
         if (RecursionDepth == 0)
         {
             _GemList = new GemListScene();
             AddChild(_GemList);
             _GemList.Connect(
-                "gemSelected", this, "onGemListGemSelect"
+                "itemSelected", this, "onGemListSelect"
             );
         }
 
@@ -110,23 +125,7 @@ public class CircuitUI : AspectRatioContainer
         // Console.WriteLine("Rebuild start");
         Shared.QFreeChildren(_grid);
         _bgRect.QueueFree();
-        if (BackColor == null)
-        {
-            TextureRect _rect = new TextureRect();
-            _rect.Texture = GD.Load<Texture>("res://texture/gem/wall.png");
-            _rect.Expand = true;
-            _rect.StretchMode = TextureRect.StretchModeEnum.Scale;
-            ShaderMaterial mat = new ShaderMaterial();
-            mat.Shader = _rainbow;
-            _rect.Material = mat;
-            _bgRect = _rect;
-        }
-        else
-        {
-            ColorRect _rect = new ColorRect();
-            _rect.Color = (Color)BackColor;
-            _bgRect = _rect;
-        }
+        SetBackGround();
         AddChild(_bgRect);
         MoveChild(_bgRect, 0);
         Ratio = MyCircuit.Size.IntY / (float)MyCircuit.Size.IntX;
@@ -222,17 +221,60 @@ public class CircuitUI : AspectRatioContainer
         _GemList.PopupCentered();
     }
 
-    public void onGemListGemSelect()
+    public void onGemListSelect()
     {
         MyCircuit.Remove(_selectedLocation);
-        Gem gem = _GemList.SelectedGem;
+        Gem gem = (Gem)_GemList.Selected.Item;
         if (gem != null)
         {
             gem.Location = _selectedLocation;
             MyCircuit.Add(gem);
-            _GemList.SelectedGem = null;
+            _GemList.Selected = null;
         }
         Rebuild();
         EmitSignal("modified");
+    }
+    private void SetBackGround()
+    {
+        if (MetaLevel.MyRank != Rank.FINITE)
+        {
+            TextureRect _tRect = new TextureRect();
+            _tRect.Texture = GD.Load<Texture>("res://texture/gem/wall.png");
+            _tRect.Expand = true;
+            _tRect.StretchMode = TextureRect.StretchModeEnum.Scale;
+            ShaderMaterial mat = new ShaderMaterial();
+            mat.Shader = _rainbow;
+            _tRect.Material = mat;
+            _bgRect = _tRect;
+            return;
+        }
+        if (MyUnionWandGem.Item is Wand wand)
+        {
+            TextureRect _tRect = new TextureRect();
+            _tRect.Texture = wand.Texture();
+            _tRect.Expand = true;
+            _tRect.StretchMode = TextureRect.StretchModeEnum.Scale;
+            _bgRect = _tRect;
+            return;
+        }
+        // Typed CG
+        Color color;
+        switch (MetaLevel.K % 3)
+        {
+            case 0:
+                color = Color.FromHsv(.16f, 1f, .3f, 1f);
+                break;
+            case 1:
+                color = Color.FromHsv(.66f, 1f, .3f, 1f);
+                break;
+            case 2:
+                color = Color.FromHsv(.38f, 1f, .3f, 1f);
+                break;
+            default:
+                throw new Shared.ValueError();
+        }
+        ColorRect _cRect = new ColorRect();
+        _cRect.Color = color;
+        _bgRect = _cRect;
     }
 }
