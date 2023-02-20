@@ -338,6 +338,8 @@ public class Simplest
                             return new Simplest(
                                 Rank.FINITE, a.K * b.K
                             );
+                        if (a.K == 0)
+                            return a;
                         return b;
                     case Rank.W_TO_THE_K:
                         if (b.MyRank == Rank.W_TO_THE_K)

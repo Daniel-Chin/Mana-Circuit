@@ -23,6 +23,18 @@ public class Shared
             x.QueueFree();
         }
     }
+
+
+    public static void PrintArray(object[] objs)
+    {
+        Console.Write("[");
+        foreach (var x in objs)
+        {
+            Console.Write(x.ToString());
+            Console.Write(", ");
+        }
+        Console.WriteLine("]");
+    }
 }
 
 public abstract class MagicItem

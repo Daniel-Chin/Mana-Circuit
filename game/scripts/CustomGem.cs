@@ -61,14 +61,14 @@ public class CustomGem : Gem
             // recursion makes the system of eq. non-linear, 
             // so I can't solve for finite solutions just by 
             // matrix division. Give up. Just brute force. 
-            CachedMultiplier = new EstimateLFS.Typeless(this).Solve();
+            CachedMultiplier = new MagicProblem(MyCircuit).SolveTypeless(this);
             return;
         }
         // typed custom gem
-        Simplest lfs1 = new EstimateLFS.Typed(MyCircuit, 1).Solve();
+        Simplest lfs1 = new MagicProblem(MyCircuit).SolveTyped(1);
         if (lfs1.MyRank == Rank.FINITE)
         {
-            Simplest lfs0 = new EstimateLFS.Typed(MyCircuit, 0).Solve();
+            Simplest lfs0 = new MagicProblem(MyCircuit).SolveTyped(0);
             CachedAdder = lfs0;
             CachedMultiplier = new Simplest(Rank.FINITE, lfs1.K - lfs0.K);
         }

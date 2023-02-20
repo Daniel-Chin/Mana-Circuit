@@ -12,3 +12,8 @@ and OMG, the stochastic gem has focuser capability.
 I noticed this when the static analysis entered a dead loop. 
 Solution: Allow this! enhance the analyzer to treat stochastic gems as unknowns.
 Let's leave the fosuer available, so that the puzzle is not too difficult (to create inf). 
+
+2/20
+The way we assume each unknown source to be the same skips least solutions. 
+e.g. putting a focuser before a *w gem rejects w and yields 2^w. 
+Change the search to an iterative stabalization of a simplest vector?

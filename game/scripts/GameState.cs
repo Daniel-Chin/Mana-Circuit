@@ -16,7 +16,13 @@ namespace GameState
             HasCustomGems = new Dictionary<int, CustomGem>();
             MyTypelessGem = null;
 
-            // debug
+            DebugInit();
+
+            Ready();
+        }
+
+        public static void DebugInit()
+        {
             MyWand = new Wand.Test();
             MyWand.Init();
             HasGems.Add("addOne", 1);
@@ -24,13 +30,36 @@ namespace GameState
             HasGems.Add("focus", 99);
             HasGems.Add("mirror", 99);
             HasGems.Add("stochastic", 99);
-            HasCustomGems.Add(0, new CustomGem(new Simplest(Rank.FINITE, 0)));
+            CustomGem cG = new CustomGem(new Simplest(Rank.FINITE, 0));
+            HasCustomGems.Add(0, cG);
             HasCustomGems.Add(1, new CustomGem(new Simplest(Rank.FINITE, 1)));
             HasCustomGems.Add(3, new CustomGem(new Simplest(Rank.FINITE, 3)));
             HasCustomGems.Add(6, new CustomGem(new Simplest(Rank.FINITE, 6)));
             MyTypelessGem = new CustomGem(Simplest.W());
 
-            Ready();
+            Circuit c = new Circuit(new PointInt(8, 8));
+            for (int i = 0; i < 8; i++)
+            {
+                c.Add(new Gem.Wall(), new PointInt(0, i), true);
+                c.Add(new Gem.Wall(), new PointInt(7, i), true);
+                c.Add(new Gem.Wall(), new PointInt(i, 0), true);
+                c.Add(new Gem.Wall(), new PointInt(i, 7), true);
+            }
+
+            Gem source = new Gem.Source(new PointInt(1, 0));
+            c.Add(source, new PointInt(1, 4));
+
+            Gem drain = new Gem.Drain();
+            c.Add(drain, new PointInt(6, 4));
+
+            c.Add(new Gem.WeakMult(), new PointInt(3, 2));
+            c.Add(new Gem.WeakMult(), new PointInt(4, 2));
+            c.Add(new Gem.WeakMult(), new PointInt(4, 3));
+            c.Add(new Gem.Mirror(false), new PointInt(3, 1));
+            c.Add(new Gem.Mirror(true), new PointInt(4, 1));
+            c.Add(new Gem.Stochastic(false), new PointInt(4, 4));
+            c.Add(new Gem.Focus(new PointInt(1, 0)), new PointInt(3, 4));
+            cG.MyCircuit = c;
         }
         public static void WriteDisk() { }
         public static void LoadDisk()
