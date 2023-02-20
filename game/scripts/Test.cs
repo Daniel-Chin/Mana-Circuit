@@ -17,8 +17,7 @@ public class Test : Node2D
         // MagicProblem.Test();
         // TestCircuit();
         // TestMathBB();
-        CircuitEditor e = GetNode<CircuitEditor>("PanelContainer/CircuitEditor");
-        e.Popup();
+        TestEditor();
         Console.WriteLine("end");
         // Console.ReadKey();
     }
@@ -129,5 +128,22 @@ public class Test : Node2D
         s += MathBB.Build(new Simplest(Rank.STACK_W, 11));
         l.BbcodeText = s;
         l.RectMinSize = new Vector2(700, 400);
+    }
+
+    public void TestEditor()
+    {
+        Button b = new Button();
+        b.Text = "Click";
+        AddChild(b);
+        b.Connect(
+            "pressed", this, "showEditor"
+        );
+    }
+
+    public void showEditor()
+    {
+        CircuitEditor e = new CircuitEditor();
+        AddChild(e);
+        e.Popup();
     }
 }

@@ -37,8 +37,11 @@ public class MagicProblem
             b[i] = -MinusB[i].K;
         }
         Vector<double> x = A.Solve(b);
-        if (double.IsNaN(x.Minimum()) || x.Minimum() < 0)
+        if (double.IsNaN(x.Minimum()) || x.Minimum() < -.00001)
+        {
+            Console.WriteLine("reject " + x);
             return null;    // reject NaN & negative solutions
+        }
         return x;
     }
 

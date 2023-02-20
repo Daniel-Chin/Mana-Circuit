@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 public class CircuitEditor : WindowDialog
 {
+    // code-defined
     public GemListScene _gemList;
     public VBoxContainer VBox;
     public RichTextLabel HeadingLabel;
@@ -12,12 +13,25 @@ public class CircuitEditor : WindowDialog
     public AspectRatioContainer Aspect;
     public MagicItem Editee;
     public CircuitUI MyCircuitUI;
-    public override void _Ready()
+    public CircuitEditor() : base()
     {
-        VBox = GetNode<VBoxContainer>("VBox");
-        HeadingLabel = GetNode<RichTextLabel>("VBox/Heading");
-        ExplainLabel = GetNode<RichTextLabel>("VBox/Explain");
-        Aspect = GetNode<AspectRatioContainer>("VBox/Aspect");
+        RectMinSize = new Vector2(700, 550);
+        Theme = Shared.THEME;
+        VBox = new VBoxContainer();
+        AddChild(VBox);
+        VBox.RectMinSize = RectMinSize;
+        HeadingLabel = new RichTextLabel();
+        ExplainLabel = new RichTextLabel();
+        Aspect = new AspectRatioContainer();
+        VBox.AddChild(HeadingLabel);
+        VBox.AddChild(ExplainLabel);
+        VBox.AddChild(Aspect);
+        HeadingLabel.BbcodeEnabled = true;
+        HeadingLabel.FitContentHeight = true;
+        ExplainLabel.BbcodeEnabled = true;
+        ExplainLabel.RectMinSize = new Vector2(0, 100);
+        Aspect.SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
+        Aspect.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
         _gemList = new GemListScene();
         Connect("popup_hide", this, "OnPopupHide");
     }

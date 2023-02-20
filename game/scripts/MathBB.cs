@@ -62,7 +62,7 @@ public class MathBB
                 }
                 else
                 {
-                    sB.Append(k);
+                    sB.Append(k.ToString("#.#"));
                 }
                 break;
             case Rank.W_TO_THE_K:

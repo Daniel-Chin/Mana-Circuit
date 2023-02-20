@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scripts/Test.cs" type="Script" id=1]
-[ext_resource path="res://CircuitEditor.tscn" type="PackedScene" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
@@ -14,5 +13,3 @@ margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 700, 500 )
 custom_styles/panel = SubResource( 1 )
-
-[node name="CircuitEditor" parent="PanelContainer" instance=ExtResource( 2 )]

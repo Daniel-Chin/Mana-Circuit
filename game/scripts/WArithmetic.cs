@@ -31,7 +31,7 @@ public class Terminal
         switch (MyTerminalType)
         {
             case TerminalType.NUMBER:
-                return MyNumber.ToString("##.0");
+                return MyNumber.ToString("#.#");
             case TerminalType.OMEGA:
                 return "w";
             default:
@@ -472,7 +472,7 @@ public class Simplest
         switch (MyRank)
         {
             case Rank.FINITE:
-                return K.ToString("##.0");
+                return K.ToString("#.#");
             case Rank.W_TO_THE_K:
                 if (K == 1)
                     return "w";
