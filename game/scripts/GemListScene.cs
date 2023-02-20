@@ -55,9 +55,9 @@ public class GemListScene : WindowDialog
             "pressed", this, "OnClickGem",
             new Godot.Collections.Array() { gemIsCG, gemI }
         );
-        if (gem == null)
+        if (gem is Gem.RemoveGem)
         {
-            gemEntry.Labels[GemEntry.N_LABELS - 1].Text = "Remove gem.";
+            gemEntry.Labels[5].BbcodeText = gem.Explain();
             return;
         }
         if (_rotated)
@@ -119,7 +119,7 @@ public class GemListScene : WindowDialog
         // contents
         if (vBox == GemVBox)
         {
-            Add(vBox, null);
+            Add(vBox, new Gem.RemoveGem());
             Add(vBox, new Gem.AddOne());
             Add(vBox, new Gem.WeakMult());
             Add(vBox, new Gem.Focus(new PointInt(0, 1)));
@@ -176,7 +176,7 @@ public class GemListScene : WindowDialog
     public void OnClickGem(bool gemIsCG, int gemI)
     {
         Selected = (_gems[gemI]);
-        if (Selected != null)
+        if (!(Selected is Gem.RemoveGem))
         {
             var (nInWand, nInCGs, nAvailable) = CountGems((Gem)Selected);
             if (nAvailable <= Simplest.Zero())

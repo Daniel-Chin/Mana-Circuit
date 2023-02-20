@@ -93,6 +93,25 @@ public abstract class Gem : MagicItem
             return "";
         }
     }
+    public class RemoveGem : Gem
+    {
+        public override Particle Apply(Particle input)
+        {
+            return input;
+        }
+        public override string Name()
+        {
+            return "transparent";
+        }
+        public override string DisplayName()
+        {
+            return "RemoveGem";
+        }
+        public override string Explain()
+        {
+            return "Remove gem.";
+        }
+    }
     public class AddOne : Gem
     {
         public override Particle Apply(Particle input)

@@ -225,7 +225,7 @@ public class CircuitUI : AspectRatioContainer
             return;
         MyCircuit.Remove(_selectedLocation);
         Gem gem = (Gem)_GemList.Selected;
-        if (gem != null)
+        if (!(gem is Gem.RemoveGem))
         {
             gem.Location = _selectedLocation;
             MyCircuit.Add(gem);
