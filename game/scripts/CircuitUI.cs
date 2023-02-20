@@ -108,14 +108,6 @@ public class CircuitUI : AspectRatioContainer
         AddChild(_grid);
         _grid.AddConstantOverride("vseparation", 0);
         _grid.AddConstantOverride("hseparation", 0);
-        if (RecursionDepth == 0)
-        {
-            _GemList = new GemListScene();
-            AddChild(_GemList);
-            _GemList.Connect(
-                "finished", this, "onGemListFinish"
-            );
-        }
 
         Rebuild();
     }
@@ -217,6 +209,12 @@ public class CircuitUI : AspectRatioContainer
             case Gem.Drain d:
                 return;
         }
+        Debug.Assert(RecursionDepth == 0);
+        _GemList = new GemListScene();
+        AddChild(_GemList);
+        _GemList.Connect(
+            "finished", this, "onGemListFinish"
+        );
         _GemList.ListAll(MetaLevel);
         _GemList.PopupCentered();
     }
