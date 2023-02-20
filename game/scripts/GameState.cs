@@ -10,11 +10,15 @@ namespace GameState
         public static Dictionary<string, int> HasGems;
         public static Dictionary<int, (int, CustomGem)> HasCustomGems;
         public static CustomGem MyTypelessGem;
+        public static int JumperStage;
         public static void Init()
         {
+            Money = Simplest.Zero();
+            Location = (Simplest.Zero(), Simplest.Zero());
             HasGems = new Dictionary<string, int>();
             HasCustomGems = new Dictionary<int, (int, CustomGem)>();
             MyTypelessGem = null;
+            JumperStage = 0;
 
             DebugInit();
 
