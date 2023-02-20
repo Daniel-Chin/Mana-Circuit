@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class GemListScene : WindowDialog
 {
     // code-defined
-    [Signal] public delegate void itemSelected();
+    [Signal] public delegate void finished();
     private static readonly Vector2 SIZE = new Vector2(800, 500);
     public TabContainer Tabs;
     public ScrollContainer GemScroll;
@@ -40,6 +40,7 @@ public class GemListScene : WindowDialog
         CGVBox.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
         Tabs.SetTabTitle(0, "Gems");
         Tabs.SetTabTitle(1, "Custom Gems");
+        Connect("popup_hide", this, "OnPopupHide");
     }
 
     private void Add(VBoxContainer vBox, Gem gem)
@@ -200,7 +201,7 @@ public class GemListScene : WindowDialog
             if (AskRotate())
                 return;
         }
-        Finish();
+        Hide();
     }
 
     private Simplest CountGemsOwned(Gem gem)
@@ -292,19 +293,23 @@ public class GemListScene : WindowDialog
 
         ListAll(CGVBox);
 
+        Tabs.SetTabTitle(1, "Which one to design?");
         GemScroll.QueueFree();
-        Tabs.SetTabTitle(0, "Which one to design?");
     }
 
     public void OnClickWand()
     {
         Selected = GameState.Persistent.MyWand;
-        Finish();
+        Hide();
     }
 
     private void Finish()
     {
-        EmitSignal("itemSelected");
+        EmitSignal("finished");
         QueueFree();
+    }
+    public void OnPopupHide()
+    {
+        Finish();
     }
 }

@@ -4,7 +4,6 @@
 [ext_resource path="res://MaskButton.tscn" type="PackedScene" id=2]
 
 [node name="GemListScene" type="WindowDialog"]
-visible = true
 rect_min_size = Vector2( 800, 500 )
 script = ExtResource( 1 )
 
@@ -23,7 +22,7 @@ rect_min_size = Vector2( 792, 449 )
 scroll_horizontal_enabled = false
 
 [node name="MyVBox" type="VBoxContainer" parent="TabContainer/Gems"]
-margin_right = 780.0
+margin_right = 792.0
 margin_bottom = 908.0
 size_flags_horizontal = 3
 size_flags_vertical = 3

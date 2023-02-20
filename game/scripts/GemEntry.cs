@@ -43,6 +43,10 @@ public class GemEntry : HBoxContainer
         }
         else
         {
+            MarginContainer padder = new MarginContainer();
+            AddChild(padder);
+            MoveChild(padder, 1);
+            padder.RectMinSize = new Vector2(30, 0);
             Labels[0].SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         }
         foreach (var label in Labels.Skip(1))

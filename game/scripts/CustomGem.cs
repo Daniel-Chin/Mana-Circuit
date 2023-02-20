@@ -17,7 +17,7 @@ public class CustomGem : Gem
     }
     private void initCircuit()
     {
-        int n = 5;
+        int n = 6;
         MyCircuit = new Circuit(new PointInt(n, n));
         for (int i = 0; i < n; i++)
         {

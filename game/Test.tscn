@@ -16,5 +16,3 @@ rect_min_size = Vector2( 700, 500 )
 custom_styles/panel = SubResource( 1 )
 
 [node name="CircuitEditor" parent="PanelContainer" instance=ExtResource( 2 )]
-margin_right = 900.0
-margin_bottom = 550.0

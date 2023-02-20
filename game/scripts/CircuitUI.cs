@@ -113,7 +113,7 @@ public class CircuitUI : AspectRatioContainer
             _GemList = new GemListScene();
             AddChild(_GemList);
             _GemList.Connect(
-                "itemSelected", this, "onGemListSelect"
+                "finished", this, "onGemListFinish"
             );
         }
 
@@ -221,8 +221,10 @@ public class CircuitUI : AspectRatioContainer
         _GemList.PopupCentered();
     }
 
-    public void onGemListSelect()
+    public void onGemListFinish()
     {
+        if (_GemList.Selected == null)
+            return;
         MyCircuit.Remove(_selectedLocation);
         Gem gem = (Gem)_GemList.Selected;
         if (gem != null)
