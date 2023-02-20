@@ -24,4 +24,8 @@ public class Shared
     }
 }
 
-public interface MagicItem { }
+public abstract class MagicItem
+{
+    public abstract string Name();
+    public abstract string DisplayName();
+}

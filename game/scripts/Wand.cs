@@ -7,8 +7,6 @@ public abstract class Wand : MagicItem
     public static Type[] Types = new Type[] {
         typeof(Test),
     };
-    public abstract string Name();
-    public abstract string DisplayName();
     public abstract void Init();
     public Texture Texture()
     {

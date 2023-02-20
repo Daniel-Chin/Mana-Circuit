@@ -15,9 +15,10 @@ margin_right = 700.0
 margin_bottom = 550.0
 rect_min_size = Vector2( 700, 550 )
 
-[node name="LFS" type="RichTextLabel" parent="VBox"]
+[node name="Heading" type="RichTextLabel" parent="VBox"]
 margin_right = 700.0
 margin_bottom = 15.0
+bbcode_enabled = true
 fit_content_height = true
 
 [node name="Explain" type="RichTextLabel" parent="VBox"]
@@ -25,6 +26,7 @@ margin_top = 19.0
 margin_right = 700.0
 margin_bottom = 119.0
 rect_min_size = Vector2( 0, 100 )
+bbcode_enabled = true
 
 [node name="Aspect" type="AspectRatioContainer" parent="VBox"]
 margin_top = 123.0

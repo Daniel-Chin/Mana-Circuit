@@ -28,8 +28,6 @@ public abstract class Gem : MagicItem
         return this;
     }
     public abstract Particle Apply(Particle input);
-    public abstract string Name();
-    public abstract string DisplayName();
     public abstract string Explain();
 
     public class Source : Gem
