@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using MathNet.Numerics.LinearAlgebra;
 
 public abstract class Gem : MagicItem
 {
-    public PointInt Location;
+    public List<PointInt> Locations;
     public PointInt Size;
     static Gem()
     {
@@ -21,11 +22,7 @@ public abstract class Gem : MagicItem
     public Gem()
     {
         Size = new PointInt(1, 1);
-    }
-    public Gem Place(PointInt location)
-    {
-        Location = location;
-        return this;
+        Locations = new List<PointInt>();
     }
     public abstract Particle Apply(Particle input);
     public abstract string Explain();

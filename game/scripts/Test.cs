@@ -25,18 +25,18 @@ public class Test : Node2D
 
     static void TestCircuit()
     {
-        Circuit c = new Circuit(new PointInt(6, 6));
-        Gem source = new Gem.Source(new PointInt(1, 0)).Place(new PointInt(0, 3));
-        c.Add(source);
+        // Circuit c = new Circuit(new PointInt(6, 6));
+        // Gem source = new Gem.Source(new PointInt(1, 0)).Place(new PointInt(0, 3));
+        // c.Add(source);
 
-        Gem drain = new Gem.Drain().Place(new PointInt(5, 3));
-        c.Add(drain);
+        // Gem drain = new Gem.Drain().Place(new PointInt(5, 3));
+        // c.Add(drain);
 
-        // c.Add(new Gem.Doubler().Place(new PointInt(1, 1)));
-        c.Add(new Gem.Mirror(false).Place(new PointInt(2, 0)));
-        c.Add(new Gem.Mirror(true).Place(new PointInt(3, 0)));
-        c.Add(new Gem.Stochastic(false).Place(new PointInt(3, 3)));
-        c.Add(new Gem.Focus(new PointInt(1, 0)).Place(new PointInt(2, 3)));
+        // // c.Add(new Gem.Doubler().Place(new PointInt(1, 1)));
+        // c.Add(new Gem.Mirror(false).Place(new PointInt(2, 0)));
+        // c.Add(new Gem.Mirror(true).Place(new PointInt(3, 0)));
+        // c.Add(new Gem.Stochastic(false).Place(new PointInt(3, 3)));
+        // c.Add(new Gem.Focus(new PointInt(1, 0)).Place(new PointInt(2, 3)));
 
         // for (int i = 0; i < 8; i++)
         // {
@@ -50,8 +50,8 @@ public class Test : Node2D
         //     Console.WriteLine(manaOut);
         // }
 
-        Simplest manaOut = new EstimateLFS.Typed(c, 1).Solve();
-        Console.WriteLine(manaOut);
+        // Simplest manaOut = new EstimateLFS.Typed(c, 1).Solve();
+        // Console.WriteLine(manaOut);
     }
 
     static void TestMath()

@@ -21,20 +21,20 @@ public class CustomGem : Gem
         MyCircuit = new Circuit(new PointInt(n, n));
         for (int i = 0; i < n; i++)
         {
-            MyCircuit.Add(new Gem.Wall().Place(new PointInt(0, i)), true);
-            MyCircuit.Add(new Gem.Wall().Place(new PointInt(n - 1, i)), true);
-            MyCircuit.Add(new Gem.Wall().Place(new PointInt(i, 0)), true);
-            MyCircuit.Add(new Gem.Wall().Place(new PointInt(i, n - 1)), true);
+            MyCircuit.Add(new Gem.Wall(), new PointInt(0, i), true);
+            MyCircuit.Add(new Gem.Wall(), new PointInt(n - 1, i), true);
+            MyCircuit.Add(new Gem.Wall(), new PointInt(i, 0), true);
+            MyCircuit.Add(new Gem.Wall(), new PointInt(i, n - 1), true);
         }
 
         PointInt location;
         location = new PointInt(0, n / 2);
         MyCircuit.Remove(location);
-        MyCircuit.Add(new Gem.Source(new PointInt(1, 0)).Place(location));
+        MyCircuit.Add(new Gem.Source(new PointInt(1, 0)), location);
 
         location = new PointInt(n - 1, n / 2);
         MyCircuit.Remove(location);
-        MyCircuit.Add(new Gem.Drain().Place(location));
+        MyCircuit.Add(new Gem.Drain(), location);
     }
     public override string Name()
     {

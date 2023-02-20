@@ -35,9 +35,9 @@ public class CircuitUI : AspectRatioContainer
         {
             Parent = parent;
             MyParticle = new Particle(
-                s.Location, s.Direction, Simplest.Ones(1)
+                s.Locations[0], s.Direction, Simplest.Ones(1)
             );
-            Follower = s.Location.ToVector2();
+            Follower = s.Locations[0].ToVector2();
             MyTrail = new ManaTrail();
             parent.AddChild(MyTrail);
             MyTrail.LineWidth = (float)(3 * Math.Exp(-parent.RecursionDepth));
@@ -227,8 +227,7 @@ public class CircuitUI : AspectRatioContainer
         Gem gem = (Gem)_GemList.Selected;
         if (!(gem is Gem.RemoveGem))
         {
-            gem.Location = _selectedLocation;
-            MyCircuit.Add(gem);
+            MyCircuit.Add(gem, _selectedLocation);
             _GemList.Selected = null;
         }
         Rebuild();

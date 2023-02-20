@@ -17,32 +17,39 @@ public class Circuit
         Gems = new List<Gem>();
     }
 
-    public void Add(Gem gem)
+    public void Add(Gem gem, PointInt location)
     {
+        Debug.Assert(
+            gem.Locations.Count < 1
+            || gem is CustomGem cG
+            && cG.MetaLevel.MyRank != Rank.FINITE
+        );
         if (
-            gem.Location.IntX < 0 ||
-            gem.Location.IntY < 0 ||
-            gem.Location.IntX + gem.Size.IntX > Size.IntX ||
-            gem.Location.IntY + gem.Size.IntY > Size.IntY
+            location.IntX < 0 ||
+            location.IntY < 0 ||
+            location.IntX + gem.Size.IntX > Size.IntX ||
+            location.IntY + gem.Size.IntY > Size.IntY
         )
             throw new Collision();
-        if (IterRect(false, null, gem.Location, gem.Size))
+        if (IterRect(false, null, location, gem.Size))
         {
-            Gems.Add(gem);
-            IterRect(true, gem, gem.Location, gem.Size);
+            if (!Gems.Contains(gem))
+                Gems.Add(gem);
+            IterRect(true, gem, location, gem.Size);
+            gem.Locations.Add(location);
         }
         else
         {
             throw new Collision();
         }
     }
-    public bool Add(Gem gem, bool swallowCollision)
+    public bool Add(Gem gem, PointInt location, bool swallowCollision)
     {
         if (swallowCollision)
         {
             try
             {
-                Add(gem);
+                Add(gem, location);
             }
             catch (Collision)
             {
@@ -51,7 +58,7 @@ public class Circuit
         }
         else
         {
-            Add(gem);
+            Add(gem, location);
         }
         return true;
     }
@@ -83,18 +90,15 @@ public class Circuit
         return true;
     }
 
-    public void Remove(Gem gem)
-    {
-        Gems.Remove(gem);
-        IterRect(true, null, gem.Location, gem.Size);
-        Gem g = Seek(gem.Location);
-    }
     public void Remove(PointInt location)
     {
-        // if empty already, silent.
         Gem gem = Seek(location);
-        if (gem != null)
-            Remove(gem);
+        // if empty already, silent.
+        if (gem == null) return;
+        IterRect(true, null, location, gem.Size);
+        gem.Locations.Remove(location);
+        if (gem.Locations.Count == 0)
+            Gems.Remove(gem);
     }
 
     public Particle[] Advect(
@@ -186,7 +190,7 @@ public class Circuit
         Simplest[] mana;
         mana = Simplest.Zeros(n + 1);
         mana[0].K = inputMana;
-        particles.Enqueue(new Particle(source.Location, null, mana));
+        particles.Enqueue(new Particle(source.Locations[0], null, mana));
         for (int i = 0; i < n; i++)
         {
             mana = Simplest.Zeros(n + 1);
@@ -203,13 +207,13 @@ public class Circuit
             if (i < stochastics.Count * 4)
             {
                 gem = stochastics[i / 4];
-                p.Location = gem.Location;
+                p.Location = gem.Locations[0];
                 p.Direction = PointInt.PhaseToBaseVec(i % 4);
             }
             else
             {
                 gem = focuses[i - stochastics.Count * 4];
-                p.Location = gem.Location;
+                p.Location = gem.Locations[0];
                 p = gem.Apply(p);
             }
             p.Location += p.Direction;
