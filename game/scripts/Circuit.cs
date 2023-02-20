@@ -22,7 +22,6 @@ public class Circuit
         Debug.Assert(
             gem.Locations.Count < 1
             || gem is CustomGem cG
-            && cG.MetaLevel.MyRank != Rank.FINITE
         );
         if (
             location.IntX < 0 ||

@@ -134,7 +134,7 @@ public class GemListScene : WindowDialog
             }
             foreach (var entry in GameState.Persistent.HasCustomGems)
             {
-                Add(vBox, entry.Value);
+                Add(vBox, entry.Value.Item2);
             }
         }
     }
@@ -208,15 +208,15 @@ public class GemListScene : WindowDialog
     {
         if (gem is CustomGem cG)
         {
-            CustomGem HasCG = null;
+            (int, CustomGem) HasCG = (0, null);
             if (cG.MetaLevel.MyRank == Rank.FINITE)
             {
                 GameState.Persistent.HasCustomGems.TryGetValue(
                     (int)cG.MetaLevel.K, out HasCG
                 );
-                if (HasCG == null)
+                if (HasCG.Item2 == null)
                     return Simplest.Zero();
-                return Simplest.One();
+                return new Simplest(Rank.FINITE, HasCG.Item1);
             }
             else
             {
@@ -241,7 +241,7 @@ public class GemListScene : WindowDialog
                 if (g is CustomGem cG)
                 {
                     if (cG.MetaLevel.Equals(customGem.MetaLevel))
-                        acc++;
+                        acc += g.Locations.Count;
                 }
             }
             else
@@ -262,7 +262,7 @@ public class GemListScene : WindowDialog
         CustomGem cG;
         foreach (var entry in GameState.Persistent.HasCustomGems)
         {
-            cG = entry.Value;
+            cG = entry.Value.Item2;
             if (cG != null)
             {
                 acc += CountGemsInCircuit(gem, cG.MyCircuit);

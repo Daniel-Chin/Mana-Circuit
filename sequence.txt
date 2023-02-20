@@ -20,7 +20,7 @@ Once $4, shop spawns.
 $6 -> x1.4 gem
     "There are more shops ahead. Don't worry, they appear quite frequently."
 
-$9 -> +1 gem
+$9 -> 2nd +1 gem
 
 $13 -> upgrade wand
     three radiators
@@ -32,8 +32,8 @@ $13 -> upgrade wand
 
 $10 -> focus
 $7 -> mirror
-$8 -> mirror
-$9 -> x1.4 gem
+$8 -> 2nd mirror
+$9 -> 2nd x1.4 gem
 
 once $19, jumper NPC spawns
     "Hello! I make skateboards as a hobby."
@@ -58,7 +58,7 @@ $25 -> upgrade wand
     ^^^
     "Only few mages can realize its true potential."
 
-$9 -> x1.4 gem
+$9 -> 3rd x1.4 gem
 $20 -> stochastic gem
 
 NPC:
@@ -75,9 +75,9 @@ Once $50, Gem Expert NPC spawns.
     "Custom Gems take the theoretical mean of anything stochastic inside them."
     "Still, a *class-1* attack is nothing I'd call exciting. Come back when you are not this weak."
 
-$10 -> one copy of CG0. 
+$10 -> 1st copy of CG0. 
 
-$30 -> x1.5 gem
+$30 -> 1st x1.5 gem
 
 Make w
 
@@ -88,7 +88,7 @@ Gem Expert: Meta Custom Gem
 
 Fight 5 enemies. probabilistically spawn enemies with HP w. This is to hint those who hasn't discovered w. 
 
-afford -> one copy of CG0. 
+afford -> 2nd copy of CG0. 
 
 Record radius. All enemies outside are now >= w. 
 
@@ -110,7 +110,7 @@ jumper NPC spawns
 
     jump away to w
 
-$w -> stochastic gem
+$w -> 2nd stochastic gem
 // 要卡的
 
 make 2^w

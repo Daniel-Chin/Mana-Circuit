@@ -8,12 +8,12 @@ namespace GameState
         public static (Simplest, Simplest) Location;
         public static Wand MyWand;
         public static Dictionary<string, int> HasGems;
-        public static Dictionary<int, CustomGem> HasCustomGems;
+        public static Dictionary<int, (int, CustomGem)> HasCustomGems;
         public static CustomGem MyTypelessGem;
         public static void Init()
         {
             HasGems = new Dictionary<string, int>();
-            HasCustomGems = new Dictionary<int, CustomGem>();
+            HasCustomGems = new Dictionary<int, (int, CustomGem)>();
             MyTypelessGem = null;
 
             DebugInit();
@@ -31,10 +31,10 @@ namespace GameState
             HasGems.Add("mirror", 99);
             HasGems.Add("stochastic", 99);
             CustomGem cG = new CustomGem(new Simplest(Rank.FINITE, 0));
-            HasCustomGems.Add(0, cG);
-            HasCustomGems.Add(1, new CustomGem(new Simplest(Rank.FINITE, 1)));
-            HasCustomGems.Add(3, new CustomGem(new Simplest(Rank.FINITE, 3)));
-            HasCustomGems.Add(6, new CustomGem(new Simplest(Rank.FINITE, 6)));
+            HasCustomGems.Add(0, (2, cG));
+            HasCustomGems.Add(1, (2, new CustomGem(new Simplest(Rank.FINITE, 1))));
+            HasCustomGems.Add(3, (2, new CustomGem(new Simplest(Rank.FINITE, 3))));
+            HasCustomGems.Add(6, (2, new CustomGem(new Simplest(Rank.FINITE, 6))));
             MyTypelessGem = new CustomGem(Simplest.W());
 
             Circuit c = new Circuit(new PointInt(8, 8));
@@ -70,7 +70,7 @@ namespace GameState
         {
             foreach (var item in HasCustomGems)
             {
-                item.Value.Eval();
+                item.Value.Item2.Eval();
             }
             if (MyTypelessGem != null)
             {
