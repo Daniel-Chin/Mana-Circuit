@@ -6,14 +6,14 @@ public class CircuitEditor : WindowDialog
 {
     public GemListScene _gemList;
     public VBoxContainer VBox;
-    public RichTextLabel LFSLabel;
+    public RichTextLabel HeadingLabel;
     public RichTextLabel ExplainLabel;
     public AspectRatioContainer Aspect;
     public CircuitUI MyCircuitUI;
     public override void _Ready()
     {
         VBox = GetNode<VBoxContainer>("VBox");
-        LFSLabel = GetNode<RichTextLabel>("VBox/LFS");
+        HeadingLabel = GetNode<RichTextLabel>("VBox/Heading");
         ExplainLabel = GetNode<RichTextLabel>("VBox/Explain");
         Aspect = GetNode<AspectRatioContainer>("VBox/Aspect");
         _gemList = new GemListScene();

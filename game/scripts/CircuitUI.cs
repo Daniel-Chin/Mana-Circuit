@@ -262,13 +262,13 @@ public class CircuitUI : AspectRatioContainer
         switch (MetaLevel.K % 3)
         {
             case 0:
-                color = Color.FromHsv(.16f, 1f, .3f, 1f);
-                break;
-            case 1:
                 color = Color.FromHsv(.66f, 1f, .3f, 1f);
                 break;
-            case 2:
+            case 1:
                 color = Color.FromHsv(.38f, 1f, .3f, 1f);
+                break;
+            case 2:
+                color = Color.FromHsv(0f, 1f, .3f, 1f);
                 break;
             default:
                 throw new Shared.ValueError();
