@@ -14,12 +14,13 @@ public class World : Node2D
     public override void _Ready()
     {
         BackRect = GetNode<TextureRect>("Background");
-        MyMageUI = GetNode<MageUI>("Mage");
+        MyMageUI = GetNode<MageUI>("MageUI");
         BackShader = (ShaderMaterial)BackRect.Material;
         AspectRatio = BackRect.RectMinSize.y / BackRect.RectMinSize.x;
         BackShader.SetShaderParam("aspect_ratio", AspectRatio);
         UpdateBack();
         MyMageUI.Resting();
+        MyMageUI.Hold(GameState.Persistent.MyWand);
     }
 
     private static readonly float SOFTZONE = 0;

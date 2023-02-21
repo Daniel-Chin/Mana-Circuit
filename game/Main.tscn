@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/Main.cs" type="Script" id=1]
-[ext_resource path="res://Mage.tscn" type="PackedScene" id=2]
+[ext_resource path="res://MageUI.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/FPSLabel.cs" type="Script" id=3]
 [ext_resource path="res://misc/theme.tres" type="Theme" id=4]
 [ext_resource path="res://texture/gem/transparent.png" type="Texture" id=5]
@@ -46,7 +46,7 @@ rect_min_size = Vector2( 720, 600 )
 texture = ExtResource( 5 )
 expand = true
 
-[node name="Mage" parent="HBox/MarginContainer/World" instance=ExtResource( 2 )]
+[node name="MageUI" parent="HBox/MarginContainer/World" instance=ExtResource( 2 )]
 
 [node name="Overlay" type="MarginContainer" parent="."]
 margin_right = 1024.0

@@ -47,6 +47,15 @@ public class MageUI : Node2D
         JumpPrep.Visible = false;
         JumpSpin.Visible = true;
     }
+    public void Hold(Wand wand)
+    {
+        if (wand == null)
+        {
+            WalkWand.Visible = false;
+        }
+        WalkWand.Texture = wand.Texture();
+        WalkWand.Visible = true;
+    }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     //  public override void _Process(float delta)

@@ -8,20 +8,24 @@ namespace GameState
     {
         public static Simplest Money;
         public static (double, Simplest) Location;
-        // polar
+        // polar(theta, r)
         public static Wand MyWand;
         public static Dictionary<string, int> HasGems;
         public static Dictionary<int, (int, CustomGem)> HasCustomGems;
         public static CustomGem MyTypelessGem;
-        public static int JumperStage;
+        public static class Events
+        {
+            public static bool Intro = false;
+            public static int JumperStage = 0;
+        }
         public static void Init()
         {
             Money = Simplest.Zero();
             Location = (0, Simplest.Zero());
+            MyWand = null;
             HasGems = new Dictionary<string, int>();
             HasCustomGems = new Dictionary<int, (int, CustomGem)>();
             MyTypelessGem = null;
-            JumperStage = 0;
 
             DebugInit();
 

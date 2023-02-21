@@ -35,7 +35,7 @@ animations = [ {
 "speed": 4.0
 } ]
 
-[node name="Mage" type="Node2D"]
+[node name="MageUI" type="Node2D"]
 scale = Vector2( 4, 4 )
 script = ExtResource( 10 )
 
