@@ -42,3 +42,9 @@ public abstract class MagicItem
     public abstract string Name();
     public abstract string DisplayName();
 }
+
+public interface Spawnable
+{
+    // NPC
+    // First Wand
+}

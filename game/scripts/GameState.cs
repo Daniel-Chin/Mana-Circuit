@@ -93,9 +93,15 @@ namespace GameState
     public static class Transient
     {
         public static Vector2 LocationOffset;
+        public static int EventProgression;
+        public static Spawnable NextSpawn;
+        public static int EnemiesTillNextSpawn;
         public static void Init()
         {
             LocationOffset = new Vector2(0, 0);
+            EventProgression = 0;
+            NextSpawn = null;
+            EnemiesTillNextSpawn = 0;
         }
     }
 }

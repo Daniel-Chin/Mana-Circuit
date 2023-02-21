@@ -61,4 +61,32 @@ public abstract class Wand : MagicItem
             MyCircuit = c;
         }
     }
+    public class Staff : Wand, Spawnable
+    {
+        public override string Name()
+        {
+            return "staff";
+        }
+        public override string DisplayName()
+        {
+            return "Weak Staff";
+        }
+        public override void Init()
+        {
+            Circuit c = new Circuit(new PointInt(4, 3));
+            for (int i = 0; i < c.Size.IntX; i++)
+            {
+                c.Add(new Gem.Wall(), new PointInt(i, 0), false);
+                c.Add(new Gem.Wall(), new PointInt(i, c.Size.IntY - 1), false);
+            }
+
+            Gem source = new Gem.Source(new PointInt(1, 0));
+            c.Add(source, new PointInt(0, 1));
+
+            Gem drain = new Gem.Drain();
+            c.Add(drain, new PointInt(c.Size.IntY - 1, 1));
+
+            MyCircuit = c;
+        }
+    }
 }
