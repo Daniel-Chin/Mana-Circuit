@@ -52,6 +52,7 @@ public class MageUI : Node2D
         if (wand == null)
         {
             WalkWand.Visible = false;
+            return;
         }
         WalkWand.Texture = wand.Texture();
         WalkWand.Visible = true;

@@ -21,6 +21,7 @@ public class World : Node2D
         UpdateBack();
         MyMageUI.Resting();
         MyMageUI.Hold(GameState.Persistent.MyWand);
+        Moneys = new List<Money>();
     }
 
     private static readonly float SOFTZONE = 0;

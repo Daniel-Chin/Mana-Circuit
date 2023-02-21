@@ -18,10 +18,16 @@ float rand(vec2 co){
 
 vec2 f_g(vec2 screen_pos) {
 	vec2 pos = offset_g + screen_pos;
-	float accent = pow(rand(round(pos * 64.0)), 12) * .1;
+	vec2 round_pos = round(pos * 64.0);
 	float dist = length(pos);
+	float str = pow((sin(TIME) + 1.0) * .5, 3);
+	float accent = pow(rand(round_pos), 12);
+	round_pos.x += round(TIME * 4.0);
+	if (accent > .6 * str && rand(round_pos) < .1) {
+		accent *= (2.0 + str * 2.0);
+	}
 	float phase = 1.0 - pow(mod(dist, .3) * 3.3333, 2);
-	return vec2(phase * .1, accent);
+	return vec2(phase * .1, accent * .1);
 }
 
 // float f_b(vec2 screen_pos) {
