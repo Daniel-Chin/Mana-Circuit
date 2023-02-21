@@ -21,7 +21,7 @@ vec2 f_g(vec2 screen_pos) {
 	float dist = length(pos);
 	float str = pow((sin(TIME) + 1.0) * .5, 3);
 	float accent = pow(rand(pos), 12);
-	pos.x += round(TIME * 4.0);
+	pos.x += round(TIME * 2.0);
 	if (accent > .6 * str && rand(pos) < .1) {
 		accent *= (2.0 + str * 2.0);
 	}

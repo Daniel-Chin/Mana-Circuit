@@ -64,7 +64,6 @@ text = "FPS: 60"
 script = ExtResource( 3 )
 
 [node name="VBox" type="VBoxContainer" parent="Overlay"]
-visible = false
 margin_right = 1024.0
 margin_bottom = 600.0
 alignment = 2
