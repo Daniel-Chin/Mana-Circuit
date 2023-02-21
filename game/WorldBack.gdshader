@@ -17,13 +17,12 @@ float rand(vec2 co){
 // }
 
 vec2 f_g(vec2 screen_pos) {
-	vec2 pos = offset_g + screen_pos;
-	vec2 round_pos = round(pos * 64.0);
+	vec2 pos = round((offset_g + screen_pos) * 64.0) / 64.0;
 	float dist = length(pos);
 	float str = pow((sin(TIME) + 1.0) * .5, 3);
-	float accent = pow(rand(round_pos), 12);
-	round_pos.x += round(TIME * 4.0);
-	if (accent > .6 * str && rand(round_pos) < .1) {
+	float accent = pow(rand(pos), 12);
+	pos.x += round(TIME * 4.0);
+	if (accent > .6 * str && rand(pos) < .1) {
 		accent *= (2.0 + str * 2.0);
 	}
 	float phase = 1.0 - pow(mod(dist, .3) * 3.3333, 2);
@@ -38,7 +37,7 @@ vec2 f_g(vec2 screen_pos) {
 // }
 
 void fragment() {
-	vec2 screen_pos = round(vec2(UV.x, UV.y * aspect_ratio) * 64.0) / 64.0;
+	vec2 screen_pos = vec2(UV.x, UV.y * aspect_ratio);
 	// float r = f_r(screen_pos);
 	vec2 g = f_g(screen_pos);
 	// float b = f_b(screen_pos);
