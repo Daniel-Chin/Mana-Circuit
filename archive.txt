@@ -17,3 +17,7 @@ Let's leave the fosuer available, so that the puzzle is not too difficult (to cr
 The way we assume each unknown source to be the same skips least solutions. 
 e.g. putting a focuser before a *w gem rejects w and yields 2^w. 
 Change the search to an iterative stabalization of a simplest vector?
+
+2/21
+9d923b523f88cb755dd0dd16cc24a9347b2be6c4
+world background shader: give up pixelated movement, using smooth
