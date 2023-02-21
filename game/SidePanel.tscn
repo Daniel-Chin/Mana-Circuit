@@ -1,4 +1,52 @@
-[gd_scene format=2]
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://texture/gem/drain.png" type="Texture" id=1]
+[ext_resource path="res://misc/theme.tres" type="Theme" id=2]
+[ext_resource path="res://misc/font/m5x7.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://scripts/SidePanel.cs" type="Script" id=4]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.0392157, 0.0392157, 0.0392157, 1 )
+border_width_right = 4
+border_color = Color( 0.101961, 0.101961, 0.101961, 1 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 60
+font_data = ExtResource( 3 )
 
 [node name="SidePanel" type="PanelContainer"]
 rect_min_size = Vector2( 300, 600 )
+theme = ExtResource( 2 )
+custom_styles/panel = SubResource( 2 )
+script = ExtResource( 4 )
+
+[node name="VBox" type="VBoxContainer" parent="."]
+margin_right = 296.0
+margin_bottom = 600.0
+
+[node name="Crystal" type="MarginContainer" parent="VBox"]
+margin_right = 296.0
+margin_bottom = 600.0
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="VBox/Crystal"]
+margin_right = 296.0
+margin_bottom = 600.0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 1
+
+[node name="VBox" type="VBoxContainer" parent="VBox/Crystal"]
+margin_right = 296.0
+margin_bottom = 600.0
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="VBox/Crystal/VBox"]
+margin_top = 275.0
+margin_right = 296.0
+margin_bottom = 324.0
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]123[/center]"
+text = "123"
+fit_content_height = true
