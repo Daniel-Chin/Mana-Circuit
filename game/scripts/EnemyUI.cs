@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Enemy : Node2D
+public class EnemyUI : Node2D
 {
     public RichTextLabel label;
     public override void _Ready()

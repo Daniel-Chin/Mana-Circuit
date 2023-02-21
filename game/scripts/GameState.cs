@@ -18,6 +18,13 @@ namespace GameState
             public static bool Intro = false;
             public static int JumperStage = 0;
         }
+        public static class Loneliness
+        {
+
+            public static int Shop = 0;
+            public static int GemExpert = 0;
+            public static int WandSmith = 0;
+        }
         public static void Init()
         {
             Money = Simplest.Zero();

@@ -96,11 +96,5 @@ Gem Expert
 
     if x >= w^2, "You see, if you hit me with a class-w^x attack, I will unlock Meta^x Custom Gems."
 
-Ack
+Acknowledge
     font m5x7. 
-
-Q
-what can typeless do
-    IDK
-how to go beyond w^w^w^...
-    IDK
