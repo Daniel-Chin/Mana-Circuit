@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 public class World : Node2D
 {
@@ -7,6 +9,7 @@ public class World : Node2D
     public MageUI MyMageUI;
     ShaderMaterial BackShader;
     public float AspectRatio;
+    public List<Money> Moneys;
 
     public override void _Ready()
     {
@@ -38,6 +41,22 @@ public class World : Node2D
         else
         {
             MyMageUI.Resting();
+        }
+        UpdateMoneys(delta);
+    }
+
+    private void UpdateMoneys(float dt)
+    {
+        for (int i = 0; i < Moneys.Count; i++)
+        {
+            Money m0 = Moneys[i];
+            foreach (Money m1 in Moneys.Skip(i + 1))
+            {
+                Vector2 displace = m0.Position - m1.Position;
+                Vector2 force = displace.Normalized() / displace.Length();
+                m0.Step(force, dt);
+                m1.Step(-force, dt);
+            }
         }
     }
 
