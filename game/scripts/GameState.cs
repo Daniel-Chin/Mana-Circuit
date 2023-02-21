@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace GameState
 {
     public static class Persistent
     {
         public static Simplest Money;
-        public static (Simplest, Simplest) Location;
+        public static (double, Simplest) Location;
+        // polar
         public static Wand MyWand;
         public static Dictionary<string, int> HasGems;
         public static Dictionary<int, (int, CustomGem)> HasCustomGems;
@@ -14,7 +17,7 @@ namespace GameState
         public static void Init()
         {
             Money = Simplest.Zero();
-            Location = (Simplest.Zero(), Simplest.Zero());
+            Location = (0, Simplest.Zero());
             HasGems = new Dictionary<string, int>();
             HasCustomGems = new Dictionary<int, (int, CustomGem)>();
             MyTypelessGem = null;
@@ -85,6 +88,10 @@ namespace GameState
     }
     public static class Transient
     {
-        public static void Init() { }
+        public static Vector2 LocationOffset;
+        public static void Init()
+        {
+            LocationOffset = new Vector2(0, 0);
+        }
     }
 }

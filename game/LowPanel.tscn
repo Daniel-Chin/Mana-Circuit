@@ -1,0 +1,8 @@
+[gd_scene format=2]
+
+[node name="LowPanel" type="PanelContainer"]
+margin_top = 400.0
+margin_right = 1024.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 0, 200 )
+size_flags_vertical = 0

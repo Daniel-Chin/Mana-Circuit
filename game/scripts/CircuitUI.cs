@@ -250,7 +250,7 @@ public class CircuitUI : AspectRatioContainer
         if (MyMagicItem is Wand wand)
         {
             TextureRect _tRect = new TextureRect();
-            _tRect.Texture = wand.Texture();
+            _tRect.Texture = wand.TextureFlat();
             _tRect.Expand = true;
             _tRect.StretchMode = TextureRect.StretchModeEnum.Scale;
             _bgRect = _tRect;

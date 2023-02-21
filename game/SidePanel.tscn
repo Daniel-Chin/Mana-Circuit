@@ -1,0 +1,4 @@
+[gd_scene format=2]
+
+[node name="SidePanel" type="PanelContainer"]
+rect_min_size = Vector2( 300, 600 )

@@ -12,6 +12,10 @@ public abstract class Wand : MagicItem
     {
         return GD.Load<Texture>($"res://texture/wand/{Name()}.png");
     }
+    public Texture TextureFlat()
+    {
+        return GD.Load<Texture>($"res://texture/wand/{Name()}_flat.png");
+    }
     public int TypeID(Wand wand)
     {
         for (int i = 0; i < Types.Length; i++)
