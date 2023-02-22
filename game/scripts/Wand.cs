@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Diagnostics;
+
 using Godot;
 
 public abstract class Wand : MagicItem, JSONable
@@ -34,9 +34,14 @@ public abstract class Wand : MagicItem, JSONable
         writer.WriteLine("[");
         switch (this)
         {
+            case Test w:
+                JSON.Store("test", writer);
+                break;
             case Staff w:
                 JSON.Store("staff", writer);
                 break;
+            default:
+                throw new Shared.ValueError();
         }
         MyCircuit.ToJSON(writer);
         writer.WriteLine("],");
@@ -46,17 +51,22 @@ public abstract class Wand : MagicItem, JSONable
         string line = reader.ReadLine();
         if (line.Equals("null,"))
             return null;
-        Debug.Assert(line.Equals("["));
+        Shared.Assert(line.Equals("["));
         string wandType = JSON.ParseString(reader);
         Wand wand = null;
         switch (wandType)
         {
+            case "test":
+                wand = new Test();
+                break;
             case "staff":
                 wand = new Staff();
                 break;
+            default:
+                throw new Shared.ValueError();
         }
         wand.MyCircuit = Circuit.FromJSON(reader, null);
-        Debug.Assert(reader.ReadLine().Equals("],"));
+        Shared.Assert(reader.ReadLine().Equals("],"));
         return wand;
     }
 

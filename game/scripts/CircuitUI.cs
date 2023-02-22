@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using System.Diagnostics;
+
 using System.Collections.Generic;
 
 public class CircuitUI : AspectRatioContainer
@@ -212,7 +212,7 @@ public class CircuitUI : AspectRatioContainer
             case Gem.Drain d:
                 return;
         }
-        Debug.Assert(RecursionDepth == 0);
+        Shared.Assert(RecursionDepth == 0);
         _GemList = new GemListScene();
         AddChild(_GemList);
         _GemList.Connect(

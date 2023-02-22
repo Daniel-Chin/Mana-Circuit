@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -17,7 +17,7 @@ public abstract class Gem : MagicItem
         //     ok = false;
         // }
         // catch (Shared.ValueError) { }
-        // Debug.Assert(ok);
+        // Shared.Assert(ok);
     }
     public Gem()
     {
@@ -77,9 +77,10 @@ public abstract class Gem : MagicItem
         string line = reader.ReadLine();
         if (line.Equals("null,"))
             return null;
-        Debug.Assert(line.Equals("["));
+        Shared.Assert(line.Equals("["));
         string gemType = JSON.ParseString(reader);
         Gem gem = null;
+        Console.WriteLine("JSON has " + gemType);
         switch (gemType)
         {
             case "source":
@@ -132,13 +133,21 @@ public abstract class Gem : MagicItem
                         gem = iC.Item2;
                         break;
                     }
-                    Debug.Assert(metaLevel.MyRank != Rank.FINITE);
+                    Shared.Assert(metaLevel.MyRank != Rank.FINITE);
                     CustomGem typeless = new CustomGem(metaLevel);
                     gem = typeless;
                 }
                 break;
+            default:
+                throw new Shared.ValueError();
         }
-        Debug.Assert(reader.ReadLine().Equals("],"));
+        string s = reader.ReadLine();
+        if (!s.Equals("],"))
+        {
+            Console.WriteLine("dan", s);
+            throw new Exception();
+        }
+        // Shared.Assert(reader.ReadLine().Equals("],"));
         return gem;
     }
 

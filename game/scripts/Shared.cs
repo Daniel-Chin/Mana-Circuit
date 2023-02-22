@@ -9,6 +9,7 @@ public class Shared
     public class ValueError : Exception { }
     public class TypeError : Exception { }
     public class PlayerCreatedEpsilonNaught : Exception { }
+    public class AssertionFailed : Exception { }
     public static Random Rand = new Random();
     public static readonly Theme THEME = GD.Load<Theme>("res://misc/theme.tres");
     public static readonly Font FONT = THEME.DefaultFont;
@@ -34,6 +35,12 @@ public class Shared
             Console.Write(", ");
         }
         Console.WriteLine("]");
+    }
+
+    public static void Assert(bool x)
+    {
+        if (!x)
+            throw new AssertionFailed();
     }
 }
 

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Diagnostics;
+
 
 public class Circuit : JSONable
 {
@@ -175,7 +175,7 @@ public class Circuit : JSONable
     }
     public static Circuit FromJSON(StreamReader reader, CustomGem typeless)
     {
-        Debug.Assert(reader.ReadLine().Equals("["));
+        Shared.Assert(reader.ReadLine().Equals("["));
         PointInt size = PointInt.FromJSON(reader);
         Circuit c = new Circuit(size);
         for (int i = 0; i < size.IntX; i++)
@@ -196,7 +196,7 @@ public class Circuit : JSONable
                 c.Add(gem, location);
             }
         }
-        Debug.Assert(reader.ReadLine().Equals("],"));
+        Shared.Assert(reader.ReadLine().Equals("],"));
         return c;
     }
 }

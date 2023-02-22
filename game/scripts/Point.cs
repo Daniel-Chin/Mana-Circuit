@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 using System.IO;
-using System.Diagnostics;
+
 using Godot;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -180,7 +180,7 @@ public class PointInt : Point, JSONable
     }
     public static PointInt FromJSON(StreamReader reader)
     {
-        Debug.Assert((char)reader.Read() == '[');
+        Shared.Assert((char)reader.Read() == '[');
         StringBuilder sB = new StringBuilder();
         int state = 0;
         int? x = null;
@@ -208,7 +208,7 @@ public class PointInt : Point, JSONable
             }
             sB.Append(c);
         }
-        Debug.Assert((char)reader.Read() == ',');
+        Shared.Assert(reader.ReadLine() == ",");
         return new PointInt((int)x, (int)y);
     }
 }

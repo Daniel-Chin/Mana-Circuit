@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using System.Diagnostics;
+
 
 public class CustomGem : Gem
 {
@@ -42,7 +42,7 @@ public class CustomGem : Gem
     }
     public override Particle Apply(Particle input)
     {
-        Debug.Assert(CachedMultiplier != null);
+        Shared.Assert(CachedMultiplier != null);
         input.Multiply(CachedMultiplier);
         if (CachedAdder != null)
         {

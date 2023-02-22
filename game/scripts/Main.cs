@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using System.Diagnostics;
+
 
 public class Main : Node2D
 {
@@ -9,7 +9,7 @@ public class Main : Node2D
     public static float WorldTime;
     public Main() : base()
     {
-        Debug.Assert(Singleton == null);
+        Shared.Assert(Singleton == null);
         Singleton = this;
     }
     public override void _Ready()

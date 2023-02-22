@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.Text;
-using System.Diagnostics;
+
 
 public class CircuitEditor : WindowDialog
 {

@@ -1,4 +1,4 @@
-using System.Diagnostics;
+
 using System.Text;
 using Godot;
 
@@ -26,7 +26,7 @@ public class MathBB
                     sB.Append("raised_");
                     break;
                 default:
-                    Debug.Assert(Raised <= MAX_RAISE);
+                    Shared.Assert(Raised <= MAX_RAISE);
                     sB.Append(new string('r', Raised));
                     break;
             }

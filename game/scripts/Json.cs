@@ -1,6 +1,6 @@
 using System.IO;
 using System.Text;
-using System.Diagnostics;
+
 using System.Collections.Generic;
 
 public interface JSONable
@@ -35,7 +35,7 @@ public class JSON
     }
     public static string ParseString(StreamReader reader)
     {
-        Debug.Assert((char)reader.Read() == '"');
+        Shared.Assert((char)reader.Read() == '"');
         bool escaping = false;
         StringBuilder sB = new StringBuilder();
         while (true)
@@ -43,19 +43,27 @@ public class JSON
             char c = (char)reader.Read();
             if (escaping)
             {
-                sB.Append(c);
                 escaping = false;
-                continue;
+                if (c == 'n')
+                {
+                    sB.Append('\n');
+                    continue;
+                }
+                sB.Append(c);
             }
-            if (c == '"')
-                break;
-            if (c == 'n')
+            else
             {
-                sB.Append('\n');
-                continue;
+                if (c == '"')
+                    break;
+                if (c == '\\')
+                {
+                    escaping = true;
+                    continue;
+                }
+                sB.Append(c);
             }
         }
-        Debug.Assert(reader.ReadLine() == ",");
+        Shared.Assert(reader.ReadLine() == ",");
         return sB.ToString();
     }
 
@@ -76,7 +84,7 @@ public class JSON
         {
             case "true,":
                 return true;
-            case "fasle,":
+            case "false,":
                 return false;
         }
         throw new Shared.ValueError();
@@ -93,7 +101,7 @@ public class JSON
     {
         if (reader.Peek() == ']')
         {
-            Debug.Assert(reader.ReadLine().Equals("],"));
+            Shared.Assert(reader.ReadLine().Equals("],"));
             return true;
         }
         return false;

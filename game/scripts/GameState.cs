@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Diagnostics;
+
 using System.Collections.Generic;
 using Godot;
 
@@ -49,8 +49,6 @@ public class GameState
             Loneliness_WandSmith = 0;
 
             DebugInit();
-
-            Ready();
         }
 
         public void DebugInit()
@@ -93,6 +91,8 @@ public class GameState
             c.Add(new Gem.Stochastic(false), new PointInt(4, 4));
             c.Add(new Gem.Focus(new PointInt(1, 0)), new PointInt(3, 4));
             cG.MyCircuit = c;
+
+            Ready();
         }
         public void ToJSON(StreamWriter writer)
         {
@@ -153,13 +153,13 @@ public class GameState
         }
         public void FromJSON(StreamReader reader)
         {
-            Debug.Assert(reader.ReadLine().Equals("["));
+            Shared.Assert(reader.ReadLine().Equals("["));
 
             Money = Simplest.FromJSON(reader);
             Location_theta = Double.Parse(JSON.NoLast(reader));
             Location_dist = Simplest.FromJSON(reader);
 
-            Debug.Assert(reader.ReadLine().Equals("["));
+            Shared.Assert(reader.ReadLine().Equals("["));
             while (!JSON.DidArrayEnd(reader))
             {
                 string key = JSON.ParseString(reader);
@@ -167,7 +167,7 @@ public class GameState
                 HasGems[key] = value;
             }
 
-            Debug.Assert(reader.ReadLine().Equals("["));
+            Shared.Assert(reader.ReadLine().Equals("["));
             while (!JSON.DidArrayEnd(reader))
             {
                 int key = Int32.Parse(JSON.NoLast(reader));
@@ -185,7 +185,7 @@ public class GameState
             Loneliness_GemExpert = Int32.Parse(JSON.NoLast(reader));
             Loneliness_WandSmith = Int32.Parse(JSON.NoLast(reader));
 
-            Debug.Assert(reader.ReadLine().Equals("],"));
+            Shared.Assert(reader.ReadLine().Equals("],"));
 
             Persistent.Ready();
         }

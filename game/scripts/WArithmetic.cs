@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Diagnostics;
+
 using System.Linq;
 using System.Text;
 
@@ -159,7 +159,7 @@ public class Expression
             }
             else
             {
-                Debug.Assert(MyOperator > op);
+                Shared.Assert(MyOperator > op);
             }
         }
         return new Expression[] { this };
@@ -167,7 +167,7 @@ public class Expression
 
     public static Expression Sample(double probToTerminate)
     {
-        // Debug.Assert(probToTerminate > .5);    // converge
+        // Shared.Assert(probToTerminate > .5);    // converge
         if (Shared.Rand.NextDouble() < probToTerminate)
         {
             if (Shared.Rand.NextDouble() < .6)
@@ -249,7 +249,7 @@ public class Simplest : JSONable
                 break;
         }
         if (MyRank == Rank.TWO_TO_THE_W)
-            Debug.Assert(K == -1);
+            Shared.Assert(K == -1);
     }
     public static bool operator <=(Simplest a, Simplest b)
     {
@@ -560,11 +560,11 @@ public class Simplest : JSONable
     }
     public static Simplest FromJSON(StreamReader reader)
     {
-        Debug.Assert(reader.ReadLine().Equals("["));
+        Shared.Assert(reader.ReadLine().Equals("["));
         Rank rank = (Rank)Int32.Parse(JSON.NoLast(reader));
         double k = Double.Parse(JSON.NoLast(reader));
         Simplest s = new Simplest(rank, k);
-        Debug.Assert(reader.ReadLine().Equals("],"));
+        Shared.Assert(reader.ReadLine().Equals("],"));
         return s;
     }
 }
