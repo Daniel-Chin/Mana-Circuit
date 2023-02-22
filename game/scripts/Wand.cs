@@ -3,7 +3,8 @@ using Godot;
 
 public abstract class Wand : MagicItem
 {
-    public Circuit MyCircuit;
+    public Circuit MyCircuit { get; set; }
+
     public static Type[] Types = new Type[] {
         typeof(Test),
     };

@@ -4,8 +4,8 @@ using MathNet.Numerics.LinearAlgebra;
 
 public abstract class Gem : MagicItem
 {
-    public List<PointInt> Locations;
-    public PointInt Size;
+    public List<PointInt> Locations { get; set; }
+    public PointInt Size { get; set; }
     static Gem()
     {
         // verify consistency

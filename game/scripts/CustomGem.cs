@@ -4,10 +4,10 @@ using System.Diagnostics;
 
 public class CustomGem : Gem
 {
-    public Simplest MetaLevel;
-    public Circuit MyCircuit;  // only one source one drain
-    public Simplest CachedAdder;
-    public Simplest CachedMultiplier;
+    public Simplest MetaLevel { get; set; }
+    public Circuit MyCircuit { get; set; }  // only one source one drain
+    public Simplest CachedAdder { get; set; }
+    public Simplest CachedMultiplier { get; set; }
     public CustomGem(Simplest metaLevel) : base()
     {
         MetaLevel = metaLevel;

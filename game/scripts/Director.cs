@@ -11,7 +11,7 @@ public class Director
     {
         if (NowEvent != null)
             throw new Shared.ObjectStateIllegal();
-        if (!GameState.Persistent.Events.Intro)
+        if (!GameState.Persistent.Event_Intro)
         {
             NowEvent = new MagicEvent.Intro();
             NowEvent.NextStep();

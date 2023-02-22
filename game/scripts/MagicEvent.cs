@@ -59,7 +59,7 @@ public abstract class MagicEvent
         }
         private void EventFinished()
         {
-            GameState.Persistent.Events.Intro = true;
+            GameState.Persistent.Event_Intro = true;
             Director.EventFinished();
         }
     }

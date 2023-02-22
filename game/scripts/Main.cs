@@ -11,8 +11,6 @@ public class Main : Node2D
     {
         Debug.Assert(Singleton == null);
         Singleton = this;
-        GameState.Persistent.Init();
-        GameState.Transient.Init();
     }
     public override void _Ready()
     {

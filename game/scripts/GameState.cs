@@ -2,45 +2,56 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-namespace GameState
+public class GameState
 {
-    public static class Persistent
+    public static PersistentClass Persistent;
+    public static TransientClass Transient;
+    static GameState()
     {
-        public static Simplest Money;
-        public static (double, Simplest) Location;
-        // polar(theta, r)
-        public static Wand MyWand;
-        public static Dictionary<string, int> HasGems;
-        public static Dictionary<int, (int, CustomGem)> HasCustomGems;
-        public static CustomGem MyTypelessGem;
-        public static class Events
-        {
-            // true means completed.
-            public static bool Intro = false;
-            public static int JumperStage = 0;
-        }
-        public static class Loneliness
-        {
+        Persistent = new PersistentClass();
+        Transient = new TransientClass();
+        SaveLoad.Test();
+    }
 
-            public static int Shop = 0;
-            public static int GemExpert = 0;
-            public static int WandSmith = 0;
-        }
-        public static void Init()
+    public class PersistentClass
+    {
+        public Simplest Money { get; set; }
+        public double Location_theta { get; set; }
+        public Simplest Location_dist { get; set; }
+        public Wand MyWand { get; set; }
+        public Dictionary<string, int> HasGems { get; set; }
+        public Dictionary<int, (int, CustomGem)> HasCustomGems { get; set; }
+        public CustomGem MyTypelessGem { get; set; }
+
+        // events. true means completed.
+        public bool Event_Intro { get; set; }
+        public int Event_JumperStage { get; set; }
+
+        public int Loneliness_Shop { get; set; }
+        public int Loneliness_GemExpert { get; set; }
+        public int Loneliness_WandSmith { get; set; }
+        public PersistentClass()
         {
             Money = Simplest.Zero();
-            Location = (0, Simplest.Zero());
+            Location_theta = 0;
+            Location_dist = Simplest.Zero();
             MyWand = null;
             HasGems = new Dictionary<string, int>();
             HasCustomGems = new Dictionary<int, (int, CustomGem)>();
             MyTypelessGem = null;
+
+            Event_Intro = false;
+            Event_JumperStage = 0;
+            Loneliness_Shop = 0;
+            Loneliness_GemExpert = 0;
+            Loneliness_WandSmith = 0;
 
             DebugInit();
 
             Ready();
         }
 
-        public static void DebugInit()
+        public void DebugInit()
         {
             HasGems.Add("addOne", 1);
             HasGems.Add("weakMult", 9);
@@ -78,12 +89,12 @@ namespace GameState
             c.Add(new Gem.Focus(new PointInt(1, 0)), new PointInt(3, 4));
             cG.MyCircuit = c;
         }
-        public static void WriteDisk() { }
-        public static void LoadDisk()
+        public void WriteDisk() { }
+        public void LoadDisk()
         {
             Ready();
         }
-        public static void Ready()
+        public void Ready()
         {
             foreach (var item in HasCustomGems)
             {
@@ -96,14 +107,15 @@ namespace GameState
 
         }
     }
-    public static class Transient
+
+    public class TransientClass
     {
-        public static bool NPCPausedWorld;
-        public static Vector2 LocationOffset;
-        public static int EventProgression;
-        public static Spawnable NextSpawn;
-        public static int EnemiesTillNextSpawn;
-        public static void Init()
+        public bool NPCPausedWorld;
+        public Vector2 LocationOffset;
+        public int EventProgression;
+        public Spawnable NextSpawn;
+        public int EnemiesTillNextSpawn;
+        public TransientClass()
         {
             NPCPausedWorld = false;
             LocationOffset = new Vector2(0, 0);

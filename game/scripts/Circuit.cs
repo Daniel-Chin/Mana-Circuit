@@ -4,9 +4,9 @@ using System.Diagnostics;
 
 public class Circuit
 {
-    public PointInt Size;
-    public Gem[,] Field;
-    public List<Gem> Gems;
+    public PointInt Size { get; set; }
+    public Gem[,] Field { get; set; }
+    public List<Gem> Gems { get; set; }
 
     class Collision : Exception { }
 
