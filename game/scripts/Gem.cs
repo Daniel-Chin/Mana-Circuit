@@ -67,6 +67,8 @@ public abstract class Gem : MagicItem
                     g.MyCircuit.ToJSON(writer);
                 }
                 break;
+            default:
+                throw new Shared.ValueError();
         }
         writer.WriteLine("],");
     }
@@ -80,7 +82,7 @@ public abstract class Gem : MagicItem
         Shared.Assert(line.Equals("["));
         string gemType = JSON.ParseString(reader);
         Gem gem = null;
-        Console.WriteLine("JSON has " + gemType);
+        // Console.WriteLine("JSON has " + gemType);
         switch (gemType)
         {
             case "source":
@@ -141,13 +143,7 @@ public abstract class Gem : MagicItem
             default:
                 throw new Shared.ValueError();
         }
-        string s = reader.ReadLine();
-        if (!s.Equals("],"))
-        {
-            Console.WriteLine("dan", s);
-            throw new Exception();
-        }
-        // Shared.Assert(reader.ReadLine().Equals("],"));
+        Shared.Assert(reader.ReadLine().Equals("],"));
         return gem;
     }
 

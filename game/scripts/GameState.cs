@@ -12,7 +12,6 @@ public class GameState
     {
         Persistent = new PersistentClass();
         Transient = new TransientClass();
-        // SaveLoad.Test();
     }
 
     public class PersistentClass : JSONable
