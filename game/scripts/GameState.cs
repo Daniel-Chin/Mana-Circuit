@@ -53,6 +53,9 @@ public class GameState
 
         public void DebugInit()
         {
+            MyWand = new Wand.Test();
+            MyWand.Init();
+
             HasGems.Add("addOne", 1);
             HasGems.Add("weakMult", 9);
             HasGems.Add("focus", 99);

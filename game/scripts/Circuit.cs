@@ -6,7 +6,6 @@ public class Circuit
 {
     public PointInt Size { get; set; }
     public Gem[,] Field { get; set; }
-    public List<Gem> Gems { get; set; }
 
     class Collision : Exception { }
 
@@ -14,15 +13,10 @@ public class Circuit
     {
         Size = size;
         Field = new Gem[size.IntX, size.IntY];
-        Gems = new List<Gem>();
     }
 
     public void Add(Gem gem, PointInt location)
     {
-        Debug.Assert(
-            gem.Locations.Count < 1
-            || gem is CustomGem cG
-        );
         if (
             location.IntX < 0 ||
             location.IntY < 0 ||
@@ -32,10 +26,7 @@ public class Circuit
             throw new Collision();
         if (IterRect(false, null, location, gem.Size))
         {
-            if (!Gems.Contains(gem))
-                Gems.Add(gem);
             IterRect(true, gem, location, gem.Size);
-            gem.Locations.Add(location);
         }
         else
         {
@@ -95,9 +86,6 @@ public class Circuit
         // if empty already, silent.
         if (gem == null) return;
         IterRect(true, null, location, gem.Size);
-        gem.Locations.Remove(location);
-        if (gem.Locations.Count == 0)
-            Gems.Remove(gem);
     }
 
     public Particle[] Advect(
@@ -141,14 +129,18 @@ public class Circuit
         return results;
     }
 
-    public List<T> FindAll<T>()
+    public List<(PointInt, T)> FindAll<T>()
     {
-        List<T> matches = new List<T>();
-        foreach (Gem gem in Gems)
+        List<(PointInt, T)> matches = new List<(PointInt, T)>();
+        for (int i = 0; i < Size.IntX; i++)
         {
-            if (gem is T t)
+            for (int j = 0; j < Size.IntY; j++)
             {
-                matches.Add(t);
+                Gem gem = Field[i, j];
+                if (gem is T t)
+                {
+                    matches.Add((new PointInt(i, j), t));
+                }
             }
         }
         return matches;

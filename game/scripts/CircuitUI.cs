@@ -31,13 +31,16 @@ public class CircuitUI : AspectRatioContainer
         public Particle MyParticle;
         public ManaTrail MyTrail;
         public Vector2 Follower;
-        public ParticleAndTrail(CircuitUI parent, Gem.Source s)
+        public ParticleAndTrail(
+            CircuitUI parent,
+            PointInt sourceLocation, Gem.Source source
+        )
         {
             Parent = parent;
             MyParticle = new Particle(
-                s.Locations[0], s.Direction, Simplest.Ones(1)
+                sourceLocation, source.Direction, Simplest.Ones(1)
             );
-            Follower = s.Locations[0].ToVector2();
+            Follower = sourceLocation.ToVector2();
             MyTrail = new ManaTrail();
             parent.AddChild(MyTrail);
             MyTrail.LineWidth = (float)(3 * Math.Exp(-parent.RecursionDepth));
@@ -177,9 +180,9 @@ public class CircuitUI : AspectRatioContainer
         {
             // spawn new particle
             // Console.WriteLine("spawn new particle");
-            List<Gem.Source> sources = MyCircuit.FindAll<Gem.Source>();
-            Gem.Source s = sources[Shared.Rand.Next(sources.Count)];
-            ParticleAndTrail pT = new ParticleAndTrail(this, s);
+            List<(PointInt, Gem.Source)> sources = MyCircuit.FindAll<Gem.Source>();
+            var (sourceLocation, source) = sources[Shared.Rand.Next(sources.Count)];
+            ParticleAndTrail pT = new ParticleAndTrail(this, sourceLocation, source);
             _pAndTs.Add(pT);
         }
         // Console.WriteLine("Process end");

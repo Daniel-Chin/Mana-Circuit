@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MathNet.Numerics.LinearAlgebra;
@@ -9,9 +10,9 @@ public class MagicProblem
     private static readonly int UPRANK_EVERY = 17;
     public int N;
     public Circuit MyCircuit;
-    Gem.Source Source;
-    public List<Gem.Stochastic> Stochastics;
-    public List<Gem.Focus> Focuses;
+    public PointInt SourceLocation;
+    public List<(PointInt, Gem.Stochastic)> StochasticWithLocations;
+    public List<(PointInt, Gem.Focus)> FocusWithLocations;
     Dictionary<Gem, int> Dictionary;
     public Simplest[,] AWithoutDiag;
     public Simplest[] MinusB;
@@ -20,19 +21,19 @@ public class MagicProblem
     public MagicProblem(Circuit circuit)
     {
         MyCircuit = circuit;
-        Source = MyCircuit.FindAll<Gem.Source>()[0];
-        Stochastics = MyCircuit.FindAll<Gem.Stochastic>();
-        Focuses = MyCircuit.FindAll<Gem.Focus>();
-        N = Stochastics.Count * 4 + Focuses.Count;
+        SourceLocation = MyCircuit.FindAll<Gem.Source>()[0].Item1;
+        StochasticWithLocations = MyCircuit.FindAll<Gem.Stochastic>();
+        FocusWithLocations = MyCircuit.FindAll<Gem.Focus>();
+        N = StochasticWithLocations.Count * 4 + FocusWithLocations.Count;
         Dictionary = new Dictionary<Gem, int>();
         {
             int i = 0;
-            foreach (Gem stochastic in Stochastics)
+            foreach (var (_, stochastic) in StochasticWithLocations)
             {
                 Dictionary[stochastic] = i;
                 i += 4;
             }
-            foreach (Gem focus in Focuses)
+            foreach (var (_, focus) in FocusWithLocations)
             {
                 Dictionary[focus] = i;
                 i++;
@@ -49,7 +50,7 @@ public class MagicProblem
         Simplest[] mana;
         mana = Simplest.Zeros(N + 1);
         mana[0].K = inputMana;
-        particles.Enqueue(new Particle(Source.Locations[0], null, mana));
+        particles.Enqueue(new Particle(SourceLocation, null, mana));
         for (int i = 0; i < N; i++)
         {
             mana = Simplest.Zeros(N + 1);
@@ -63,16 +64,16 @@ public class MagicProblem
             }
             Gem gem;
             Particle p = new Particle(null, null, mana);
-            if (i < Stochastics.Count * 4)
+            if (i < StochasticWithLocations.Count * 4)
             {
-                gem = Stochastics[i / 4];
-                p.Location = gem.Locations[0];
+                (p.Location, gem) = StochasticWithLocations[i / 4];
                 p.Direction = PointInt.PhaseToBaseVec(i % 4);
             }
             else
             {
-                gem = Focuses[i - Stochastics.Count * 4];
-                p.Location = gem.Locations[0];
+                (p.Location, gem) = FocusWithLocations[
+                    i - StochasticWithLocations.Count * 4
+                ];
                 p = gem.Apply(p);
             }
             p.Location += p.Direction;

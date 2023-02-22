@@ -234,14 +234,15 @@ public class GemListScene : WindowDialog
     private int CountGemsInCircuit(Gem gem, Circuit circuit)
     {
         int acc = 0;
-        foreach (Gem g in circuit.Gems)
+        foreach (Gem g in circuit.Field)
         {
+            if (g == null) continue;
             if (gem is CustomGem customGem)
             {
                 if (g is CustomGem cG)
                 {
                     if (cG.MetaLevel.Equals(customGem.MetaLevel))
-                        acc += g.Locations.Count;
+                        acc++;
                 }
             }
             else

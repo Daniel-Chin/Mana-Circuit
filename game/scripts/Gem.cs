@@ -5,7 +5,6 @@ using MathNet.Numerics.LinearAlgebra;
 
 public abstract class Gem : MagicItem, JSONable
 {
-    public JList<PointInt> Locations { get; set; }
     public PointInt Size { get; set; }
     static Gem()
     {
@@ -23,7 +22,6 @@ public abstract class Gem : MagicItem, JSONable
     public Gem()
     {
         Size = new PointInt(1, 1);
-        Locations = new JList<PointInt>();
     }
     public abstract Particle Apply(Particle input);
     public abstract string Explain();
@@ -37,7 +35,6 @@ public abstract class Gem : MagicItem, JSONable
                 JSON.Store("source", writer);
                 break;
         }
-        Locations.ToJSON(writer);
         writer.WriteLine("],");
     }
     // public static Gem FromJSON(StreamReader reader)
