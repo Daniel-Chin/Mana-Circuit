@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using MathNet.Numerics.LinearAlgebra;
 
-public abstract class Gem : MagicItem, JSONable
+public abstract class Gem : MagicItem
 {
     public PointInt Size { get; set; }
     static Gem()
@@ -26,26 +26,121 @@ public abstract class Gem : MagicItem, JSONable
     public abstract Particle Apply(Particle input);
     public abstract string Explain();
 
-    public void ToJSON(StreamWriter writer)
+    public void ToJSON(StreamWriter writer, bool inCircuit)
     {
         writer.WriteLine("[");
         switch (this)
         {
             case Source g:
                 JSON.Store("source", writer);
+                g.Direction.ToJSON(writer);
+                break;
+            case Drain g:
+                JSON.Store("drain", writer);
+                break;
+            case Wall g:
+                JSON.Store("wall", writer);
+                break;
+            case AddOne g:
+                JSON.Store("addOne", writer);
+                break;
+            case WeakMult g:
+                JSON.Store("weakMult", writer);
+                break;
+            case Focus g:
+                JSON.Store("focus", writer);
+                g.Direction.ToJSON(writer);
+                break;
+            case Stochastic g:
+                JSON.Store("stochastic", writer);
+                JSON.Store(g.Orientation, writer);
+                break;
+            case Mirror g:
+                JSON.Store("mirror", writer);
+                JSON.Store(g.Orientation, writer);
+                break;
+            case CustomGem g:
+                JSON.Store("customGem", writer);
+                g.MetaLevel.ToJSON(writer);
+                if (!inCircuit)
+                {
+                    g.MyCircuit.ToJSON(writer);
+                }
                 break;
         }
         writer.WriteLine("],");
     }
-    // public static Gem FromJSON(StreamReader reader)
-    // {
-    //     Debug.Assert(reader.ReadLine().Equals("["));
-    //     string gemType = JSON.ParseString(reader);
-    //     Gem gem;
-    //     ...
-    //     Location.FromJSON()
-    //     Debug.Assert(reader.ReadLine().Equals("],"));
-    // }
+    public static Gem FromJSON(
+        StreamReader reader, bool inCircuit
+    )
+    {
+        string line = reader.ReadLine();
+        if (line.Equals("null,"))
+            return null;
+        Debug.Assert(line.Equals("["));
+        string gemType = JSON.ParseString(reader);
+        Gem gem = null;
+        switch (gemType)
+        {
+            case "source":
+                gem = new Source(PointInt.FromJSON(reader));
+                break;
+            case "drain":
+                gem = new Drain();
+                break;
+            case "wall":
+                gem = new Wall();
+                break;
+            case "addOne":
+                gem = new AddOne();
+                break;
+            case "weakMult":
+                gem = new WeakMult();
+                break;
+            case "focus":
+                gem = new Focus(PointInt.FromJSON(reader));
+                break;
+            case "stochastic":
+                gem = new Stochastic(JSON.ParseBool(reader));
+                break;
+            case "mirror":
+                gem = new Mirror(JSON.ParseBool(reader));
+                break;
+            case "customGem":
+                Simplest metaLevel = Simplest.FromJSON(reader);
+                if (!inCircuit)
+                {
+                    CustomGem cG = new CustomGem(metaLevel);
+                    if (metaLevel.MyRank == Rank.FINITE)
+                    {
+                        cG.MyCircuit = Circuit.FromJSON(reader, null);
+                    }
+                    else
+                    {
+                        cG.MyCircuit = Circuit.FromJSON(reader, cG);
+                    }
+                    cG.Eval();
+                    gem = cG;
+                }
+                else
+                {
+                    (int, CustomGem) iC;
+                    if (GameState.Persistent.HasCustomGems.TryGetValue(
+                        (int)metaLevel.K, out iC
+                    ))
+                    {
+                        gem = iC.Item2;
+                        break;
+                    }
+                    Debug.Assert(metaLevel.MyRank != Rank.FINITE);
+                    CustomGem typeless = new CustomGem(metaLevel);
+                    gem = typeless;
+                }
+                break;
+        }
+        Debug.Assert(reader.ReadLine().Equals("],"));
+        return gem;
+    }
 
     public class Source : Gem
     {

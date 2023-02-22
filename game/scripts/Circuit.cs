@@ -1,8 +1,9 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-public class Circuit
+public class Circuit : JSONable
 {
     public PointInt Size { get; set; }
     public Gem[,] Field { get; set; }
@@ -149,5 +150,53 @@ public class Circuit
     public Gem Seek(PointInt location)
     {
         return Field[location.IntX, location.IntY];
+    }
+
+    public void ToJSON(StreamWriter writer)
+    {
+        writer.WriteLine("[");
+        Size.ToJSON(writer);
+        for (int i = 0; i < Size.IntX; i++)
+        {
+            for (int j = 0; j < Size.IntY; j++)
+            {
+                Gem gem = Field[i, j];
+                if (gem == null)
+                {
+                    writer.WriteLine("null,");
+                }
+                else
+                {
+                    gem.ToJSON(writer, true);
+                }
+            }
+        }
+        writer.WriteLine("],");
+    }
+    public static Circuit FromJSON(StreamReader reader, CustomGem typeless)
+    {
+        Debug.Assert(reader.ReadLine().Equals("["));
+        PointInt size = PointInt.FromJSON(reader);
+        Circuit c = new Circuit(size);
+        for (int i = 0; i < size.IntX; i++)
+        {
+            for (int j = 0; j < size.IntY; j++)
+            {
+                PointInt location = new PointInt(i, j);
+                Gem gem = Gem.FromJSON(reader, true);
+                if (gem == null)
+                    continue;
+                if (
+                    typeless != null && gem is CustomGem cG
+                    && cG.MetaLevel.MyRank != Rank.FINITE
+                )
+                {
+                    gem = typeless;
+                }
+                c.Add(gem, location);
+            }
+        }
+        Debug.Assert(reader.ReadLine().Equals("],"));
+        return c;
     }
 }

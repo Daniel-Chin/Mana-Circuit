@@ -18,6 +18,7 @@ public class Main : Node2D
         Director.MainUI = this;
         MyLowPanel = GetNode<LowPanel>("Overlay/VBox/LowPanel");
         Director.CheckEvent();
+        SaveLoad.Test();
     }
 
     public override void _Process(float delta)

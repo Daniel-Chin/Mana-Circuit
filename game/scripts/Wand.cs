@@ -1,7 +1,9 @@
 using System;
+using System.IO;
+using System.Diagnostics;
 using Godot;
 
-public abstract class Wand : MagicItem
+public abstract class Wand : MagicItem, JSONable
 {
     public Circuit MyCircuit { get; set; }
 
@@ -25,6 +27,37 @@ public abstract class Wand : MagicItem
                 return i;
         }
         throw new Shared.ValueError();
+    }
+
+    public void ToJSON(StreamWriter writer)
+    {
+        writer.WriteLine("[");
+        switch (this)
+        {
+            case Staff w:
+                JSON.Store("staff", writer);
+                break;
+        }
+        MyCircuit.ToJSON(writer);
+        writer.WriteLine("],");
+    }
+    public static Wand FromJSON(StreamReader reader)
+    {
+        string line = reader.ReadLine();
+        if (line.Equals("null,"))
+            return null;
+        Debug.Assert(line.Equals("["));
+        string wandType = JSON.ParseString(reader);
+        Wand wand = null;
+        switch (wandType)
+        {
+            case "staff":
+                wand = new Staff();
+                break;
+        }
+        wand.MyCircuit = Circuit.FromJSON(reader, null);
+        Debug.Assert(reader.ReadLine().Equals("],"));
+        return wand;
     }
 
     public class Test : Wand

@@ -8,41 +8,6 @@ public interface JSONable
     void ToJSON(StreamWriter writer);
 }
 
-public class JList<T> : List<T>, JSONable
-{
-    public void ToJSON(StreamWriter writer)
-    {
-        writer.WriteLine("[");
-        foreach (T item in this)
-        {
-            ((JSONable)item).ToJSON(writer);
-        }
-        writer.WriteLine("],");
-    }
-    public JSONable FromJSON(StreamReader reader)
-    {
-        JList<T> list = new JList<T>();
-        Debug.Assert(reader.ReadLine().Equals("["));
-        while (true)
-        {
-            if (reader.Peek() == ']')
-            {
-                Debug.Assert(reader.ReadLine().Equals("],"));
-                return list;
-            }
-            switch (typeof(T))
-            {
-                case var value when value == typeof(PointInt):
-                    list.Add((T)(object)PointInt.FromJSON(reader));
-                    break;
-                    // case var value when value == typeof(Gem):
-                    //     list.Add((T)(object)Gem.FromJSON(reader));
-                    //     break;
-            }
-        }
-    }
-}
-
 public class JSON
 {
     public static void Store(string s, StreamWriter writer)
@@ -90,7 +55,47 @@ public class JSON
                 continue;
             }
         }
-        Debug.Assert((char)reader.Read() == '\n');
+        Debug.Assert(reader.ReadLine() == ",");
         return sB.ToString();
+    }
+
+    public static void Store(bool b, StreamWriter writer)
+    {
+        if (b)
+        {
+            writer.WriteLine("true,");
+        }
+        else
+        {
+            writer.WriteLine("false,");
+        }
+    }
+    public static bool ParseBool(StreamReader reader)
+    {
+        switch (reader.ReadLine())
+        {
+            case "true,":
+                return true;
+            case "fasle,":
+                return false;
+        }
+        throw new Shared.ValueError();
+    }
+
+    public static string NoLast(StreamReader reader)
+    {
+        string x = reader.ReadLine();
+        return x.Substring(0, x.Length - 1);
+    }
+
+    public static bool DidArrayEnd(StreamReader reader)
+    // this function consumes the trailing "],"
+    {
+        if (reader.Peek() == ']')
+        {
+            Debug.Assert(reader.ReadLine().Equals("],"));
+            return true;
+        }
+        return false;
     }
 }

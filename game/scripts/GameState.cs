@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Godot;
 
@@ -13,15 +15,15 @@ public class GameState
         // SaveLoad.Test();
     }
 
-    public class PersistentClass
+    public class PersistentClass : JSONable
     {
         public Simplest Money { get; set; }
         public double Location_theta { get; set; }
         public Simplest Location_dist { get; set; }
-        public Wand MyWand { get; set; }
         public Dictionary<string, int> HasGems { get; set; }
         public Dictionary<int, (int, CustomGem)> HasCustomGems { get; set; }
         public CustomGem MyTypelessGem { get; set; }
+        public Wand MyWand { get; set; }
 
         // events. true means completed.
         public bool Event_Intro { get; set; }
@@ -92,10 +94,100 @@ public class GameState
             c.Add(new Gem.Focus(new PointInt(1, 0)), new PointInt(3, 4));
             cG.MyCircuit = c;
         }
-        public void WriteDisk() { }
-        public void LoadDisk()
+        public void ToJSON(StreamWriter writer)
         {
-            Ready();
+            writer.WriteLine("[");
+            Money.ToJSON(writer);
+            writer.Write(Location_theta);
+            writer.WriteLine(',');
+            Location_dist.ToJSON(writer);
+
+            writer.WriteLine("[");
+            foreach (var entry in HasGems)
+            {
+                JSON.Store(entry.Key, writer);
+                writer.Write(entry.Value);
+                writer.WriteLine(',');
+            }
+            writer.WriteLine("],");
+
+            writer.WriteLine("[");
+            foreach (var entry in HasCustomGems)
+            {
+                writer.Write(entry.Key);
+                writer.WriteLine(',');
+                writer.Write(entry.Value.Item1);
+                writer.WriteLine(',');
+                entry.Value.Item2.ToJSON(writer, false);
+            }
+            writer.WriteLine("],");
+
+            if (MyTypelessGem == null)
+            {
+                writer.WriteLine("null,");
+            }
+            else
+            {
+                MyTypelessGem.ToJSON(writer, false);
+            }
+            if (MyWand == null)
+            {
+                writer.WriteLine("null,");
+            }
+            else
+            {
+                MyWand.ToJSON(writer);
+            }
+
+            JSON.Store(Event_Intro, writer);
+            writer.Write(Event_JumperStage);
+            writer.WriteLine(',');
+            writer.Write(Loneliness_Shop);
+            writer.WriteLine(',');
+            writer.Write(Loneliness_GemExpert);
+            writer.WriteLine(',');
+            writer.Write(Loneliness_WandSmith);
+            writer.WriteLine(',');
+
+            writer.WriteLine("],");
+        }
+        public void FromJSON(StreamReader reader)
+        {
+            Debug.Assert(reader.ReadLine().Equals("["));
+
+            Money = Simplest.FromJSON(reader);
+            Location_theta = Double.Parse(JSON.NoLast(reader));
+            Location_dist = Simplest.FromJSON(reader);
+
+            Debug.Assert(reader.ReadLine().Equals("["));
+            while (!JSON.DidArrayEnd(reader))
+            {
+                string key = JSON.ParseString(reader);
+                int value = Int32.Parse(JSON.NoLast(reader));
+                HasGems[key] = value;
+            }
+
+            Debug.Assert(reader.ReadLine().Equals("["));
+            while (!JSON.DidArrayEnd(reader))
+            {
+                int key = Int32.Parse(JSON.NoLast(reader));
+                int n_owned = Int32.Parse(JSON.NoLast(reader));
+                CustomGem cG = (CustomGem)Gem.FromJSON(reader, false);
+                HasCustomGems[key] = (n_owned, cG);
+            }
+
+            MyTypelessGem = (CustomGem)Gem.FromJSON(reader, false);
+            MyWand = Wand.FromJSON(reader);
+
+            Event_Intro = JSON.ParseBool(reader);
+            Event_JumperStage = Int32.Parse(JSON.NoLast(reader));
+            Loneliness_Shop = Int32.Parse(JSON.NoLast(reader));
+            Loneliness_GemExpert = Int32.Parse(JSON.NoLast(reader));
+            Loneliness_WandSmith = Int32.Parse(JSON.NoLast(reader));
+
+            Debug.Assert(reader.ReadLine().Equals("],"));
+
+            Persistent.Ready();
         }
         public void Ready()
         {

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -214,7 +215,7 @@ public enum Rank
     FINITE, W_TO_THE_K, TWO_TO_THE_W, STACK_W
 }
 
-public class Simplest
+public class Simplest : JSONable
 {   // immutable
     public Rank MyRank { get; set; }
     public double K { get; set; }
@@ -547,5 +548,23 @@ public class Simplest
             default:
                 throw new Shared.ValueError();
         }
+    }
+    public void ToJSON(StreamWriter writer)
+    {
+        writer.WriteLine("[");
+        writer.Write((int)MyRank);
+        writer.WriteLine(',');
+        writer.Write(K);
+        writer.WriteLine(',');
+        writer.WriteLine("],");
+    }
+    public static Simplest FromJSON(StreamReader reader)
+    {
+        Debug.Assert(reader.ReadLine().Equals("["));
+        Rank rank = (Rank)Int32.Parse(JSON.NoLast(reader));
+        double k = Double.Parse(JSON.NoLast(reader));
+        Simplest s = new Simplest(rank, k);
+        Debug.Assert(reader.ReadLine().Equals("],"));
+        return s;
     }
 }
