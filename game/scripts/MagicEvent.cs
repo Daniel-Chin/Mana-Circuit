@@ -43,7 +43,7 @@ public abstract class MagicEvent
                     break;
                 case 4:
                     GameState.Transient.NPCPausedWorld = false;
-                    Director.EventFinished();
+                    EventFinished();
                     break;
             }
         }
@@ -56,6 +56,11 @@ public abstract class MagicEvent
                     NextStep();
                 }
             }
+        }
+        private void EventFinished()
+        {
+            GameState.Persistent.Events.Intro = true;
+            Director.EventFinished();
         }
     }
 }

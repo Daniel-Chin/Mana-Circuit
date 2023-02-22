@@ -15,6 +15,7 @@ namespace GameState
         public static CustomGem MyTypelessGem;
         public static class Events
         {
+            // true means completed.
             public static bool Intro = false;
             public static int JumperStage = 0;
         }
