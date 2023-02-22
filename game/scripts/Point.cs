@@ -1,4 +1,7 @@
 using System;
+using System.Text;
+using System.IO;
+using System.Diagnostics;
 using Godot;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -94,7 +97,7 @@ public class Point : IComparable<Point>
     }
 }
 
-public class PointInt : Point
+public class PointInt : Point, JSONable
 {
     public int IntX
     {
@@ -170,5 +173,42 @@ public class PointInt : Point
     public static int BaseVecToPhase(PointInt baseVec)
     {
         return Array.IndexOf(BASE_VECS, baseVec);
+    }
+    public void ToJSON(StreamWriter writer)
+    {
+        writer.WriteLine($"[{IntX},{IntY}],");
+    }
+    public static PointInt FromJSON(StreamReader reader)
+    {
+        Debug.Assert((char)reader.Read() == '[');
+        StringBuilder sB = new StringBuilder();
+        int state = 0;
+        int? x = null;
+        int? y = null;
+        while (true)
+        {
+            char c = (char)reader.Read();
+            if (state == 0)
+            {
+                if (c == ',')
+                {
+                    state = 1;
+                    x = Int32.Parse(sB.ToString());
+                    sB.Clear();
+                    continue;
+                }
+            }
+            else
+            {
+                if (c == ']')
+                {
+                    y = Int32.Parse(sB.ToString());
+                    break;
+                }
+            }
+            sB.Append(c);
+        }
+        Debug.Assert((char)reader.Read() == ',');
+        return new PointInt((int)x, (int)y);
     }
 }

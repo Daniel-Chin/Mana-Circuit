@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using MathNet.Numerics.LinearAlgebra;
 
-public abstract class Gem : MagicItem
+public abstract class Gem : MagicItem, JSONable
 {
-    public List<PointInt> Locations { get; set; }
+    public JList<PointInt> Locations { get; set; }
     public PointInt Size { get; set; }
     static Gem()
     {
@@ -22,10 +23,32 @@ public abstract class Gem : MagicItem
     public Gem()
     {
         Size = new PointInt(1, 1);
-        Locations = new List<PointInt>();
+        Locations = new JList<PointInt>();
     }
     public abstract Particle Apply(Particle input);
     public abstract string Explain();
+
+    public void ToJSON(StreamWriter writer)
+    {
+        writer.WriteLine("[");
+        switch (this)
+        {
+            case Source g:
+                JSON.Store("source", writer);
+                break;
+        }
+        Locations.ToJSON(writer);
+        writer.WriteLine("],");
+    }
+    // public static Gem FromJSON(StreamReader reader)
+    // {
+    //     Debug.Assert(reader.ReadLine().Equals("["));
+    //     string gemType = JSON.ParseString(reader);
+    //     Gem gem;
+    //     ...
+    //     Location.FromJSON()
+    //     Debug.Assert(reader.ReadLine().Equals("],"));
+    // }
 
     public class Source : Gem
     {
