@@ -211,12 +211,11 @@ public class GemListScene : WindowDialog
             (int, CustomGem) HasCG = (0, null);
             if (cG.MetaLevel.MyRank == Rank.FINITE)
             {
-                GameState.Persistent.HasCustomGems.TryGetValue(
+                if (GameState.Persistent.HasCustomGems.TryGetValue(
                     (int)cG.MetaLevel.K, out HasCG
-                );
-                if (HasCG.Item2 == null)
-                    return Simplest.Zero();
-                return new Simplest(Rank.FINITE, HasCG.Item1);
+                ))
+                    return new Simplest(Rank.FINITE, HasCG.Item1);
+                return Simplest.Zero();
             }
             else
             {
@@ -227,7 +226,8 @@ public class GemListScene : WindowDialog
             }
         }
         int n = 0;
-        GameState.Persistent.HasGems.TryGetValue(gem.Name(), out n);
+        if (!GameState.Persistent.HasGems.TryGetValue(gem.Name(), out n))
+            n = 0;
         return new Simplest(Rank.FINITE, n);
     }
 
