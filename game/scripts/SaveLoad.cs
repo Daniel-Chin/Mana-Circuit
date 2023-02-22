@@ -23,8 +23,8 @@ public class SaveLoad
             Save();
             return;
         }
-        reader9.Close();
         int which = Int32.Parse(reader9.ReadLine());
+        reader9.Close();
         StreamReader reader = new StreamReader(
             Filename(which)
         );
