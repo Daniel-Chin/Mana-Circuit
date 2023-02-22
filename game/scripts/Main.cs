@@ -5,6 +5,7 @@ using System.Diagnostics;
 public class Main : Node2D
 {
     public static Main Singleton = null;
+    public LowPanel MyLowPanel;
     public static float WorldTime;
     public Main() : base()
     {
@@ -16,11 +17,14 @@ public class Main : Node2D
     public override void _Ready()
     {
         WorldTime = 0f;
-        // Test.Main();
+        Director.MainUI = this;
+        MyLowPanel = GetNode<LowPanel>("Overlay/VBox/LowPanel");
+        Director.CheckEvent();
     }
 
     public override void _Process(float delta)
     {
         WorldTime += delta;
+        Director.Process(delta);
     }
 }

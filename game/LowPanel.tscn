@@ -47,5 +47,15 @@ margin_bottom = 180.0
 size_flags_horizontal = 3
 custom_fonts/normal_font = SubResource( 1 )
 bbcode_enabled = true
-bbcode_text = "[b]My words here. "
+bbcode_text = "My words here. "
 text = "My words here. "
+
+[node name="Mask" type="TextureButton" parent="."]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 1004.0
+margin_bottom = 190.0
+expand = true
+stretch_mode = 1
+
+[connection signal="pressed" from="Mask" to="." method="_on_Mask_pressed"]

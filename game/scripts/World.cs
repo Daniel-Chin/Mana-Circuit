@@ -27,6 +27,8 @@ public class World : Node2D
     private static readonly float SOFTZONE = 0;
     public override void _Process(float delta)
     {
+        if (GameState.Transient.NPCPausedWorld)
+            return;
         if (Input.IsMouseButtonPressed(((int)ButtonList.Right)))
         {
             Vector2 drag = GetLocalMousePosition();
