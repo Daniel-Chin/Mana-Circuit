@@ -26,6 +26,7 @@ public class GameState
 
         // events. true means completed.
         public bool Event_Intro { get; set; }
+        public bool Event_Staff { get; set; }
         public int Event_JumperStage { get; set; }
 
         public int Loneliness_Shop { get; set; }
@@ -42,6 +43,7 @@ public class GameState
             MyTypelessGem = null;
 
             Event_Intro = false;
+            Event_Staff = false;
             Event_JumperStage = 0;
             Loneliness_Shop = 0;
             Loneliness_GemExpert = 0;
@@ -52,9 +54,6 @@ public class GameState
 
         public void DebugInit()
         {
-            MyWand = new Wand.Test();
-            MyWand.Init();
-
             HasGems.Add("addOne", 1);
             HasGems.Add("weakMult", 9);
             HasGems.Add("focus", 99);
@@ -139,6 +138,7 @@ public class GameState
             }
 
             JSON.Store(Event_Intro, writer);
+            JSON.Store(Event_Staff, writer);
             writer.Write(Event_JumperStage);
             writer.WriteLine(',');
             writer.Write(Loneliness_Shop);
@@ -179,6 +179,7 @@ public class GameState
             MyWand = Wand.FromJSON(reader);
 
             Event_Intro = JSON.ParseBool(reader);
+            Event_Staff = JSON.ParseBool(reader);
             Event_JumperStage = Int32.Parse(JSON.NoLast(reader));
             Loneliness_Shop = Int32.Parse(JSON.NoLast(reader));
             Loneliness_GemExpert = Int32.Parse(JSON.NoLast(reader));
@@ -206,16 +207,18 @@ public class GameState
     {
         public bool NPCPausedWorld;
         public Vector2 LocationOffset;
-        public int EventProgression;
         public Spawnable NextSpawn;
         public int EnemiesTillNextSpawn;
+        public bool CanSpawnNonevent;
+        public Vector2 LastLocationNoneventSpawn;
         public TransientClass()
         {
             NPCPausedWorld = false;
             LocationOffset = new Vector2(0, 0);
-            EventProgression = 0;
             NextSpawn = null;
             EnemiesTillNextSpawn = 0;
+            CanSpawnNonevent = false;
+            LastLocationNoneventSpawn = new Vector2(0, 0);
         }
     }
 }

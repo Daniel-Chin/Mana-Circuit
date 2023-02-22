@@ -29,7 +29,7 @@ public abstract class MagicEvent
                     break;
                 case 2:
                     Director.MainUI.MyLowPanel.Display(
-                        "You feel the game will feature amazing plot twists in the story."
+                        "You feel urged to discover this game's true content."
                     );
                     GameState.Transient.NPCPausedWorld = true;
                     _step++;

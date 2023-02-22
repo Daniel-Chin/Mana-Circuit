@@ -15,10 +15,26 @@ public class Director
         {
             NowEvent = new MagicEvent.Intro();
             NowEvent.NextStep();
+            return;
+        }
+        if (!GameState.Persistent.Event_Staff)
+        {
+            Wand staff = new Wand.Staff();
+            staff.Init();
+            GameState.Transient.NextSpawn = (Spawnable)staff;
+            GameState.Transient.EnemiesTillNextSpawn = 0;
+            return;
         }
     }
 
-    public static void OnEventStepCompelte()
+    public static void OnSpawn()
+    {
+        if (GameState.Transient.NextSpawn is Wand.Staff)
+            return;
+        GameState.Transient.NextSpawn = null;
+    }
+
+    public static void OnEventStepComplete()
     {
         NowEvent.NextStep();
     }
@@ -32,5 +48,6 @@ public class Director
     public static void EventFinished()
     {
         NowEvent = null;
+        CheckEvent();
     }
 }

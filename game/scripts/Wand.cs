@@ -107,6 +107,7 @@ public abstract class Wand : MagicItem, JSONable
     }
     public class Staff : Wand, Spawnable
     {
+        public Vector2 ScreenLocation { get; set; }
         public override string Name()
         {
             return "staff";

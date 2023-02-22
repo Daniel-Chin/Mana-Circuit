@@ -69,6 +69,6 @@ public class LowPanel : PanelContainer
             return;
         }
         Visible = false;
-        Director.OnEventStepCompelte();
+        Director.OnEventStepComplete();
     }
 }

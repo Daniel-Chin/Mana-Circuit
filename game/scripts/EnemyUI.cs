@@ -1,17 +1,29 @@
 using Godot;
 using System;
 
-public class EnemyUI : Node2D
+public class EnemyUI : SpawnableUI
 {
-    public RichTextLabel label;
-    public override void _Ready()
+    public RichTextLabel Label;
+    private static readonly Texture TEXTURE = GD.Load<Texture>("res://texture/npc/enemy.png");
+    public EnemyUI(Enemy e) : base(e)
     {
-        label = GetNode<RichTextLabel>("RichTextLabel");
+        base._Ready();
+        MySprite.Texture = TEXTURE;
+        Label = new RichTextLabel();
+        AddChild(Label);
+        Label.BbcodeEnabled = true;
+        Label.ScrollActive = false;
+        Label.GrowHorizontal = Control.GrowDirection.Both;
+        Label.GrowVertical = Control.GrowDirection.Both;
+        Label.RectMinSize = new Vector2(300, 34);
+        Label.RectSize = Label.RectMinSize;
+        Label.RectPivotOffset = Label.RectMinSize / 2;
+        Label.RectPosition = -Label.RectPivotOffset;
     }
 
     public void SetHP(Simplest simplest)
     {
-        label.BbcodeText = $"[center]{MathBB.Build(simplest)}[/center]";
+        Label.BbcodeText = $"[center]{MathBB.Build(simplest)}[/center]";
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
