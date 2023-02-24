@@ -85,6 +85,7 @@ public class World : Node2D
                 Direction = direction,
                 Mana = GameState.Transient.Mana,
             };
+            attack.Head = direction * Params.ENEMY_COLLISION_RANGE;
             GameState.Transient.Mana = Simplest.Zero();
             Main.Singleton.MySidePanel.Update(); // Ideally, a signal
             attack.LineWidth = 3;
@@ -93,6 +94,7 @@ public class World : Node2D
         }
         UpdateMoneys(delta);
         UpdateAttacks(delta);
+        UpdateEnemies(delta);
         // despawn specials
         foreach (var ui in new List<SpawnableSpecialUI>(SpawnedSpecialUIs))
         {
@@ -273,6 +275,20 @@ public class World : Node2D
                 Attacks.Remove(attack);
                 attack.QueueFree();
                 return;
+            }
+        }
+    }
+
+    private void UpdateEnemies(float dt)
+    {
+        foreach (var ui in SpawnedSpecialUIs)
+        {
+            if (ui is EnemyUI eUI)
+            {
+                eUI.Position -= (
+                    eUI.Position.Normalized() * Params.ENEMY_SPEED
+                    * dt * BackRect.RectSize.x
+                );
             }
         }
     }
