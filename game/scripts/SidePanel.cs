@@ -18,6 +18,10 @@ public class SidePanel : PanelContainer
             VBox.Visible = false;
             return;
         }
+        if (MyCircuitUI != null)
+        {
+            MyCircuitUI.QueueFree();
+        }
         MyCircuitUI = new CircuitUI(wand, 0, false);
         VBox.AddChild(MyCircuitUI);
         VBox.Visible = true;
