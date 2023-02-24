@@ -8,6 +8,7 @@ public class Main : Node2D
     public LowPanel MyLowPanel;
     public SidePanel MySidePanel;
     public World MyWorld;
+    public MageUI MyMageUI;
     public static float WorldTime;
     public Main() : base()
     {
@@ -19,6 +20,7 @@ public class Main : Node2D
         WorldTime = 0f;
         Director.MainUI = this;
         MyWorld = GetNode<World>("HBox/Container/World");
+        MyMageUI = GetNode<MageUI>("HBox/Container/World/MageUI");
         MySidePanel = GetNode<SidePanel>("HBox/SidePanel");
         MyLowPanel = GetNode<LowPanel>("Overlay/VBox/LowPanel");
         MyWorld.Connect(
@@ -27,9 +29,9 @@ public class Main : Node2D
 
         SaveLoad.Load();
         // GameState.Persistent.DebugInit();
-        if (GameState.Persistent.MyWand != null)
-            MySidePanel.Hold(GameState.Persistent.MyWand);
         GameState.Transient.Update();
+        NewWand();
+        MyWorld.UpdateBack();
         Director.CheckEvent();
     }
 
@@ -42,5 +44,6 @@ public class Main : Node2D
     public void NewWand()
     {
         MySidePanel.Hold(GameState.Persistent.MyWand);
+        MyMageUI.Hold(GameState.Persistent.MyWand);
     }
 }

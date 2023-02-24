@@ -128,7 +128,7 @@ public abstract class Wand : MagicItem, JSONable
             c.Add(source, new PointInt(0, 1));
 
             Gem drain = new Gem.Drain();
-            c.Add(drain, new PointInt(c.Size.IntY - 1, 1));
+            c.Add(drain, new PointInt(c.Size.IntX - 1, 1));
 
             MyCircuit = c;
         }
