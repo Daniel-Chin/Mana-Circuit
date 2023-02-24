@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class World : Node2D
 {
     [Signal] public delegate void new_wand();
+    [Signal] public delegate void player_died();
     public TextureRect BackRect;
     public MageUI MyMageUI;
     ShaderMaterial BackShader;
@@ -32,7 +33,7 @@ public class World : Node2D
     private static readonly float SOFTZONE = 0;
     public override void _Process(float delta)
     {
-        if (GameState.Transient.NPCPausedWorld)
+        if (GameState.Transient.WorldPaused)
             return;
         Vector2 drag = GetLocalMousePosition();
         Vector2 direction = drag.Normalized();
@@ -319,7 +320,7 @@ public class World : Node2D
 
     private void CollidedWithEnemy(EnemyUI enemyUI)
     {
-        // todo
+        EmitSignal("player_died");
     }
     private void CollidedWithNPC(NPCUI npcUI)
     {
@@ -405,5 +406,15 @@ public class World : Node2D
         Moneys.Add(money);
         money.Position = location;
         return money;
+    }
+
+    public void Reset()
+    {
+        Shared.QFreeList<SpawnableSpecialUI>(SpawnedSpecialUIs);
+        SpawnedSpecialUIs.Clear();
+        Shared.QFreeList<Money>(Moneys);
+        Moneys.Clear();
+        Shared.QFreeList<Attack>(Attacks);
+        Attacks.Clear();
     }
 }

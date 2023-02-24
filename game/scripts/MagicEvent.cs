@@ -19,11 +19,11 @@ public abstract class MagicEvent
                     Director.MainUI.MyLowPanel.Display(
                         "You instictively know to *hold* the *Right Mouse Button*."
                     );
-                    GameState.Transient.NPCPausedWorld = false;
+                    GameState.Transient.WorldPaused = false;
                     _step++;
                     break;
                 case 1:
-                    GameState.Transient.NPCPausedWorld = false;
+                    GameState.Transient.WorldPaused = false;
                     _step++;
                     // wait for movement
                     break;
@@ -31,18 +31,18 @@ public abstract class MagicEvent
                     Director.MainUI.MyLowPanel.Display(
                         "You feel urged to discover this game's true content."
                     );
-                    GameState.Transient.NPCPausedWorld = true;
+                    GameState.Transient.WorldPaused = true;
                     _step++;
                     break;
                 case 3:
                     Director.MainUI.MyLowPanel.Display(
                         "However, you can't shake off the suspicion that your previous thought was injected by the narrator."
                     );
-                    GameState.Transient.NPCPausedWorld = true;
+                    GameState.Transient.WorldPaused = true;
                     _step++;
                     break;
                 case 4:
-                    GameState.Transient.NPCPausedWorld = false;
+                    GameState.Transient.WorldPaused = false;
                     EventFinished();
                     break;
                 default:
@@ -84,7 +84,7 @@ public abstract class MagicEvent
                     Director.MainUI.MyLowPanel.Display(
                         "You pick up the *staff*."
                     );
-                    GameState.Transient.NPCPausedWorld = true;
+                    GameState.Transient.WorldPaused = true;
                     _step++;
                     break;
                 case 1:
@@ -109,7 +109,7 @@ public abstract class MagicEvent
                     Director.MainUI.MyLowPanel.Display(
                         "*Hold* the left mouse button!"
                     );
-                    GameState.Transient.NPCPausedWorld = false;
+                    GameState.Transient.WorldPaused = false;
                     _step++;
                     break;
                 case 5:

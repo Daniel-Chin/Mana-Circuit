@@ -1,0 +1,86 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://misc/theme.tres" type="Theme" id=1]
+[ext_resource path="res://misc/font/m5x7.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://scripts/Revive.cs" type="Script" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 80.0
+content_margin_right = 80.0
+content_margin_top = 40.0
+content_margin_bottom = 40.0
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+
+[sub_resource type="DynamicFont" id=2]
+size = 60
+font_data = ExtResource( 2 )
+
+[node name="Revive" type="PanelContainer"]
+rect_min_size = Vector2( 400, 550 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource( 1 )
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 3 )
+
+[node name="VBox" type="VBoxContainer" parent="."]
+margin_left = 80.0
+margin_top = 40.0
+margin_right = 324.0
+margin_bottom = 510.0
+custom_constants/separation = 20
+
+[node name="Title" type="Label" parent="VBox"]
+margin_right = 244.0
+margin_bottom = 48.0
+custom_fonts/font = SubResource( 2 )
+text = "Punishments"
+align = 1
+
+[node name="Padding" type="MarginContainer" parent="VBox"]
+margin_top = 68.0
+margin_right = 244.0
+margin_bottom = 118.0
+rect_min_size = Vector2( 0, 50 )
+
+[node name="Money" type="RichTextLabel" parent="VBox"]
+margin_top = 138.0
+margin_right = 244.0
+margin_bottom = 168.0
+bbcode_enabled = true
+bbcode_text = "[center]Money: [color=yellow]$3[/color][/center]"
+text = "Money: $3"
+fit_content_height = true
+
+[node name="Button1" type="Button" parent="VBox"]
+margin_top = 188.0
+margin_right = 244.0
+margin_bottom = 223.0
+text = "1. Lose money"
+
+[node name="Distance" type="RichTextLabel" parent="VBox"]
+margin_top = 243.0
+margin_right = 244.0
+margin_bottom = 273.0
+bbcode_enabled = true
+bbcode_text = "[center]Distance: 6.82[/center]"
+text = "Distance: 6.82"
+fit_content_height = true
+
+[node name="Button2" type="Button" parent="VBox"]
+margin_top = 293.0
+margin_right = 244.0
+margin_bottom = 328.0
+disabled = true
+text = "2. Lose distance"
+
+[node name="Button3" type="Button" parent="VBox"]
+margin_top = 348.0
+margin_right = 244.0
+margin_bottom = 383.0
+disabled = true
+text = "3. Revive"

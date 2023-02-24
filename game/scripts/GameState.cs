@@ -207,7 +207,7 @@ public class GameState
     public class TransientClass
     {
         public Simplest Mana;
-        public bool NPCPausedWorld;
+        public bool WorldPaused;
         public Vector2 LocationOffset;
         public SpawnableSpecial NextSpawn;
         public int EnemiesTillNextSpawn;
@@ -215,7 +215,7 @@ public class GameState
         public TransientClass()
         {
             Mana = Simplest.Zero();
-            NPCPausedWorld = false;
+            WorldPaused = false;
             LocationOffset = new Vector2(0, 0);
             NextSpawn = null;
             EnemiesTillNextSpawn = 0;

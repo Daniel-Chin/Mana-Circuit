@@ -26,6 +26,20 @@ public class Shared
         }
     }
 
+    public static void QFreeList<T>(List<T> list)
+    {
+        foreach (T x in list)
+        {
+            if (x is Node n)
+            {
+                n.QueueFree();
+            }
+            else
+            {
+                throw new Shared.TypeError();
+            }
+        }
+    }
 
     public static void PrintArray(object[] objs)
     {

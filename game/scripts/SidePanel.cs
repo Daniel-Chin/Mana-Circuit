@@ -37,7 +37,7 @@ public class SidePanel : PanelContainer
 
     public override void _Process(float delta)
     {
-        if (GameState.Transient.NPCPausedWorld)
+        if (GameState.Transient.WorldPaused)
             return;
         MyWandSim.Process(delta);
     }
@@ -55,5 +55,6 @@ public class SidePanel : PanelContainer
     {
         ManaLabel.BbcodeText = $"[center]{MathBB.Build(GameState.Transient.Mana)}[/center]";
         MoneyLabel.BbcodeText = $" [color=yellow]${MathBB.Build(GameState.Persistent.Money)}[/color]";
+        Hold(GameState.Persistent.MyWand);
     }
 }
