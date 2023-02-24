@@ -8,9 +8,10 @@ public class Params
     public static readonly float ENEMY_COLLISION_RANGE = 50;
     public static readonly float MONEY_COLLISION_RANGE = 50;
     public static readonly int WAND_MAX_PARTICLES = 10;
-    public static readonly float WAND_EMIT_INTERVAL = 1f;
-    public static readonly float WAND_ADVECT_INTERVAL = .1f;
+    public static readonly float WAND_EMIT_INTERVAL = .3f;
+    public static readonly float WAND_ADVECT_INTERVAL = .03f;
     public static readonly float ATTACK_PROXIMITY = 40;
-    public static readonly double ATTACK_FLY_BASE_SPEED = 3;
-    public static readonly double MONEY_DROP_MULT = .2;
+    public static readonly double ATTACK_FLY_BASE_SPEED = 4;
+    public static readonly double BASE_LOG_ENEMY_HP = 1;
+    public static readonly double MONEY_DROP_MULT = .1;
 }
