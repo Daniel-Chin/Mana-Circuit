@@ -209,7 +209,7 @@ public class GameState
         public Simplest Mana;
         public bool NPCPausedWorld;
         public Vector2 LocationOffset;
-        public Spawnable NextSpawn;
+        public SpawnableSpecial NextSpawn;
         public int EnemiesTillNextSpawn;
         public Vector2 LastLocationNoneventSpawn;
         public TransientClass()

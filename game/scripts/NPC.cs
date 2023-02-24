@@ -1,6 +1,6 @@
 using Godot;
 
-public abstract class NPC : Spawnable
+public abstract class NPC : SpawnableSpecial
 {
     public abstract string Name();
     public Texture Texture()

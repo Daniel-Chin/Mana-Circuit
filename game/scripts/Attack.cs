@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public class Attack : ManaTrail
+public class Attack : ManaTrail, SpawnableUI
 {
     private static readonly float DISTANCE = 20;
     public Vector2 Direction { get; set; }

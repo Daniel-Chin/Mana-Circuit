@@ -1,16 +1,20 @@
 using Godot;
 
-public interface Spawnable
+public interface SpawnableSpecial
 {
     // Enemy, NPC, or DropedItem
 }
 
-public class SpawnableUI : Node2D
+public interface SpawnableUI
 {
-    public Spawnable MySpawnable;
+}
+
+public class SpawnableSpecialUI : Node2D, SpawnableUI
+{
+    public SpawnableSpecial MySpawnable;
 
     public Sprite MySprite;
-    public SpawnableUI(Spawnable s)
+    public SpawnableSpecialUI(SpawnableSpecial s)
     {
         MySpawnable = s;
         MySprite = new Sprite();

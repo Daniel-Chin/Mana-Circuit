@@ -21,17 +21,17 @@ public class Director
         {
             Wand staff = new Wand.Staff();
             staff.Init();
-            GameState.Transient.NextSpawn = (Spawnable)staff;
+            GameState.Transient.NextSpawn = (SpawnableSpecial)staff;
             GameState.Transient.EnemiesTillNextSpawn = 0;
             return;
         }
     }
 
-    public static void OnSpawn()
+    public static void OnSpecialSpawn()
     {
 
     }
-    public static void OnDespawn()
+    public static void OnSpecialDespawn()
     {
         if (GameState.Transient.NextSpawn is Wand.Staff)
             return;

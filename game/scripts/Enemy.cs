@@ -1,4 +1,4 @@
-public class Enemy : Spawnable
+public class Enemy : SpawnableSpecial
 {
     public Simplest HP;
     public int HitTimes;

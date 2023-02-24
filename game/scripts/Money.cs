@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Money : Node2D
+public class Money : Node2D, SpawnableUI
 {
     private static readonly float REPEL = 1f;
     private static readonly float FRICTION = 1f;

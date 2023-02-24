@@ -10,8 +10,8 @@ public class World : Node2D
     public MageUI MyMageUI;
     ShaderMaterial BackShader;
     public float AspectRatio;
+    public List<SpawnableSpecialUI> SpawnedSpecialUIs;
     public List<Money> Moneys;
-    public List<SpawnableUI> SpawnedUIs;
     public List<Attack> Attacks;
 
     public override void _Ready()
@@ -25,7 +25,7 @@ public class World : Node2D
         MyMageUI.Resting();
         MyMageUI.Hold(GameState.Persistent.MyWand);
         Moneys = new List<Money>();
-        SpawnedUIs = new List<SpawnableUI>();
+        SpawnedSpecialUIs = new List<SpawnableSpecialUI>();
         Attacks = new List<Attack>();
     }
 
@@ -42,7 +42,7 @@ public class World : Node2D
             if (l < 1)
                 direction *= l;
             Vector2 displace = (
-                delta * Params.SPEED * direction
+                delta * Params.WALK_SPEED * direction
             );
             if (GameState.Persistent.Location_dist.MyRank == Rank.FINITE)
             {
@@ -56,9 +56,17 @@ public class World : Node2D
             GameState.Transient.Update();
             UpdateBack();
             MyMageUI.Walking();
-            foreach (SpawnableUI s in SpawnedUIs)
+            foreach (SpawnableSpecialUI s in SpawnedSpecialUIs)
             {
                 s.Position -= displace * BackRect.RectSize.x;
+            }
+            foreach (Money m in Moneys)
+            {
+                m.Position -= displace * BackRect.RectSize.x;
+            }
+            foreach (Attack a in Attacks)
+            {
+                a.Position -= displace * BackRect.RectSize.x;
             }
             OnWalk(direction);
         }
@@ -85,18 +93,28 @@ public class World : Node2D
         }
         UpdateMoneys(delta);
         UpdateAttacks(delta);
+        // despawn specials
+        foreach (var ui in new List<SpawnableSpecialUI>(SpawnedSpecialUIs))
+        {
+            if (ShouldDespawn(ui.Position))
+            {
+                if (ui is EnemyUI)
+                    continue;
+                DespawnSpecial(ui);
+            }
+        }
     }
 
     private void OnWalk(Vector2 direction)
     {
+        // spawn event
         if (
             GameState.Transient.NextSpawn != null
             && GameState.Transient.EnemiesTillNextSpawn == 0
         )
         {
-            // spawn event
             bool alreadyThere = false;
-            foreach (var ui in SpawnedUIs)
+            foreach (var ui in SpawnedSpecialUIs)
             {
                 if (ui.MySpawnable == GameState.Transient.NextSpawn)
                 {
@@ -109,9 +127,10 @@ public class World : Node2D
             {
                 Console.WriteLine("Spawning " + GameState.Transient.NextSpawn);
                 Spawn(GameState.Transient.NextSpawn, direction);
-                Director.OnSpawn();
+                Director.OnSpecialSpawn();
             }
         }
+        // spawn non-event
         if (Director.CanSpawnNonevent())
         {
             if ((
@@ -137,7 +156,7 @@ public class World : Node2D
             }
         }
         // check NPC collision
-        foreach (var ui in new List<SpawnableUI>(SpawnedUIs))
+        foreach (var ui in new List<SpawnableSpecialUI>(SpawnedSpecialUIs))
         {
             float distance = ui.Position.Length();
             if (ui is EnemyUI enemyUI)
@@ -166,21 +185,11 @@ public class World : Node2D
                 }
             }
         }
-        // despawn
-        foreach (var ui in new List<SpawnableUI>(SpawnedUIs))
-        {
-            if (ui.Position.Length() >= SpawnRadius() * 1.1)
-            {
-                if (ui is EnemyUI)
-                    continue;
-                Despawn(ui);
-            }
-        }
     }
 
-    private void Spawn(Spawnable s, Vector2 direction)
+    private void Spawn(SpawnableSpecial s, Vector2 direction)
     {
-        SpawnableUI ui;
+        SpawnableSpecialUI ui;
         switch (s)
         {
             case Enemy e:
@@ -199,7 +208,7 @@ public class World : Node2D
         ) * 2 * .3f;
         location = location.Normalized();
         ui.Position = location * SpawnRadius();
-        SpawnedUIs.Add(ui);
+        SpawnedSpecialUIs.Add(ui);
         // Console.Write("SpawnedUIs ");
         // Shared.PrintList(SpawnedUIs);
         AddChild(ui);
@@ -207,6 +216,14 @@ public class World : Node2D
 
     private void UpdateMoneys(float dt)
     {
+        foreach (Money money in new List<Money>(Moneys))
+        {
+            if (ShouldDespawn(money.Position))
+            {
+                Moneys.Remove(money);
+                money.QueueFree();
+            }
+        }
         for (int i = 0; i < Moneys.Count; i++)
         {
             Money m0 = Moneys[i];
@@ -232,15 +249,17 @@ public class World : Node2D
     {
         while (attack.Advect(dt))
         {
-            if (attack.Head.Length() >= SpawnRadius() * 1.1)
+            if (ShouldDespawn(attack.Head + attack.Position))
             {
                 Attacks.Remove(attack);
                 attack.QueueFree();
                 return;
             }
-            foreach (var ui in SpawnedUIs)
+            foreach (var ui in SpawnedSpecialUIs)
             {
-                if ((ui.Position - attack.Head).Length() >= Params.ATTACK_PROXIMITY)
+                if ((ui.Position - (
+                    attack.Head + attack.Position
+                )).Length() >= Params.ATTACK_PROXIMITY)
                     continue;
                 if (ui is EnemyUI enemyUI)
                 {
@@ -274,7 +293,7 @@ public class World : Node2D
         Shared.Assert(dUI.MySpawnable is Wand.Staff);
         Shared.Assert(GameState.Persistent.MyWand == null);
         GameState.Persistent.MyWand = (Wand)dUI.MySpawnable;
-        SpawnedUIs.Remove(dUI);
+        SpawnedSpecialUIs.Remove(dUI);
         dUI.QueueFree();
         EmitSignal("new_wand");
         GameState.Persistent.Event_Staff = true;
@@ -287,11 +306,11 @@ public class World : Node2D
         return .7f * BackRect.RectSize.x;
     }
 
-    private void Despawn(SpawnableUI ui)
+    private void DespawnSpecial(SpawnableSpecialUI ui)
     {
-        SpawnedUIs.Remove(ui);
+        SpawnedSpecialUIs.Remove(ui);
         ui.QueueFree();
-        Director.OnDespawn();
+        Director.OnSpecialDespawn();
     }
 
     private void HitEnemy(Attack attack, EnemyUI enemyUI)
@@ -299,7 +318,7 @@ public class World : Node2D
         Enemy enemy = (Enemy)enemyUI.MySpawnable;
         if (attack.Mana >= enemy.HP)
         {
-            SpawnedUIs.Remove(enemyUI);
+            SpawnedSpecialUIs.Remove(enemyUI);
             enemyUI.QueueFree();
         }
         else
@@ -308,5 +327,10 @@ public class World : Node2D
                 enemy.HP, Operator.MINUS, attack.Mana
             );
         }
+    }
+
+    private bool ShouldDespawn(Vector2 location)
+    {
+        return location.Length() >= SpawnRadius() * 1.1;
     }
 }

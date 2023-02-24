@@ -1,4 +1,4 @@
-public class JustOneSpriteSpawnableUI : SpawnableUI
+public class JustOneSpriteSpawnableUI : SpawnableSpecialUI
 {
-    public JustOneSpriteSpawnableUI(Spawnable s) : base(s) { }
+    public JustOneSpriteSpawnableUI(SpawnableSpecial s) : base(s) { }
 }

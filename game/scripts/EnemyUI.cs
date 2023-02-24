@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class EnemyUI : SpawnableUI
+public class EnemyUI : SpawnableSpecialUI
 {
     public RichTextLabel Label;
     private static readonly Texture TEXTURE = GD.Load<Texture>("res://texture/npc/enemy.png");

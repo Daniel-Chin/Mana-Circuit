@@ -105,7 +105,7 @@ public abstract class Wand : MagicItem, JSONable
             MyCircuit = c;
         }
     }
-    public class Staff : Wand, Spawnable
+    public class Staff : Wand, SpawnableSpecial
     {
         public override string Name()
         {
