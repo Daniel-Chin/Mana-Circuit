@@ -99,6 +99,7 @@ public class World : Node2D
                 - GameState.Transient.LocationOffset
             ).Length() >= Params.SPAWN_EVERY_DISTANCE)
             {
+                GameState.Transient.LastLocationNoneventSpawn = GameState.Transient.LocationOffset;
                 // if event shows can spawn shops, spawn w/ low prob
                 Simplest hp;
                 Simplest d = GameState.Persistent.Location_dist;
