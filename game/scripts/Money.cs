@@ -6,8 +6,8 @@ public class Money : Node2D, SpawnableUI
     // code-defined
     public RichTextLabel Label;
     public Simplest Amount;
-    private static readonly float REPEL = 1f;
-    private static readonly float FRICTION = 1f;
+    private static readonly float REPEL = 5000f;
+    private static readonly float FRICTION = 130f;
     public Vector2 Velocity = new Vector2(0, 0);
     public Money() : base() { }
     public Money(Simplest amount) : base()
@@ -26,8 +26,11 @@ public class Money : Node2D, SpawnableUI
     public void Step(Vector2 force, float dt)
     {
         Velocity += REPEL * force * dt;
-        Velocity *= (float)Math.Exp(-dt * FRICTION);
-        Position += Velocity * dt;
+        Vector2 friction = -Velocity.Normalized() * FRICTION;
+        Velocity += friction * dt;
+        // Velocity *= (float)Math.Exp(-dt * FRICTION);
+        if (Velocity.Length() >= 5)
+            Position += Velocity * dt;
     }
     public void SetAmount()
     {

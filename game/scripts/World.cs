@@ -325,7 +325,7 @@ public class World : Node2D
         {
             SpawnedSpecialUIs.Remove(enemyUI);
             enemyUI.QueueFree();
-            DropMoneyCluster(enemy.HP, enemyUI.Position);
+            DropMoneyCluster(enemy.MaxHP, enemyUI.Position);
         }
         else
         {
