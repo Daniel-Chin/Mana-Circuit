@@ -51,7 +51,7 @@ public abstract class MagicEvent
         {
             if (_step <= 2)
             {
-                if (GameState.Transient.LocationOffset.Length() >= 0.15)
+                if (GameState.Transient.LocationOffset.Length() >= 0.1)
                 {
                     NextStep();
                 }
