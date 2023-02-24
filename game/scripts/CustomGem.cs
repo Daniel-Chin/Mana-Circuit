@@ -95,7 +95,7 @@ public class CustomGem : Gem
         sB.Append(" Custom Gem");
         return sB.ToString();
     }
-    public override string Explain()
+    public override string Explain(bool inCG)
     {
         if (MetaLevel.MyRank == Rank.FINITE)
         {

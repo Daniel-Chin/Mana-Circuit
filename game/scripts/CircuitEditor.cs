@@ -24,7 +24,7 @@ public class CircuitEditor : WindowDialog
         ExplainLabel = new RichTextLabel();
         Aspect = new AspectRatioContainer();
         VBox.AddChild(HeadingLabel);
-        VBox.AddChild(ExplainLabel);
+        VBox.AddChild(new HPad(ExplainLabel));
         VBox.AddChild(Aspect);
         HeadingLabel.BbcodeEnabled = true;
         HeadingLabel.FitContentHeight = true;
@@ -57,9 +57,12 @@ public class CircuitEditor : WindowDialog
         MyCircuitUI = new CircuitUI(Editee, 0);
         Aspect.AddChild(MyCircuitUI);
         MyCircuitUI.Connect(
-            "modified", this, "circuitModified"
+            "modified", this, "CircuitModified"
         );
-        circuitModified();
+        MyCircuitUI.Connect(
+            "new_explain", this, "NewExplain"
+        );
+        CircuitModified();
         PopupCentered();
     }
     public void OnPopupHide()
@@ -67,7 +70,7 @@ public class CircuitEditor : WindowDialog
         QueueFree();
     }
 
-    public void circuitModified()
+    public void CircuitModified()
     {
         StringBuilder sB = new StringBuilder();
         sB.Append("[center]");
@@ -86,5 +89,10 @@ public class CircuitEditor : WindowDialog
         }
         sB.Append("[/center]");
         HeadingLabel.BbcodeText = sB.ToString();
+    }
+
+    public void NewExplain(string explain)
+    {
+        ExplainLabel.BbcodeText = explain;
     }
 }

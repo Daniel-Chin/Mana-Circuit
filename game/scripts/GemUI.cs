@@ -4,6 +4,9 @@ using System;
 public class GemUI : AspectRatioContainer
 {
     // code-defined
+    [Signal] public delegate void mouse_entered_overlay();
+    [Signal] public delegate void mouse_exited_overlay();
+    public ColorRect Overlay;
     public TextureButton Button;
     public CircuitUI MyCircuitUI;
     private Gem _gem = null;
@@ -11,7 +14,9 @@ public class GemUI : AspectRatioContainer
     public bool IsInCG;
     private static Shader _flipper = GD.Load<Shader>("res://Flip.gdshader");
     public GemUI() : base() { }
-    public GemUI(Gem gem, int recursionDepth, bool isInCG) : base()
+    public GemUI(
+        Gem gem, int recursionDepth, bool isInCG
+    ) : base()
     {
         _gem = gem;
         RecursionDepth = recursionDepth;
@@ -26,7 +31,14 @@ public class GemUI : AspectRatioContainer
         Button.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
         AddChild(Button);
         Set();
+        if (recursionDepth == 0)
+        {
+            Overlay = new ColorRect();
+            Overlay.Color = Colors.Transparent;
+            AddChild(Overlay);
+        }
     }
+
     private void Set()
     {
         string filename;
@@ -113,5 +125,27 @@ public class GemUI : AspectRatioContainer
             mat.Shader = _flipper;
             Button.Material = mat;
         }
+    }
+
+    public void ConnectMouseOver()
+    {
+        Overlay.Connect(
+            "mouse_entered", this, "MouseEntered"
+        );
+        Overlay.Connect(
+            "mouse_exited", this, "MouseExited"
+        );
+    }
+
+    public void MouseEntered()
+    {
+        Overlay.Color = Color.FromHsv(0, 0, 1, .2f);
+        EmitSignal("mouse_entered_overlay");
+    }
+
+    public void MouseExited()
+    {
+        Overlay.Color = Colors.Transparent;
+        EmitSignal("mouse_exited_overlay");
     }
 }

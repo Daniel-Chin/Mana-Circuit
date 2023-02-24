@@ -48,12 +48,13 @@ public class GameState
             Loneliness_Shop = 0;
             Loneliness_GemExpert = 0;
             Loneliness_WandSmith = 0;
-
-            DebugInit();
         }
 
         public void DebugInit()
         {
+            MyWand = new Wand.Staff();
+            MyWand.Init();
+
             HasGems.Add("addOne", 1);
             HasGems.Add("weakMult", 9);
             HasGems.Add("focus", 99);

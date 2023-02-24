@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class CircuitUI : AspectRatioContainer
 {
     // code-defined
+    [Signal] public delegate void new_explain();
     [Signal] public delegate void modified();
     private static readonly int MAX_PARTICLES = 8;
     private static readonly double EMIT_LAMBDA = .5;
@@ -151,6 +152,15 @@ public class CircuitUI : AspectRatioContainer
                         "pressed", this, "OnClickGem",
                         new Godot.Collections.Array() { i, j }
                     );
+                    gemUI.ConnectMouseOver();
+                    gemUI.Connect(
+                        "mouse_entered_overlay", this, "MouseEnteredGem",
+                        new Godot.Collections.Array() { i, j }
+                    );
+                    gemUI.Connect(
+                        "mouse_exited_overlay", this, "MouseExitedGem",
+                        new Godot.Collections.Array() { i, j }
+                    );
                 }
             }
         }
@@ -278,5 +288,25 @@ public class CircuitUI : AspectRatioContainer
         ColorRect _cRect = new ColorRect();
         _cRect.Color = color;
         _bgRect = _cRect;
+    }
+
+    public void MouseEnteredGem(int i, int j)
+    {
+        Gem gem = MyCircuit.Field[i, j];
+        string explain;
+        if (gem == null)
+        {
+            explain = "No gem here. Click to add!";
+        }
+        else
+        {
+            explain = gem.Explain(MyMagicItem is CustomGem);
+        }
+        EmitSignal("new_explain", explain);
+
+    }
+    public void MouseExitedGem(int i, int j)
+    {
+        EmitSignal("new_explain", "");
     }
 }

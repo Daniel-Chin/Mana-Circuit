@@ -18,7 +18,8 @@ public class Main : Node2D
         Director.MainUI = this;
         MyLowPanel = GetNode<LowPanel>("Overlay/VBox/LowPanel");
 
-        SaveLoad.Load();
+        // SaveLoad.Load();
+        GameState.Persistent.DebugInit();
         Director.CheckEvent();
     }
 

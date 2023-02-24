@@ -57,7 +57,7 @@ public class GemListScene : WindowDialog
         );
         if (gem is Gem.RemoveGem)
         {
-            gemEntry.Labels[5].BbcodeText = gem.Explain();
+            gemEntry.Labels[5].BbcodeText = gem.Explain(false);
             return;
         }
         if (_rotated)
@@ -73,7 +73,7 @@ public class GemListScene : WindowDialog
             gemEntry.Labels[2].BbcodeText = $"[color=aqua][center]{nInWand}[/center][/color]";
             gemEntry.Labels[3].BbcodeText = "[center]/[/center]";
             gemEntry.Labels[4].BbcodeText = $"[color=yellow][center]{nInCGs}[/center][/color]";
-            gemEntry.Labels[5].BbcodeText = gem.Explain();
+            gemEntry.Labels[5].BbcodeText = gem.Explain(false);
         }
     }
 

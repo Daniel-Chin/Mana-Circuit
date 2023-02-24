@@ -24,7 +24,7 @@ public abstract class Gem : MagicItem
         Size = new PointInt(1, 1);
     }
     public abstract Particle Apply(Particle input);
-    public abstract string Explain();
+    public abstract string Explain(bool inCG);
 
     public void ToJSON(StreamWriter writer, bool inCircuit)
     {
@@ -167,9 +167,11 @@ public abstract class Gem : MagicItem
         {
             return "Radiator Gem";
         }
-        public override string Explain()
+        public override string Explain(bool inCG)
         {
-            return "";
+            if (inCG)
+                return "Mana always enters from here.";
+            return "Mana radiator. You can see it blink at random intervals.";
         }
     }
     public class Drain : Gem
@@ -186,9 +188,11 @@ public abstract class Gem : MagicItem
         {
             return "Mana Crystalizer";
         }
-        public override string Explain()
+        public override string Explain(bool inCG)
         {
-            return "";
+            if (inCG)
+                return "Mana can only exit from here.";
+            return "Mana crystalizer. Absorb mana and store it. Very loyal.";
         }
     }
     public class Wall : Gem
@@ -205,9 +209,9 @@ public abstract class Gem : MagicItem
         {
             return "Blockage";
         }
-        public override string Explain()
+        public override string Explain(bool inCG)
         {
-            return "";
+            return "Blockage.";
         }
     }
     public class RemoveGem : Gem
@@ -224,7 +228,7 @@ public abstract class Gem : MagicItem
         {
             return "RemoveGem";
         }
-        public override string Explain()
+        public override string Explain(bool inCG)
         {
             return "Remove gem.";
         }
@@ -246,9 +250,9 @@ public abstract class Gem : MagicItem
         {
             return "+1 Gem";
         }
-        public override string Explain()
+        public override string Explain(bool inCG)
         {
-            return "Add one mana.";
+            return "+1 to any mana flowing through it.";
         }
     }
     public class WeakMult : Gem
@@ -267,9 +271,9 @@ public abstract class Gem : MagicItem
         {
             return $"x{MULT} Gem";
         }
-        public override string Explain()
+        public override string Explain(bool inCG)
         {
-            return $"Multiply mana by {MULT:#.#}.";
+            return $"Multiply any mana flowing through it by {MULT:#.#}.";
         }
     }
     // public class Doubler : Gem
@@ -304,7 +308,7 @@ public abstract class Gem : MagicItem
         {
             return "Focus Gem";
         }
-        public override string Explain()
+        public override string Explain(bool inCG)
         {
             return "Focus mana from different directions.";
         }
@@ -350,7 +354,7 @@ public abstract class Gem : MagicItem
         {
             return "Mirror Gem";
         }
-        public override string Explain()
+        public override string Explain(bool inCG)
         {
             return "Reflect mana.";
         }
@@ -389,7 +393,7 @@ public abstract class Gem : MagicItem
         {
             return "Stochastic Gem";
         }
-        public override string Explain()
+        public override string Explain(bool inCG)
         {
             return "Reflect mana with probability = 50%.";
         }

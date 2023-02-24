@@ -4,6 +4,7 @@
 [ext_resource path="res://misc/theme.tres" type="Theme" id=2]
 
 [node name="CircuitEditor" type="WindowDialog"]
+visible = true
 margin_right = 700.0
 margin_bottom = 550.0
 rect_min_size = Vector2( 700, 550 )
@@ -17,19 +18,39 @@ rect_min_size = Vector2( 700, 550 )
 
 [node name="Heading" type="RichTextLabel" parent="VBox"]
 margin_right = 700.0
-margin_bottom = 15.0
+margin_bottom = 30.0
 bbcode_enabled = true
 fit_content_height = true
 
-[node name="Explain" type="RichTextLabel" parent="VBox"]
-margin_top = 19.0
+[node name="HBox" type="HBoxContainer" parent="VBox"]
+margin_top = 34.0
 margin_right = 700.0
-margin_bottom = 119.0
+margin_bottom = 134.0
+
+[node name="Padding" type="MarginContainer" parent="VBox/HBox"]
+margin_right = 15.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 15, 0 )
+size_flags_vertical = 3
+
+[node name="Explain" type="RichTextLabel" parent="VBox/HBox"]
+margin_left = 19.0
+margin_right = 681.0
+margin_bottom = 100.0
 rect_min_size = Vector2( 0, 100 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 bbcode_enabled = true
 
+[node name="Padding2" type="MarginContainer" parent="VBox/HBox"]
+margin_left = 685.0
+margin_right = 700.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 15, 0 )
+size_flags_vertical = 3
+
 [node name="Aspect" type="AspectRatioContainer" parent="VBox"]
-margin_top = 123.0
+margin_top = 138.0
 margin_right = 700.0
 margin_bottom = 550.0
 size_flags_horizontal = 3
