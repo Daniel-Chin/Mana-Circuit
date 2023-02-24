@@ -221,5 +221,17 @@ public class GameState
             CanSpawnNonevent = false;
             LastLocationNoneventSpawn = new Vector2(0, 0);
         }
+
+        public void Update()
+        {
+            if (Persistent.Location_dist.MyRank == Rank.FINITE)
+            {
+                double dist = Persistent.Location_dist.K;
+                LocationOffset = new Vector2(
+                    (float)(dist * Math.Cos(Persistent.Location_theta)),
+                    (float)(dist * Math.Sin(Persistent.Location_theta))
+                );
+            }
+        }
     }
 }

@@ -31,7 +31,7 @@ public class Director
     {
         if (GameState.Transient.NextSpawn is Wand.Staff)
             return;
-        GameState.Transient.NextSpawn = null;
+        GameState.Transient.EnemiesTillNextSpawn = Shared.Rand.Next(2, 4);
     }
 
     public static void OnEventStepComplete()

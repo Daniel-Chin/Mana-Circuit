@@ -27,6 +27,9 @@ public class Main : Node2D
 
         SaveLoad.Load();
         // GameState.Persistent.DebugInit();
+        if (GameState.Persistent.MyWand != null)
+            MySidePanel.Hold(GameState.Persistent.MyWand);
+        GameState.Transient.Update();
         Director.CheckEvent();
     }
 

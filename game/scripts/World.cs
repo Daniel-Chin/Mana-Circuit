@@ -42,7 +42,16 @@ public class World : Node2D
             Vector2 displace = (
                 delta * Params.SPEED * direction
             );
-            GameState.Transient.LocationOffset += displace;
+            if (GameState.Persistent.Location_dist.MyRank == Rank.FINITE)
+            {
+                GameState.Transient.LocationOffset += displace;
+                GameState.Persistent.Location_dist = new Simplest(
+                    Rank.FINITE,
+                    GameState.Transient.LocationOffset.Length()
+                );
+                GameState.Persistent.Location_theta = GameState.Transient.LocationOffset.Angle();
+            }
+            GameState.Transient.Update();
             UpdateBack();
             MyMageUI.Walking();
             foreach (SpawnableUI s in SpawnedUIs)
@@ -204,5 +213,8 @@ public class World : Node2D
         SpawnedUIs.Remove(dUI);
         dUI.QueueFree();
         EmitSignal("new_wand");
+        GameState.Persistent.Event_Staff = true;
+        GameState.Transient.NextSpawn = null;
+        SaveLoad.Save();
     }
 }
