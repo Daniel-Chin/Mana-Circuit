@@ -4,7 +4,7 @@ using Godot;
 
 public class WandSimulation
 {
-    private static readonly float BLING = .15f;
+    private static readonly float BLING = .3f;
     private static readonly float BLING_DECAY = 4f;
 
     public SidePanel TheSidePanel { get; set; }
@@ -49,9 +49,7 @@ public class WandSimulation
         foreach (GemUI gemUI in TheSidePanel.MyCircuitUI.GemUIs)
         {
             gemUI.Tinter.Color = new Color(
-                gemUI.Tinter.Color.r,
-                gemUI.Tinter.Color.g,
-                gemUI.Tinter.Color.b,
+                0, 1, 1,
                 gemUI.Tinter.Color.a * (float)Math.Exp(-dt * BLING_DECAY)
             );
         }
@@ -79,11 +77,12 @@ public class WandSimulation
         int y = p.Location.IntY;
         Gem gem = MyWand.MyCircuit.Field[x, y];
         var tinter = TheSidePanel.MyCircuitUI.GemUIs[x, y].Tinter;
+        float tintBy = BLING;
+        if (gem == null)
+            tintBy *= .4f;
         tinter.Color = new Color(
-            tinter.Color.r,
-            tinter.Color.g,
-            tinter.Color.b,
-            Math.Min(1f, tinter.Color.a + BLING)
+            0, 1, 1,
+            Math.Min(1f, tinter.Color.a + tintBy)
         );
         if (gem == null)
         {
