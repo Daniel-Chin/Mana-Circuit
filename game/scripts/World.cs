@@ -247,17 +247,17 @@ public class World : Node2D
             }
         }
         // repel
-        for (int i = 0; i < Moneys.Count; i++)
+        foreach (Money m0 in Moneys)
         {
-            Money m0 = Moneys[i];
-            foreach (Money m1 in Moneys.Skip(i + 1))
+            Vector2 force = new Vector2(0, 0);
+            foreach (Money m1 in Moneys)
             {
+                if (m0 == m1) continue;
                 Vector2 displace = m0.Position - m1.Position;
                 float dist = Math.Max(3f, displace.Length());
-                Vector2 force = displace.Normalized() / dist;
-                m0.Step(force, dt);
-                m1.Step(-force, dt);
+                force += displace.Normalized() / dist;
             }
+            m0.Step(force, dt);
         }
     }
 
