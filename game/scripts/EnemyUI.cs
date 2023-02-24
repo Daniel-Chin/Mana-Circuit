@@ -20,6 +20,7 @@ public class EnemyUI : SpawnableSpecialUI
         Label.RectSize = Label.RectMinSize;
         Label.RectPivotOffset = Label.RectMinSize / 2;
         Label.RectPosition = -Label.RectPivotOffset;
+        Label.Theme = Shared.THEME;
         UpdateHP();
     }
 

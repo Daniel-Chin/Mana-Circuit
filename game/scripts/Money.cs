@@ -9,12 +9,14 @@ public class Money : Node2D, SpawnableUI
     private static readonly float REPEL = 1f;
     private static readonly float FRICTION = 1f;
     public Vector2 Velocity = new Vector2(0, 0);
+    public Money() : base() { }
     public Money(Simplest amount) : base()
     {
         Amount = amount;
         Label = new RichTextLabel();
         AddChild(Label);
         Label.BbcodeEnabled = true;
+        Label.ScrollActive = false;
         Label.RectMinSize = new Vector2(100, 50);
         Label.RectSize = Label.RectMinSize;
         Label.RectPosition = -Label.RectMinSize * .5f;

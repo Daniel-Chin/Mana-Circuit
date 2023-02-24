@@ -144,7 +144,9 @@ public class World : Node2D
                 Simplest d = GameState.Persistent.Location_dist;
                 if (d.MyRank == Rank.FINITE)
                 {
-                    hp = new Simplest(Rank.FINITE, Math.Exp(d.K));
+                    hp = new Simplest(Rank.FINITE, Math.Ceiling(
+                        Math.Exp(d.K)
+                    ));
                 }
                 else
                 {
