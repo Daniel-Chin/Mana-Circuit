@@ -92,7 +92,7 @@ public class World : Node2D
                 Director.OnSpawn();
             }
         }
-        if (GameState.Transient.CanSpawnNonevent)
+        if (Director.CanSpawnNonevent())
         {
             if ((
                 GameState.Transient.LastLocationNoneventSpawn
@@ -145,6 +145,16 @@ public class World : Node2D
                 }
             }
         }
+        // despawn
+        foreach (var ui in new List<SpawnableUI>(SpawnedUIs))
+        {
+            if (ui.Position.Length() >= SpawnRadius() * 1.1)
+            {
+                if (ui is EnemyUI)
+                    continue;
+                Despawn(ui);
+            }
+        }
     }
 
     private void Spawn(Spawnable s, Vector2 direction)
@@ -167,7 +177,7 @@ public class World : Node2D
             (float)Shared.Rand.NextDouble() - .5f
         ) * 2 * .3f;
         location = location.Normalized();
-        ui.Position = location * .7f * BackRect.RectSize.x;
+        ui.Position = location * SpawnRadius();
         SpawnedUIs.Add(ui);
         // Console.Write("SpawnedUIs ");
         // Shared.PrintList(SpawnedUIs);
@@ -216,5 +226,17 @@ public class World : Node2D
         GameState.Persistent.Event_Staff = true;
         GameState.Transient.NextSpawn = null;
         SaveLoad.Save();
+    }
+
+    private float SpawnRadius()
+    {
+        return .7f * BackRect.RectSize.x;
+    }
+
+    private void Despawn(SpawnableUI ui)
+    {
+        SpawnedUIs.Remove(ui);
+        ui.QueueFree();
+        Director.OnDespawn();
     }
 }

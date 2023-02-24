@@ -210,7 +210,6 @@ public class GameState
         public Vector2 LocationOffset;
         public Spawnable NextSpawn;
         public int EnemiesTillNextSpawn;
-        public bool CanSpawnNonevent;
         public Vector2 LastLocationNoneventSpawn;
         public TransientClass()
         {
@@ -218,7 +217,6 @@ public class GameState
             LocationOffset = new Vector2(0, 0);
             NextSpawn = null;
             EnemiesTillNextSpawn = 0;
-            CanSpawnNonevent = false;
             LastLocationNoneventSpawn = new Vector2(0, 0);
         }
 

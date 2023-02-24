@@ -29,6 +29,10 @@ public class Director
 
     public static void OnSpawn()
     {
+
+    }
+    public static void OnDespawn()
+    {
         if (GameState.Transient.NextSpawn is Wand.Staff)
             return;
         GameState.Transient.EnemiesTillNextSpawn = Shared.Rand.Next(2, 4);
@@ -49,5 +53,18 @@ public class Director
     {
         NowEvent = null;
         CheckEvent();
+    }
+
+    public static bool CanSpawnNonevent()
+    {
+        if (
+            GameState.Transient.NextSpawn != null
+            && GameState.Transient.EnemiesTillNextSpawn == 0
+        ) return false;
+        if (
+            !GameState.Persistent.Event_Intro
+            || !GameState.Persistent.Event_Staff
+        ) return false;
+        return true;
     }
 }
