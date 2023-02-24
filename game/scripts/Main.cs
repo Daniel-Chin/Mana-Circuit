@@ -19,8 +19,8 @@ public class Main : Node2D
     {
         WorldTime = 0f;
         Director.MainUI = this;
-        MyWorld = GetNode<World>("HBox/Container/World");
-        MyMageUI = GetNode<MageUI>("HBox/Container/World/MageUI");
+        MyWorld = GetNode<World>("HBox/World");
+        MyMageUI = GetNode<MageUI>("HBox/World/MageUI");
         MySidePanel = GetNode<SidePanel>("HBox/SidePanel");
         MyLowPanel = GetNode<LowPanel>("Overlay/VBox/LowPanel");
         MyWorld.Connect(
