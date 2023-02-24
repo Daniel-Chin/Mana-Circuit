@@ -34,12 +34,12 @@ texture = ExtResource( 1 )
 expand = true
 stretch_mode = 1
 
-[node name="VBox" type="VBoxContainer" parent="VBox/Crystal"]
+[node name="Centerer" type="VBoxContainer" parent="VBox/Crystal"]
 margin_right = 300.0
 margin_bottom = 300.0
 alignment = 1
 
-[node name="Label" type="RichTextLabel" parent="VBox/Crystal/VBox"]
+[node name="Label" type="RichTextLabel" parent="VBox/Crystal/Centerer"]
 margin_top = 125.0
 margin_right = 300.0
 margin_bottom = 174.0

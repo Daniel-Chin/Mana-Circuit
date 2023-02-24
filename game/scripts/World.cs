@@ -122,7 +122,7 @@ public class World : Node2D
             float distance = ui.Position.Length();
             if (ui is EnemyUI enemyUI)
             {
-                if (distance < Params.Enemy_COLLISION_RANGE)
+                if (distance < Params.ENEMY_COLLISION_RANGE)
                 {
                     CollidedWithEnemy(enemyUI);
                 }

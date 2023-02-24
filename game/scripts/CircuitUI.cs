@@ -25,9 +25,10 @@ public class CircuitUI : AspectRatioContainer
     private List<ParticleAndTrail> _pAndTs;
     private Queue<ParticleAndTrail> _pAndTsToFree;
     private PointInt _selectedLocation;
+    public GemUI[,] GemUIs;
     public MagicItem MyMagicItem;
     public Simplest MetaLevel;
-    public bool MouseEvents;
+    public bool InSidePanel;
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -84,12 +85,12 @@ public class CircuitUI : AspectRatioContainer
     public CircuitUI() : base() { }
     public CircuitUI(
         MagicItem magicItem, int recursionDepth,
-        bool mouseEvents
+        bool inSidePanel
     ) : base()
     {
         MyMagicItem = magicItem;
         RecursionDepth = recursionDepth;
-        MouseEvents = mouseEvents;
+        InSidePanel = inSidePanel;
         switch (MyMagicItem)
         {
             case Wand wand:
@@ -106,6 +107,10 @@ public class CircuitUI : AspectRatioContainer
         }
         _pAndTs = new List<ParticleAndTrail>();
         _pAndTsToFree = new Queue<ParticleAndTrail>();
+        GemUIs = new GemUI[
+            MyCircuit.Size.IntX,
+            MyCircuit.Size.IntY
+        ];
 
         SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
@@ -150,7 +155,8 @@ public class CircuitUI : AspectRatioContainer
                 Gem gem = MyCircuit.Field[i, j];
                 GemUI gemUI = new GemUI(gem, RecursionDepth, MetaLevel >= Simplest.Zero());
                 _grid.AddChild(gemUI);
-                if (MouseEvents)
+                GemUIs[i, j] = gemUI;
+                if (!InSidePanel && RecursionDepth == 0)
                 {
                     gemUI.Button.Connect(
                         "pressed", this, "OnClickGem",
@@ -173,7 +179,10 @@ public class CircuitUI : AspectRatioContainer
 
     public override void _Process(float delta)
     {
-        if (RecursionDepth > Shared.MAX_RECURSION)
+        if (
+            RecursionDepth > Shared.MAX_RECURSION
+            || InSidePanel
+        )
             return;
         // Console.WriteLine("Process begin");
         foreach (ParticleAndTrail pT in _pAndTs)
