@@ -10,7 +10,6 @@ public class CircuitEditor : WindowDialog
     public VBoxContainer VBox;
     public RichTextLabel HeadingLabel;
     public RichTextLabel ExplainLabel;
-    public AspectRatioContainer Aspect;
     public MagicItem Editee;
     public CircuitUI MyCircuitUI;
     public CircuitEditor() : base()
@@ -22,16 +21,12 @@ public class CircuitEditor : WindowDialog
         VBox.RectMinSize = RectMinSize;
         HeadingLabel = new RichTextLabel();
         ExplainLabel = new RichTextLabel();
-        Aspect = new AspectRatioContainer();
         VBox.AddChild(HeadingLabel);
         VBox.AddChild(new HPad(ExplainLabel));
-        VBox.AddChild(Aspect);
         HeadingLabel.BbcodeEnabled = true;
         HeadingLabel.FitContentHeight = true;
         ExplainLabel.BbcodeEnabled = true;
         ExplainLabel.RectMinSize = new Vector2(0, 100);
-        Aspect.SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
-        Aspect.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
         _gemList = new GemListScene();
         Connect("popup_hide", this, "OnPopupHide");
     }
@@ -55,7 +50,7 @@ public class CircuitEditor : WindowDialog
         }
         Editee = _gemList.Selected;
         MyCircuitUI = new CircuitUI(Editee, 0, true);
-        Aspect.AddChild(MyCircuitUI);
+        VBox.AddChild(MyCircuitUI);
         MyCircuitUI.Connect(
             "modified", this, "CircuitModified"
         );

@@ -3,8 +3,8 @@ using System;
 
 public class SidePanel : PanelContainer
 {
-    CircuitUI MyCircuitUI;
-    VBoxContainer VBox;
+    public CircuitUI MyCircuitUI;
+    public VBoxContainer VBox;
     public override void _Ready()
     {
         VBox = GetNode<VBoxContainer>("VBox");

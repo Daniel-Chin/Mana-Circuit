@@ -18,6 +18,7 @@ public class CircuitUI : AspectRatioContainer
     private static Shader _rainbow = GD.Load<Shader>("res://Rainbow.gdshader");
     public Circuit MyCircuit;
     public int RecursionDepth;
+    private MarginContainer _container;
     private Control _bgRect;
     private GridContainer _grid;
     private GemListScene _GemList;
@@ -44,7 +45,7 @@ public class CircuitUI : AspectRatioContainer
             );
             Follower = sourceLocation.ToVector2();
             MyTrail = new ManaTrail();
-            parent.AddChild(MyTrail);
+            parent._container.AddChild(MyTrail);
             MyTrail.LineWidth = (float)(3 * Math.Exp(-parent.RecursionDepth));
         }
         public void Follow()
@@ -106,13 +107,13 @@ public class CircuitUI : AspectRatioContainer
         _pAndTs = new List<ParticleAndTrail>();
         _pAndTsToFree = new Queue<ParticleAndTrail>();
 
-        AlignmentHorizontal = AlignMode.Begin;
-        AlignmentVertical = AlignMode.Begin;
         SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
+        _container = new MarginContainer();
+        AddChild(_container);
         _bgRect = new Control();
         _grid = new GridContainer();
-        AddChild(_grid);
+        _container.AddChild(_grid);
         _grid.AddConstantOverride("vseparation", 0);
         _grid.AddConstantOverride("hseparation", 0);
 
@@ -125,8 +126,8 @@ public class CircuitUI : AspectRatioContainer
         Shared.QFreeChildren(_grid);
         _bgRect.QueueFree();
         SetBackGround();
-        AddChild(_bgRect);
-        MoveChild(_bgRect, 0);
+        _container.AddChild(_bgRect);
+        _container.MoveChild(_bgRect, 0);
         Ratio = MyCircuit.Size.IntX / (float)MyCircuit.Size.IntY;
         if (RecursionDepth > Shared.MAX_RECURSION)
             return;
