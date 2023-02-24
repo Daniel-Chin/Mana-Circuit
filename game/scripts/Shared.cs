@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public class Shared
@@ -30,6 +31,16 @@ public class Shared
     {
         Console.Write("[");
         foreach (var x in objs)
+        {
+            Console.Write(x.ToString());
+            Console.Write(", ");
+        }
+        Console.WriteLine("]");
+    }
+    public static void PrintList<T>(List<T> l)
+    {
+        Console.Write("List[");
+        foreach (T x in l)
         {
             Console.Write(x.ToString());
             Console.Write(", ");

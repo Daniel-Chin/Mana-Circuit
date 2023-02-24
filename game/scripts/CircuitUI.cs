@@ -127,7 +127,7 @@ public class CircuitUI : AspectRatioContainer
         SetBackGround();
         AddChild(_bgRect);
         MoveChild(_bgRect, 0);
-        Ratio = MyCircuit.Size.IntY / (float)MyCircuit.Size.IntX;
+        Ratio = MyCircuit.Size.IntX / (float)MyCircuit.Size.IntY;
         if (RecursionDepth > Shared.MAX_RECURSION)
             return;
         _grid.Columns = MyCircuit.Size.IntX;

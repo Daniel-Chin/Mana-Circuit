@@ -160,6 +160,8 @@ public class World : Node2D
         location = location.Normalized();
         ui.Position = location * .7f * BackRect.RectSize.x;
         SpawnedUIs.Add(ui);
+        // Console.Write("SpawnedUIs ");
+        // Shared.PrintList(SpawnedUIs);
         AddChild(ui);
     }
 
