@@ -1,9 +1,6 @@
 法力无边
 Your power knows no bounds
 
-2do
-    despawn
-
 How to make the player come up with inf themselves? 
     roadblock w/ inf enemies? 
         what about the excitement "I made inf and I'm OP"?
