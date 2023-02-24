@@ -75,7 +75,7 @@ public class CircuitEditor : WindowDialog
         if (Editee is CustomGem cG)
         {
             cG.Eval();
-            sB.Append(" (x) = ");
+            sB.Append(": f(x) = ");
             sB.Append(MathBB.Build(cG.CachedMultiplier));
             sB.Append(" x");
             if (cG.CachedAdder != null)
