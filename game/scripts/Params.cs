@@ -8,4 +8,6 @@ public class Params
     public static readonly int WAND_MAX_PARTICLES = 10;
     public static readonly float WAND_EMIT_INTERVAL = 1f;
     public static readonly float WAND_ADVECT_INTERVAL = .1f;
+    public static readonly float ATTACK_PROXIMITY = 40;
+    public static readonly double ATTACK_FLY_BASE_SPEED = 3;
 }

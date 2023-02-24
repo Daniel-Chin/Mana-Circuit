@@ -12,6 +12,7 @@ public class World : Node2D
     public float AspectRatio;
     public List<Money> Moneys;
     public List<SpawnableUI> SpawnedUIs;
+    public List<Attack> Attacks;
 
     public override void _Ready()
     {
@@ -25,6 +26,7 @@ public class World : Node2D
         MyMageUI.Hold(GameState.Persistent.MyWand);
         Moneys = new List<Money>();
         SpawnedUIs = new List<SpawnableUI>();
+        Attacks = new List<Attack>();
     }
 
     private static readonly float SOFTZONE = 0;
@@ -32,10 +34,10 @@ public class World : Node2D
     {
         if (GameState.Transient.NPCPausedWorld)
             return;
+        Vector2 drag = GetLocalMousePosition();
+        Vector2 direction = drag.Normalized();
         if (Input.IsMouseButtonPressed(((int)ButtonList.Right)))
         {
-            Vector2 drag = GetLocalMousePosition();
-            Vector2 direction = drag.Normalized();
             float l = drag.Length() / SOFTZONE;
             if (l < 1)
                 direction *= l;
@@ -64,7 +66,25 @@ public class World : Node2D
         {
             MyMageUI.Resting();
         }
+        // attack
+        if (
+            Input.IsMouseButtonPressed(((int)ButtonList.Left))
+            && !GameState.Transient.Mana.Equals(Simplest.Zero())
+        )
+        {
+            Attack attack = new Attack()
+            {
+                Direction = direction,
+                Mana = GameState.Transient.Mana,
+            };
+            GameState.Transient.Mana = Simplest.Zero();
+            Main.Singleton.MySidePanel.Update(); // Ideally, a signal
+            attack.LineWidth = 3;
+            Attacks.Add(attack);
+            AddChild(attack);
+        }
         UpdateMoneys(delta);
+        UpdateAttacks(delta);
     }
 
     private void OnWalk(Vector2 direction)
@@ -200,6 +220,39 @@ public class World : Node2D
         }
     }
 
+    private void UpdateAttacks(float dt)
+    {
+        foreach (Attack attack in new List<Attack>(Attacks))
+        {
+            UpdateAttack(dt, attack);
+        }
+    }
+
+    private void UpdateAttack(float dt, Attack attack)
+    {
+        while (attack.Advect(dt))
+        {
+            if (attack.Head.Length() >= SpawnRadius() * 1.1)
+            {
+                Attacks.Remove(attack);
+                attack.QueueFree();
+                return;
+            }
+            foreach (var ui in SpawnedUIs)
+            {
+                if ((ui.Position - attack.Head).Length() >= Params.ATTACK_PROXIMITY)
+                    continue;
+                if (ui is EnemyUI enemyUI)
+                {
+                    HitEnemy(attack, enemyUI);
+                }
+                Attacks.Remove(attack);
+                attack.QueueFree();
+                return;
+            }
+        }
+    }
+
     public void UpdateBack()
     {
         BackShader.SetShaderParam(
@@ -239,5 +292,21 @@ public class World : Node2D
         SpawnedUIs.Remove(ui);
         ui.QueueFree();
         Director.OnDespawn();
+    }
+
+    private void HitEnemy(Attack attack, EnemyUI enemyUI)
+    {
+        Enemy enemy = (Enemy)enemyUI.MySpawnable;
+        if (attack.Mana >= enemy.HP)
+        {
+            SpawnedUIs.Remove(enemyUI);
+            enemyUI.QueueFree();
+        }
+        else
+        {
+            enemy.HP = Simplest.Eval(
+                enemy.HP, Operator.MINUS, attack.Mana
+            );
+        }
     }
 }

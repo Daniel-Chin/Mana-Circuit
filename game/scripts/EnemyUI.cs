@@ -5,6 +5,7 @@ public class EnemyUI : SpawnableUI
 {
     public RichTextLabel Label;
     private static readonly Texture TEXTURE = GD.Load<Texture>("res://texture/npc/enemy.png");
+    public EnemyUI() : base(null) { }
     public EnemyUI(Enemy e) : base(e)
     {
         base._Ready();
