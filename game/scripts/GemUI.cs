@@ -27,16 +27,15 @@ public class GemUI : AspectRatioContainer
         Button = new TextureButton();
         Button.Expand = true;
         Button.StretchMode = TextureButton.StretchModeEnum.KeepAspectCentered;
-        Button.SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
-        Button.SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
         AddChild(Button);
-        Set();
         if (recursionDepth == 0)
         {
             Overlay = new ColorRect();
             Overlay.Color = Colors.Transparent;
             AddChild(Overlay);
+            MoveChild(Overlay, 0);
         }
+        Set();
     }
 
     private void Set()
@@ -129,10 +128,10 @@ public class GemUI : AspectRatioContainer
 
     public void ConnectMouseOver()
     {
-        Overlay.Connect(
+        Button.Connect(
             "mouse_entered", this, "MouseEntered"
         );
-        Overlay.Connect(
+        Button.Connect(
             "mouse_exited", this, "MouseExited"
         );
     }
