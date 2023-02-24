@@ -2,6 +2,7 @@ using Godot;
 
 public interface Spawnable
 {
+    // Enemy, NPC, or DropedItem
 }
 
 public class SpawnableUI : Node2D

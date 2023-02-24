@@ -6,6 +6,8 @@ public class Main : Node2D
 {
     public static Main Singleton = null;
     public LowPanel MyLowPanel;
+    public SidePanel MySidePanel;
+    public World MyWorld;
     public static float WorldTime;
     public Main() : base()
     {
@@ -16,7 +18,12 @@ public class Main : Node2D
     {
         WorldTime = 0f;
         Director.MainUI = this;
+        MyWorld = GetNode<World>("HBox/Container/World");
+        MySidePanel = GetNode<SidePanel>("HBox/SidePanel");
         MyLowPanel = GetNode<LowPanel>("Overlay/VBox/LowPanel");
+        MyWorld.Connect(
+            "new_wand", this, "NewWand"
+        );
 
         SaveLoad.Load();
         // GameState.Persistent.DebugInit();
@@ -27,5 +34,10 @@ public class Main : Node2D
     {
         WorldTime += delta;
         Director.Process(delta);
+    }
+
+    public void NewWand()
+    {
+        MySidePanel.Hold(GameState.Persistent.MyWand);
     }
 }

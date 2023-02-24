@@ -2,7 +2,6 @@ using Godot;
 
 public abstract class NPC : Spawnable
 {
-    public Vector2 ScreenLocation { get; set; }
     public abstract string Name();
     public Texture Texture()
     {

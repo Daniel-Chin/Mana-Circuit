@@ -27,19 +27,19 @@ rect_min_size = Vector2( 1024, 600 )
 margin_right = 300.0
 margin_bottom = 600.0
 
-[node name="MarginContainer" type="MarginContainer" parent="HBox"]
+[node name="Container" type="MarginContainer" parent="HBox"]
 margin_left = 304.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="World" type="Node2D" parent="HBox/MarginContainer"]
+[node name="World" type="Node2D" parent="HBox/Container"]
 position = Vector2( 360, 300 )
 z_index = -1
 script = ExtResource( 9 )
 
-[node name="Background" type="TextureRect" parent="HBox/MarginContainer/World"]
+[node name="Background" type="TextureRect" parent="HBox/Container/World"]
 material = SubResource( 1 )
 grow_horizontal = 2
 grow_vertical = 2
@@ -47,7 +47,7 @@ rect_min_size = Vector2( 720, 600 )
 texture = ExtResource( 5 )
 expand = true
 
-[node name="MageUI" parent="HBox/MarginContainer/World" instance=ExtResource( 2 )]
+[node name="MageUI" parent="HBox/Container/World" instance=ExtResource( 2 )]
 
 [node name="Overlay" type="MarginContainer" parent="."]
 margin_right = 1024.0

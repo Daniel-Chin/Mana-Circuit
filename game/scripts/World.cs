@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class World : Node2D
 {
+    [Signal] public delegate void new_wand();
     public TextureRect BackRect;
     public MageUI MyMageUI;
     ShaderMaterial BackShader;
@@ -64,6 +65,7 @@ public class World : Node2D
             && GameState.Transient.EnemiesTillNextSpawn == 0
         )
         {
+            // spawn event
             bool alreadyThere = false;
             foreach (var ui in SpawnedUIs)
             {
@@ -104,6 +106,36 @@ public class World : Node2D
                     GameState.Transient.EnemiesTillNextSpawn--;
             }
         }
+        // check NPC collision
+        foreach (var ui in new List<SpawnableUI>(SpawnedUIs))
+        {
+            float distance = ui.Position.Length();
+            if (ui is EnemyUI enemyUI)
+            {
+                if (distance < Params.Enemy_COLLISION_RANGE)
+                {
+                    CollidedWithEnemy(enemyUI);
+                }
+                continue;
+            }
+            if (distance < Params.NPC_COLLISION_RANGE)
+            {
+                if (ui.Position.Normalized().Dot(direction) > 0)
+                {
+                    switch (ui)
+                    {
+                        case DroppedItemUI dUI:
+                            CollidedWithDroppedItem(dUI);
+                            break;
+                        case NPCUI npcUI:
+                            CollidedWithNPC(npcUI);
+                            break;
+                        default:
+                            throw new Shared.TypeError();
+                    }
+                }
+            }
+        }
     }
 
     private void Spawn(Spawnable s, Vector2 direction)
@@ -115,7 +147,7 @@ public class World : Node2D
                 ui = new EnemyUI(e);
                 break;
             case Wand.Staff staff:
-                ui = new SpawnableUI(staff);
+                ui = new DroppedItemUI(staff);
                 ui.MySprite.Texture = GD.Load<Texture>("res://texture/wand/staff.png");
                 break;
             default:
@@ -152,5 +184,23 @@ public class World : Node2D
             "offset_g", GameState.Transient.LocationOffset
             - new Vector2(.5f, .5f * AspectRatio)
         );
+    }
+
+    private void CollidedWithEnemy(EnemyUI enemyUI)
+    {
+        // todo
+    }
+    private void CollidedWithNPC(NPCUI npcUI)
+    {
+        // todo
+    }
+    private void CollidedWithDroppedItem(DroppedItemUI dUI)
+    {
+        Shared.Assert(dUI.MySpawnable is Wand.Staff);
+        Shared.Assert(GameState.Persistent.MyWand == null);
+        GameState.Persistent.MyWand = (Wand)dUI.MySpawnable;
+        SpawnedUIs.Remove(dUI);
+        dUI.QueueFree();
+        EmitSignal("new_wand");
     }
 }
