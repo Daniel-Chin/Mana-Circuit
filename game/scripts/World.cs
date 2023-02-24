@@ -106,6 +106,51 @@ public class World : Node2D
                 DespawnSpecial(ui);
             }
         }
+        // check SpawnableSpecial collision
+        foreach (var ui in new List<SpawnableSpecialUI>(SpawnedSpecialUIs))
+        {
+            float distance = ui.Position.Length();
+            if (ui is EnemyUI enemyUI)
+            {
+                if (distance < Params.ENEMY_COLLISION_RANGE)
+                {
+                    CollidedWithEnemy(enemyUI);
+                }
+                continue;
+            }
+            if (distance < Params.NPC_COLLISION_RANGE)
+            {
+                if (ui.Position.Normalized().Dot(direction) > 0)
+                {
+                    switch (ui)
+                    {
+                        case DroppedItemUI dUI:
+                            CollidedWithDroppedItem(dUI);
+                            break;
+                        case NPCUI npcUI:
+                            CollidedWithNPC(npcUI);
+                            break;
+                        default:
+                            throw new Shared.TypeError();
+                    }
+                }
+            }
+        }
+        // check Money collision
+        foreach (Money money in new List<Money>(Moneys))
+        {
+            float distance = money.Position.Length();
+            if (distance < Params.MONEY_COLLISION_RANGE)
+            {
+                Moneys.Remove(money);
+                money.QueueFree();
+                GameState.Persistent.Money = Simplest.Eval(
+                    GameState.Persistent.Money, Operator.PLUS,
+                    money.Amount
+                );
+                Main.Singleton.MySidePanel.Update(); // Ideally, a signal
+            }
+        }
     }
 
     private void OnWalk(Vector2 direction)
@@ -158,36 +203,6 @@ public class World : Node2D
                 Spawn(new Enemy(hp), direction);
                 if (GameState.Transient.EnemiesTillNextSpawn > 0)
                     GameState.Transient.EnemiesTillNextSpawn--;
-            }
-        }
-        // check NPC collision
-        foreach (var ui in new List<SpawnableSpecialUI>(SpawnedSpecialUIs))
-        {
-            float distance = ui.Position.Length();
-            if (ui is EnemyUI enemyUI)
-            {
-                if (distance < Params.ENEMY_COLLISION_RANGE)
-                {
-                    CollidedWithEnemy(enemyUI);
-                }
-                continue;
-            }
-            if (distance < Params.NPC_COLLISION_RANGE)
-            {
-                if (ui.Position.Normalized().Dot(direction) > 0)
-                {
-                    switch (ui)
-                    {
-                        case DroppedItemUI dUI:
-                            CollidedWithDroppedItem(dUI);
-                            break;
-                        case NPCUI npcUI:
-                            CollidedWithNPC(npcUI);
-                            break;
-                        default:
-                            throw new Shared.TypeError();
-                    }
-                }
             }
         }
     }

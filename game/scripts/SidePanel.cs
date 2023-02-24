@@ -5,12 +5,14 @@ public class SidePanel : PanelContainer
 {
     public CircuitUI MyCircuitUI;
     public VBoxContainer VBox;
-    public RichTextLabel label;
+    public RichTextLabel ManaLabel;
+    public RichTextLabel MoneyLabel;
     public WandSimulation MyWandSim;
     public override void _Ready()
     {
         VBox = GetNode<VBoxContainer>("VBox");
-        label = GetNode<RichTextLabel>("VBox/Crystal/Centerer/Label");
+        ManaLabel = GetNode<RichTextLabel>("VBox/Crystal/Centerer/Mana");
+        MoneyLabel = GetNode<RichTextLabel>("VBox/Money");
         VBox.Visible = false;
         MyWandSim = new WandSimulation(this);
         Update();
@@ -51,6 +53,7 @@ public class SidePanel : PanelContainer
 
     public new void Update()
     {
-        label.BbcodeText = $"[center]{MathBB.Build(GameState.Transient.Mana)}[/center]";
+        ManaLabel.BbcodeText = $"[center]{MathBB.Build(GameState.Transient.Mana)}[/center]";
+        MoneyLabel.BbcodeText = $" [color=yellow]${MathBB.Build(GameState.Persistent.Money)}[/color]";
     }
 }

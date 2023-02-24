@@ -26,9 +26,18 @@ script = ExtResource( 4 )
 margin_right = 300.0
 margin_bottom = 600.0
 
-[node name="Crystal" type="MarginContainer" parent="VBox"]
+[node name="Money" type="RichTextLabel" parent="VBox"]
 margin_right = 300.0
-margin_bottom = 300.0
+margin_bottom = 30.0
+bbcode_enabled = true
+bbcode_text = " [color=yellow]$3[/color]"
+text = " $3"
+fit_content_height = true
+
+[node name="Crystal" type="MarginContainer" parent="VBox"]
+margin_top = 34.0
+margin_right = 300.0
+margin_bottom = 334.0
 rect_min_size = Vector2( 300, 300 )
 
 [node name="TextureRect" type="TextureRect" parent="VBox/Crystal"]
@@ -43,7 +52,7 @@ margin_right = 300.0
 margin_bottom = 300.0
 alignment = 1
 
-[node name="Label" type="RichTextLabel" parent="VBox/Crystal/Centerer"]
+[node name="Mana" type="RichTextLabel" parent="VBox/Crystal/Centerer"]
 margin_top = 125.0
 margin_right = 300.0
 margin_bottom = 174.0
