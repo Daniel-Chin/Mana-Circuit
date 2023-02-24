@@ -20,6 +20,7 @@ public class SidePanel : PanelContainer
         }
         MyCircuitUI = new CircuitUI(wand, 0, false);
         VBox.AddChild(MyCircuitUI);
+        VBox.Visible = true;
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
