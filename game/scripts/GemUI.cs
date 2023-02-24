@@ -6,7 +6,7 @@ public class GemUI : AspectRatioContainer
     // code-defined
     [Signal] public delegate void mouse_entered_overlay();
     [Signal] public delegate void mouse_exited_overlay();
-    public ColorRect Overlay;
+    public ColorRect Tinter;
     public TextureButton Button;
     public CircuitUI MyCircuitUI;
     private Gem _gem = null;
@@ -30,10 +30,10 @@ public class GemUI : AspectRatioContainer
         AddChild(Button);
         if (recursionDepth == 0)
         {
-            Overlay = new ColorRect();
-            Overlay.Color = Colors.Transparent;
-            AddChild(Overlay);
-            MoveChild(Overlay, 0);
+            Tinter = new ColorRect();
+            Tinter.Color = Colors.Transparent;
+            AddChild(Tinter);
+            MoveChild(Tinter, 0);
         }
         Set();
     }
@@ -138,13 +138,13 @@ public class GemUI : AspectRatioContainer
 
     public void MouseEntered()
     {
-        Overlay.Color = Color.FromHsv(0, 0, 1, .2f);
+        Tinter.Color = Color.FromHsv(0, 0, 1, .2f);
         EmitSignal("mouse_entered_overlay");
     }
 
     public void MouseExited()
     {
-        Overlay.Color = Colors.Transparent;
+        Tinter.Color = Colors.Transparent;
         EmitSignal("mouse_exited_overlay");
     }
 }
