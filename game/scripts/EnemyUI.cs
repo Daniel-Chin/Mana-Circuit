@@ -20,11 +20,12 @@ public class EnemyUI : SpawnableSpecialUI
         Label.RectSize = Label.RectMinSize;
         Label.RectPivotOffset = Label.RectMinSize / 2;
         Label.RectPosition = -Label.RectPivotOffset;
+        UpdateHP();
     }
 
-    public void SetHP(Simplest simplest)
+    public void UpdateHP()
     {
-        Label.BbcodeText = $"[center]{MathBB.Build(simplest)}[/center]";
+        Label.BbcodeText = $"[center]{MathBB.Build(((Enemy)MySpawnable).HP)}[/center]";
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.

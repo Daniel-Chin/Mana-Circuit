@@ -216,6 +216,7 @@ public class World : Node2D
 
     private void UpdateMoneys(float dt)
     {
+        // despawn
         foreach (Money money in new List<Money>(Moneys))
         {
             if (ShouldDespawn(money.Position))
@@ -224,13 +225,15 @@ public class World : Node2D
                 money.QueueFree();
             }
         }
+        // repel
         for (int i = 0; i < Moneys.Count; i++)
         {
             Money m0 = Moneys[i];
             foreach (Money m1 in Moneys.Skip(i + 1))
             {
                 Vector2 displace = m0.Position - m1.Position;
-                Vector2 force = displace.Normalized() / displace.Length();
+                float dist = Math.Max(3f, displace.Length());
+                Vector2 force = displace.Normalized() / dist;
                 m0.Step(force, dt);
                 m1.Step(-force, dt);
             }
@@ -320,17 +323,54 @@ public class World : Node2D
         {
             SpawnedSpecialUIs.Remove(enemyUI);
             enemyUI.QueueFree();
+            DropMoneyCluster(enemy.HP, enemyUI.Position);
         }
         else
         {
             enemy.HP = Simplest.Eval(
                 enemy.HP, Operator.MINUS, attack.Mana
             );
+            enemyUI.UpdateHP();
         }
     }
 
     private bool ShouldDespawn(Vector2 location)
     {
         return location.Length() >= SpawnRadius() * 1.1;
+    }
+
+    private void DropMoneyCluster(Simplest enemyHP, Vector2 location)
+    {
+        Simplest amount = enemyHP;
+        if (enemyHP.MyRank == Rank.FINITE)
+        {
+            amount = new Simplest(Rank.FINITE, Math.Ceiling(
+                enemyHP.K * Params.MONEY_DROP_MULT
+            ));
+            if (amount.K < 12)
+            {
+                for (int i = 0; i < amount.K; i++)
+                {
+                    DropOneMoney(
+                        Simplest.One(),
+                        location + new Vector2(
+                            (float)Shared.Rand.NextDouble() - .5f,
+                            (float)Shared.Rand.NextDouble() - .5f
+                        )
+                    );
+                }
+                return;
+            }
+        }
+        DropOneMoney(amount, location);
+    }
+
+    private Money DropOneMoney(Simplest amount, Vector2 location)
+    {
+        Money money = new Money(amount);
+        AddChild(money);
+        Moneys.Add(money);
+        money.Position = location;
+        return money;
     }
 }
