@@ -13,7 +13,7 @@ public class SidePanel : PanelContainer
 
     public void Hold(Wand wand)
     {
-        MyCircuitUI = new CircuitUI(wand, 0);
+        MyCircuitUI = new CircuitUI(wand, 0, false);
         VBox.AddChild(MyCircuitUI);
         VBox.Visible = true;
     }

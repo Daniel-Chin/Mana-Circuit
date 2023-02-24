@@ -26,6 +26,7 @@ public class CircuitUI : AspectRatioContainer
     private PointInt _selectedLocation;
     public MagicItem MyMagicItem;
     public Simplest MetaLevel;
+    public bool MouseEvents;
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -81,11 +82,13 @@ public class CircuitUI : AspectRatioContainer
     }
     public CircuitUI() : base() { }
     public CircuitUI(
-        MagicItem magicItem, int recursionDepth
+        MagicItem magicItem, int recursionDepth,
+        bool mouseEvents
     ) : base()
     {
         MyMagicItem = magicItem;
         RecursionDepth = recursionDepth;
+        MouseEvents = mouseEvents;
         switch (MyMagicItem)
         {
             case Wand wand:
@@ -146,7 +149,7 @@ public class CircuitUI : AspectRatioContainer
                 Gem gem = MyCircuit.Field[i, j];
                 GemUI gemUI = new GemUI(gem, RecursionDepth, MetaLevel >= Simplest.Zero());
                 _grid.AddChild(gemUI);
-                if (RecursionDepth == 0)
+                if (MouseEvents)
                 {
                     gemUI.Button.Connect(
                         "pressed", this, "OnClickGem",

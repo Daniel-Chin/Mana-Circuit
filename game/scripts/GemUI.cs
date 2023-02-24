@@ -45,7 +45,7 @@ public class GemUI : AspectRatioContainer
         {
             filename = "transparent";
             MyCircuitUI = new CircuitUI(
-                cG, RecursionDepth + 1
+                cG, RecursionDepth + 1, false
             );
             AddChild(MyCircuitUI);
             MoveChild(MyCircuitUI, 0);
