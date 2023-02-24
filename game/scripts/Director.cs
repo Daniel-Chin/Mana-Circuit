@@ -9,12 +9,10 @@ public class Director
 
     public static void CheckEvent()
     {
-        if (NowEvent != null)
-            throw new Shared.ObjectStateIllegal();
+        Shared.Assert(NowEvent == null);
         if (!GameState.Persistent.Event_Intro)
         {
-            NowEvent = new MagicEvent.Intro();
-            NowEvent.NextStep();
+            StartEvent(new MagicEvent.Intro());
             return;
         }
         if (!GameState.Persistent.Event_Staff)
@@ -25,6 +23,13 @@ public class Director
             GameState.Transient.EnemiesTillNextSpawn = 0;
             return;
         }
+    }
+
+    public static void StartEvent(MagicEvent e)
+    {
+        Shared.Assert(NowEvent == null);
+        NowEvent = e;
+        NowEvent.NextStep();
     }
 
     public static void OnSpecialSpawn()
@@ -66,5 +71,14 @@ public class Director
             || !GameState.Persistent.Event_Staff
         ) return false;
         return true;
+    }
+
+    public static void WandAttacked()
+    {
+        if (NowEvent is MagicEvent.Staff e)
+        {
+            e.Attacked = true;
+            e.NextStep();
+        }
     }
 }

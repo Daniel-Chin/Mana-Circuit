@@ -35,6 +35,8 @@ public class SidePanel : PanelContainer
 
     public override void _Process(float delta)
     {
+        if (GameState.Transient.NPCPausedWorld)
+            return;
         MyWandSim.Process(delta);
     }
 

@@ -91,6 +91,7 @@ public class World : Node2D
             attack.LineWidth = 3;
             Attacks.Add(attack);
             AddChild(attack);
+            Director.WandAttacked();
         }
         UpdateMoneys(delta);
         UpdateAttacks(delta);
@@ -317,9 +318,8 @@ public class World : Node2D
         SpawnedSpecialUIs.Remove(dUI);
         dUI.QueueFree();
         EmitSignal("new_wand");
-        GameState.Persistent.Event_Staff = true;
         GameState.Transient.NextSpawn = null;
-        SaveLoad.Save();
+        Director.StartEvent(new MagicEvent.Staff());
     }
 
     private float SpawnRadius()
