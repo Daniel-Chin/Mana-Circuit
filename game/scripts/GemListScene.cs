@@ -15,6 +15,11 @@ public class GemListScene : WindowDialog
     public Simplest MetaLevel;
     public MagicItem Selected;
     private bool _rotated;
+    public enum Mode
+    {
+        PLACE, EDIT, BUY,
+    }
+    private Mode _mode;
 
     public GemListScene() : base()
     {
@@ -55,15 +60,18 @@ public class GemListScene : WindowDialog
 
     private void FillEntryRemove(GemEntry gemEntry, Gem gem)
     {
+        gemEntry.PresetFiveSmallOneBig();
         gemEntry.Labels[5].BbcodeText = gem.Explain(false);
     }
     private void FillEntryThisWay(GemEntry gemEntry, Gem gem)
     {
-        gemEntry.ExpandFirstLabel(false);
+        gemEntry.PresetOneBig();
+        gemEntry.Pad();
         gemEntry.Labels[0].BbcodeText = "[center]This way![/center]";
     }
     private void FillEntryInStock(GemEntry gemEntry, Gem gem)
     {
+        gemEntry.PresetFiveSmallOneBig();
         var (nInWand, nInCGs, nAvailable) = CountGems(gem);
         gemEntry.Labels[0].BbcodeText = $"[color=lime][center]{MathBB.Build(nAvailable)}[/center][/color]";
         gemEntry.Labels[1].BbcodeText = "[center]/[/center]";
@@ -72,17 +80,37 @@ public class GemListScene : WindowDialog
         gemEntry.Labels[4].BbcodeText = $"[color=yellow][center]{nInCGs}[/center][/color]";
         gemEntry.Labels[5].BbcodeText = gem.Explain(false);
     }
+    private void AddAndThisWay(Gem gem)
+    {
+        FillEntryThisWay(Add(gem), gem);
+    }
+    private void FillEntryShop(GemEntry gemEntry, Gem gem)
+    {
+        gemEntry.PresetBigSmallMoney();
+        Simplest nOwned = CountGemsOwned(gem);
+        gemEntry.Labels[0].BbcodeText = gem.Explain(false);
+        gemEntry.Labels[1].BbcodeText = $"[color=green][center]{MathBB.Build(nOwned)}[/center][/color]";
+        gemEntry.Labels[2].BbcodeText = $"[color=yellow][center]{MathBB.Build(Shop.PriceOf(gem))}[/center][/color]";
+    }
+    private void FillEntryEdit(GemEntry gemEntry, Gem gem)
+    {
+        gemEntry.PresetOneBig();
+        gemEntry.Pad();
+        gemEntry.Labels[0].BbcodeText = gem.Explain(false);
+    }
 
     public void ListPlacable(Simplest metaLevel)
     {
+        _mode = Mode.PLACE;
         MetaLevel = metaLevel;
         _rotated = false;
-
         Title.Text = "Which gem?";
+
         // header
         GemEntry gemEntry = new GemEntry(null);
         OuterVBox.AddChild(gemEntry);
         OuterVBox.MoveChild(gemEntry, 1);
+        gemEntry.PresetFiveSmallMerged();
         gemEntry.MyGemUI.Empty();
         string wandName = GameState.Persistent.MyWand.DisplayName();
         gemEntry.Labels[0].BbcodeText = (
@@ -90,83 +118,64 @@ public class GemListScene : WindowDialog
             + $"[color=aqua]In {wandName}[/color] /\n"
             + "[color=yellow]In Custom Gems[/color][/center]"
         );
-        gemEntry.ExpandFirstLabel(true);
 
-        ListAllNonCG();
-        ListAllCGs();
-    }
-    public void ListAllNonCG()
-    {
-        Gem gem;
-        GemEntry gemEntry;
-        int n;
-
-        gem = new Gem.RemoveGem();
+        Gem gem = new Gem.RemoveGem();
         gemEntry = Add(gem);
         FillEntryRemove(gemEntry, gem);
 
-        if (
-            GameState.Persistent.HasGems.TryGetValue("addOne", out n)
-            && n != 0
-        )
-        {
-            gem = new Gem.AddOne();
-            gemEntry = Add(gem);
-            FillEntryInStock(gemEntry, gem);
-        }
-        if (
-            GameState.Persistent.HasGems.TryGetValue("weakMult", out n)
-            && n != 0
-        )
-        {
-            gem = new Gem.WeakMult();
-            gemEntry = Add(gem);
-            FillEntryInStock(gemEntry, gem);
-        }
-        if (
-            GameState.Persistent.HasGems.TryGetValue("focus", out n)
-            && n != 0
-        )
-        {
-            gem = new Gem.Focus(new PointInt(0, 1));
-            gemEntry = Add(gem);
-            FillEntryInStock(gemEntry, gem);
-        }
-        if (
-            GameState.Persistent.HasGems.TryGetValue("mirror", out n)
-            && n != 0
-        )
-        {
-            gem = new Gem.Mirror(true);
-            gemEntry = Add(gem);
-            FillEntryInStock(gemEntry, gem);
-        }
-        if (
-            GameState.Persistent.HasGems.TryGetValue("stochastic", out n)
-            && n != 0
-        )
-        {
-            gem = new Gem.Stochastic(true);
-            gemEntry = Add(gem);
-            FillEntryInStock(gemEntry, gem);
-        }
+        ListGems(AllBuyableGems());
+        ListGems(AllBuyableCGs());
     }
-
-    public void ListAllCGs()
+    public List<Gem> AllBuyableGems()
     {
-        GemEntry gemEntry;
+        List<Gem> gems = new List<Gem> {
+            new Gem.AddOne(),
+            new Gem.WeakMult(),
+            new Gem.Focus(new PointInt(0, 1)),
+            new Gem.Mirror(true),
+            new Gem.Stochastic(true),
+        };
+        return gems;
+    }
+    public List<Gem> AllBuyableCGs()
+    {
+        List<Gem> gems = new List<Gem>();
         if (GameState.Persistent.MyTypelessGem is CustomGem typeless)
         {
-            gemEntry = Add(typeless);
-            FillEntryInStock(gemEntry, typeless);
+            gems.Add(typeless);
         }
         foreach (var entry in GameState.Persistent.HasCustomGems)
         {
-            var (n, cG) = entry.Value;
-            if (n != 0)
+            gems.Add(entry.Value.Item2);
+        }
+        return gems;
+    }
+
+    public void ListGems(List<Gem> gems)
+    {
+        foreach (Gem gem in gems)
+        {
+            if (
+                _mode == Mode.PLACE
+                && CountGemsOwned(gem).Equals(Simplest.Zero())
+            )
+                continue;
             {
-                gemEntry = Add(cG);
-                FillEntryInStock(gemEntry, cG);
+                GemEntry gemEntry = Add(gem);
+                switch (_mode)
+                {
+                    case Mode.BUY:
+                        FillEntryShop(gemEntry, gem);
+                        break;
+                    case Mode.PLACE:
+                        FillEntryInStock(gemEntry, gem);
+                        break;
+                    case Mode.EDIT:
+                        FillEntryEdit(gemEntry, gem);
+                        break;
+                    default:
+                        throw new Shared.ValueError();
+                }
             }
         }
     }
@@ -180,18 +189,18 @@ public class GemListScene : WindowDialog
         switch (gem)
         {
             case Gem.Focus _:
-                Add(new Gem.Focus(new PointInt(1, 0)));
-                Add(new Gem.Focus(new PointInt(-1, 0)));
-                Add(new Gem.Focus(new PointInt(0, 1)));
-                Add(new Gem.Focus(new PointInt(0, -1)));
+                AddAndThisWay(new Gem.Focus(new PointInt(1, 0)));
+                AddAndThisWay(new Gem.Focus(new PointInt(-1, 0)));
+                AddAndThisWay(new Gem.Focus(new PointInt(0, 1)));
+                AddAndThisWay(new Gem.Focus(new PointInt(0, -1)));
                 break;
             case Gem.Stochastic _:
-                Add(new Gem.Stochastic(true));
-                Add(new Gem.Stochastic(false));
+                AddAndThisWay(new Gem.Stochastic(true));
+                AddAndThisWay(new Gem.Stochastic(false));
                 break;
             case Gem.Mirror _:
-                Add(new Gem.Mirror(true));
-                Add(new Gem.Mirror(false));
+                AddAndThisWay(new Gem.Mirror(true));
+                AddAndThisWay(new Gem.Mirror(false));
                 break;
             default:
                 return false;
@@ -205,24 +214,27 @@ public class GemListScene : WindowDialog
         CustomGem cG = gem as CustomGem;
         if (!(gem is Gem.RemoveGem))
         {
-            var (nInWand, nInCGs, nAvailable) = CountGems(gem);
-            if (nAvailable <= Simplest.Zero())
+            if (_mode == Mode.PLACE)
             {
-                // No gem available
-                return;
-            }
-            if (
-                cG != null
-                && cG.MetaLevel >= MetaLevel
-                && cG.MetaLevel.MyRank == Rank.FINITE
-            )
-            {
-                // Gem type illegal
-                return;
+                var (nInWand, nInCGs, nAvailable) = CountGems(gem);
+                if (nAvailable <= Simplest.Zero())
+                {
+                    // No gem available
+                    return;
+                }
+                if (
+                    cG != null
+                    && cG.MetaLevel >= MetaLevel
+                    && cG.MetaLevel.MyRank == Rank.FINITE
+                )
+                {
+                    // Gem type illegal
+                    return;
+                }
             }
         }
         Selected = (_gems[gemI]);
-        if (cG == null && !_rotated)
+        if (_mode == Mode.PLACE && cG == null && !_rotated)
         {
             _rotated = true;
             if (AskRotate())
@@ -231,7 +243,7 @@ public class GemListScene : WindowDialog
         Hide();
     }
 
-    private Simplest CountGemsOwned(Gem gem)
+    public static Simplest CountGemsOwned(Gem gem)
     {
         if (gem is CustomGem cG)
         {
@@ -323,29 +335,52 @@ public class GemListScene : WindowDialog
         return (nInWand, nInCGs, nAvailable);
     }
 
-    public void ListEditables()
+    public void ListEditable()
     {
+        _mode = Mode.EDIT;
         Title.Text = "Which one to design?";
-        MetaLevel = Simplest.W();
 
         Wand wand = GameState.Persistent.MyWand;
         GemEntry gemEntry = new GemEntry(null);
+        gemEntry.PresetOneBig();
+        gemEntry.Pad();
         MaskButton maskButton = new MaskButton(gemEntry);
         VBox.AddChild(maskButton);
         maskButton.Mask.Connect(
             "pressed", this, "OnClickWand"
         );
         gemEntry.MyGemUI.Button.TextureNormal = wand.Texture();
-        gemEntry.ExpandFirstLabel(false);
         gemEntry.Labels[0].BbcodeText = wand.DisplayName();
 
-        ListAllCGs();
+        ListGems(AllBuyableCGs());
     }
 
     public void OnClickWand()
     {
         Selected = GameState.Persistent.MyWand;
         Hide();
+    }
+
+    public void ListBuyable()
+    {
+        _mode = Mode.BUY;
+        Title.Text = "Gem shop";
+
+        // header
+        GemEntry gemEntry = new GemEntry(null);
+        OuterVBox.AddChild(gemEntry);
+        OuterVBox.MoveChild(gemEntry, 1);
+        gemEntry.PresetBigSmallMoney();
+        gemEntry.MyGemUI.Empty();
+        gemEntry.Labels[1].BbcodeText = (
+            "[center][color=green]Owned[/color][/center]"
+        );
+        gemEntry.Labels[2].BbcodeText = (
+            "[center][color=yellow]Price[/color][/center]"
+        );
+
+        ListGems(AllBuyableGems());
+        ListGems(AllBuyableCGs());
     }
 
     private void Finish()

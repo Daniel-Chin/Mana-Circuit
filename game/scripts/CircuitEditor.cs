@@ -37,7 +37,7 @@ public class CircuitEditor : WindowDialog
         _gemList.Connect(
             "finished", this, "onGemListFinish"
         );
-        _gemList.ListEditables();
+        _gemList.ListEditable();
         _gemList.PopupCentered();
     }
 
