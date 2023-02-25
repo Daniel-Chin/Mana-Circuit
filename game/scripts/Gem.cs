@@ -171,7 +171,7 @@ public abstract class Gem : MagicItem
         {
             if (inCG)
                 return "Mana always enters from here.";
-            return "Mana radiator. You can see it blink at random intervals.";
+            return "Mana radiator. Emit 1 mana every now and then.";
         }
     }
     public class Drain : Gem
