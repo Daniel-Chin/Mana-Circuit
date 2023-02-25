@@ -29,7 +29,25 @@ public abstract class Wand : MagicItem, JSONable
         throw new Shared.ValueError();
     }
     public abstract Wand UpgradeInto();
-    public abstract Simplest Price();
+    public void Salvage(Wand old, PointInt offset)
+    {
+        for (int i = 0; i < old.MyCircuit.Size.IntX; i++)
+        {
+            for (int j = 0; j < old.MyCircuit.Size.IntY; j++)
+            {
+                Gem gem = old.MyCircuit.Field[i, j];
+                if (
+                    gem == null
+                    || gem is Gem.Wall
+                    || gem is Gem.Source
+                    || gem is Gem.Drain
+                )
+                    continue;
+                PointInt newLocation = new PointInt(i, j) + offset;
+                MyCircuit.Add(gem, newLocation);
+            }
+        }
+    }
 
     public void ToJSON(StreamWriter writer)
     {
@@ -136,6 +154,48 @@ public abstract class Wand : MagicItem, JSONable
 
             Gem drain = new Gem.Drain();
             c.Add(drain, new PointInt(c.Size.IntX - 1, 1));
+
+            MyCircuit = c;
+        }
+
+        public override Wand UpgradeInto()
+        {
+            Guitar guitar = new Guitar();
+            guitar.Init();
+            guitar.Salvage(this, new PointInt(1, 1));
+            return guitar;
+        }
+    }
+
+    public class Guitar : Wand
+    {
+        public override string Name()
+        {
+            return "guitar";
+        }
+        public override string DisplayName()
+        {
+            return "Guitar";
+        }
+        public override void Init()
+        {
+            Circuit c = new Circuit(new PointInt(5, 5));
+            for (int i = 0; i < c.Size.IntX; i++)
+            {
+                c.Add(new Gem.Wall(), new PointInt(i, 0), false);
+                c.Add(new Gem.Wall(), new PointInt(i, c.Size.IntY - 1), false);
+            }
+            c.Add(new Gem.Wall(), new PointInt(2, 1), false);
+            c.Add(new Gem.Wall(), new PointInt(3, 1), false);
+            c.Add(new Gem.Wall(), new PointInt(4, 1), false);
+            c.Add(new Gem.Wall(), new PointInt(4, 3), false);
+
+            c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 1));
+            c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 2));
+            c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 3));
+
+            Gem drain = new Gem.Drain();
+            c.Add(drain, new PointInt(4, 2));
 
             MyCircuit = c;
         }

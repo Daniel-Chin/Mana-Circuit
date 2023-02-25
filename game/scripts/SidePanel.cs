@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Diagnostics;
 
 public class SidePanel : PanelContainer
 {
@@ -28,6 +29,8 @@ public class SidePanel : PanelContainer
         }
         if (MyCircuitUI != null)
         {
+            if (MyCircuitUI.MyCircuit == wand.MyCircuit)
+                return;
             MyCircuitUI.QueueFree();
         }
         MyCircuitUI = new CircuitUI(wand, 0, false, false);

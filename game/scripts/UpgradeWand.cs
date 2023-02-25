@@ -40,13 +40,13 @@ public class UpgradeWand : WindowDialog
         Button buy = new Button();
         hBox.AddChild(buy);
         buy.Text = "  Upgrade!  ";
-        buy.Disabled = GameState.Persistent.Money >= NewWand.Price();
+        buy.Disabled = !(GameState.Persistent.Money >= PriceOf(NewWand));
         buy.Connect("pressed", this, "Buy");
 
         RichTextLabel priceLabel = new RichTextLabel();
         hBox.AddChild(priceLabel);
         priceLabel.BbcodeEnabled = true;
-        priceLabel.BbcodeText = $"[color=yellow]${MathBB.Build(NewWand.Price())}[/color]";
+        priceLabel.BbcodeText = $"[color=yellow]${MathBB.Build(PriceOf(NewWand))}[/color]";
         priceLabel.RectMinSize = new Vector2(150, 0);
 
         Button leave = new Button();
@@ -71,7 +71,7 @@ public class UpgradeWand : WindowDialog
     {
         GameState.Persistent.Money = Simplest.Eval(
             GameState.Persistent.Money, Operator.MINUS,
-            NewWand.Price()
+            PriceOf(NewWand)
         );
         GameState.Persistent.MyWand = NewWand;
         Main.Singleton.WandReplaced();
@@ -84,5 +84,16 @@ public class UpgradeWand : WindowDialog
     public void OnPopupHide()
     {
         Leave();
+    }
+
+    private Simplest PriceOf(Wand wand)
+    {
+        switch (wand)
+        {
+            case Wand.Guitar _:
+                return new Simplest(Rank.FINITE, 13);
+            default:
+                throw new Shared.TypeError();
+        }
     }
 }

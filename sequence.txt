@@ -24,11 +24,9 @@ $9 -> 2nd +1 gem
 
 $13 -> upgrade wand
     three radiators
-    x!x
-    oox
-    oox
-    ooo
-    ^^^
+    >oxxx
+    >ooo!
+    >ooox
 
 $10 -> focus
 $7 -> mirror

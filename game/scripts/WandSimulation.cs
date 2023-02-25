@@ -78,7 +78,7 @@ public class WandSimulation
         Gem gem = MyWand.MyCircuit.Field[x, y];
         var tinter = TheSidePanel.MyCircuitUI.GemUIs[x, y].Tinter;
         float tintBy = BLING;
-        if (gem == null)
+        if (gem == null || gem is Gem.Wall)
             tintBy *= .4f;
         tinter.Color = new Color(
             0, 1, 1,
