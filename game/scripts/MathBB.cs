@@ -56,14 +56,29 @@ public class MathBB
         switch (simplest.MyRank)
         {
             case Rank.FINITE:
+                if (k > 1000000000)
+                {
+                    sB.Append(k.ToString("e2"));
+                    break;
+                }
+                if (k > 1000000)
+                {
+                    sB.Append((int)k / 1000000);
+                    sB.Append('M');
+                    break;
+                }
+                if (k > 1000)
+                {
+                    sB.Append((int)k / 1000);
+                    sB.Append('K');
+                    break;
+                }
                 if (k % 1 == 0)
                 {
                     sB.Append((int)k);
+                    break;
                 }
-                else
-                {
-                    sB.Append(k.ToString("#.#"));
-                }
+                sB.Append(k.ToString("#.#"));
                 break;
             case Rank.W_TO_THE_K:
                 sB.Append(new RaisableChar('w', 0));
