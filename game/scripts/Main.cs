@@ -26,7 +26,7 @@ public class Main : Node2D
         MyLowPanel = GetNode<LowPanel>("Overlay/VBox/LowPanel");
         MyRevive = GetNode<Revive>("Overlay/VBox2/HBox/Revive");
         MyWorld.Connect(
-            "new_wand", this, "NewWand"
+            "wand_replaced", this, "WandReplaced"
         );
         MyWorld.Connect(
             "player_died", this, "PlayerDied"
@@ -35,7 +35,7 @@ public class Main : Node2D
         SaveLoad.Load();
         // GameState.Persistent.DebugInit();
         GameState.Transient.Update();
-        NewWand();
+        WandReplaced();
         MyWorld.UpdateBack();
         MySidePanel.Update();
         Director.CheckEvent();
@@ -47,7 +47,7 @@ public class Main : Node2D
         Director.Process(delta);
     }
 
-    public void NewWand()
+    public void WandReplaced()
     {
         MySidePanel.Update();
         MyMageUI.Hold(GameState.Persistent.MyWand);

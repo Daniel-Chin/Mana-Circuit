@@ -28,6 +28,8 @@ public abstract class Wand : MagicItem, JSONable
         }
         throw new Shared.ValueError();
     }
+    public abstract Wand UpgradeInto();
+    public abstract Simplest Price();
 
     public void ToJSON(StreamWriter writer)
     {
@@ -104,6 +106,11 @@ public abstract class Wand : MagicItem, JSONable
             c.Add(new Gem.Focus(new PointInt(1, 0)), new PointInt(3, 4));
             MyCircuit = c;
         }
+
+        public override Wand UpgradeInto()
+        {
+            throw new NotImplementedException();
+        }
     }
     public class Staff : Wand, SpawnableSpecial
     {
@@ -131,6 +138,11 @@ public abstract class Wand : MagicItem, JSONable
             c.Add(drain, new PointInt(c.Size.IntX - 1, 1));
 
             MyCircuit = c;
+        }
+
+        public override Wand UpgradeInto()
+        {
+            throw new NotImplementedException();
         }
     }
 }

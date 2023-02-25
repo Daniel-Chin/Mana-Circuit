@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class World : Node2D
 {
-    [Signal] public delegate void new_wand();
+    [Signal] public delegate void wand_replaced();
     [Signal] public delegate void player_died();
     public TextureRect BackRect;
     public MageUI MyMageUI;
@@ -333,7 +333,7 @@ public class World : Node2D
         GameState.Persistent.MyWand = (Wand)dUI.MySpawnable;
         SpawnedSpecialUIs.Remove(dUI);
         dUI.QueueFree();
-        EmitSignal("new_wand");
+        EmitSignal("wand_replaced");
         GameState.Transient.NextSpawn = null;
         Director.StartEvent(new MagicEvent.Staff());
     }

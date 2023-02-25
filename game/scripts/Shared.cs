@@ -67,6 +67,14 @@ public class Shared
         if (!x)
             throw new AssertionFailed();
     }
+
+    public static DynamicFont NewFont(int fontSize)
+    {
+        DynamicFont font = new DynamicFont();
+        font.FontData = GD.Load<DynamicFontData>("res://misc/font/m5x7.ttf");
+        font.Size = fontSize;
+        return font;
+    }
 }
 
 public abstract class MagicItem
