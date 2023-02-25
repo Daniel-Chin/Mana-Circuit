@@ -26,22 +26,22 @@ public class LowPanel : PanelContainer
 
     public void Display(string message)
     {
-        bool inYellow = false;
+        bool inCyan = false;
         Label.Clear();
         foreach (var part in message.Split('*'))
         {
             Label.AppendBbcode(part);
-            if (inYellow)
+            if (inCyan)
             {
                 Label.Pop();
             }
             else
             {
-                Label.PushColor(Colors.Yellow);
+                Label.PushColor(Colors.LightCyan);
             }
-            inYellow = !inYellow;
+            inCyan = !inCyan;
         }
-        if (inYellow)
+        if (inCyan)
             Label.Pop();
         Label.PercentVisible = 0;
         _timeElasped = 0;
