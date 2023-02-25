@@ -246,7 +246,7 @@ public class CircuitUI : AspectRatioContainer
         _GemList.Connect(
             "finished", this, "onGemListFinish"
         );
-        _GemList.ListAll(MetaLevel);
+        _GemList.ListPlacable(MetaLevel);
         _GemList.PopupCentered();
     }
 
