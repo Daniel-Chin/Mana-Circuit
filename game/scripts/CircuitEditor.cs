@@ -49,7 +49,7 @@ public class CircuitEditor : WindowDialog
             return;
         }
         Editee = _gemList.Selected;
-        MyCircuitUI = new CircuitUI(Editee, 0, false);
+        MyCircuitUI = new CircuitUI(Editee, 0, true, true);
         VBox.AddChild(MyCircuitUI);
         MyCircuitUI.Connect(
             "modified", this, "CircuitModified"

@@ -12,15 +12,17 @@ public class GemUI : AspectRatioContainer
     private Gem _gem = null;
     public int RecursionDepth;
     public bool IsInCG;
+    public bool SimParticles;
     private static Shader _flipper = GD.Load<Shader>("res://Flip.gdshader");
     public GemUI() : base() { }
     public GemUI(
-        Gem gem, int recursionDepth, bool isInCG
+        Gem gem, int recursionDepth, bool isInCG, bool simParticles
     ) : base()
     {
         _gem = gem;
         RecursionDepth = recursionDepth;
         IsInCG = isInCG;
+        SimParticles = simParticles;
         Ratio = 1f;
         SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
@@ -45,7 +47,7 @@ public class GemUI : AspectRatioContainer
         {
             filename = "transparent";
             MyCircuitUI = new CircuitUI(
-                cG, RecursionDepth + 1, false
+                cG, RecursionDepth + 1, false, SimParticles
             );
             AddChild(MyCircuitUI);
             MoveChild(MyCircuitUI, 0);

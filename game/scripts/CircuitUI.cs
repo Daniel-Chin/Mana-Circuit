@@ -28,7 +28,8 @@ public class CircuitUI : AspectRatioContainer
     public GemUI[,] GemUIs;
     public MagicItem MyMagicItem;
     public Simplest MetaLevel;
-    public bool InSidePanel;
+    public bool DoMouseEvent;
+    public bool SimParticles;
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -85,12 +86,13 @@ public class CircuitUI : AspectRatioContainer
     public CircuitUI() : base() { }
     public CircuitUI(
         MagicItem magicItem, int recursionDepth,
-        bool inSidePanel
+        bool doMouseEvent, bool simParticles
     ) : base()
     {
         MyMagicItem = magicItem;
         RecursionDepth = recursionDepth;
-        InSidePanel = inSidePanel;
+        DoMouseEvent = doMouseEvent;
+        SimParticles = simParticles;
         switch (MyMagicItem)
         {
             case Wand wand:
@@ -153,10 +155,13 @@ public class CircuitUI : AspectRatioContainer
                     continue;
                 }
                 Gem gem = MyCircuit.Field[i, j];
-                GemUI gemUI = new GemUI(gem, RecursionDepth, MetaLevel >= Simplest.Zero());
+                GemUI gemUI = new GemUI(
+                    gem, RecursionDepth,
+                    MetaLevel >= Simplest.Zero(), SimParticles
+                );
                 _grid.AddChild(gemUI);
                 GemUIs[i, j] = gemUI;
-                if (!InSidePanel && RecursionDepth == 0)
+                if (DoMouseEvent && RecursionDepth == 0)
                 {
                     gemUI.Button.Connect(
                         "pressed", this, "OnClickGem",
@@ -180,8 +185,8 @@ public class CircuitUI : AspectRatioContainer
     public override void _Process(float delta)
     {
         if (
-            RecursionDepth > Shared.MAX_RECURSION
-            || InSidePanel
+            !SimParticles
+            || RecursionDepth > Shared.MAX_RECURSION
         )
             return;
         // Console.WriteLine("Process begin");
