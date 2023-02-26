@@ -90,7 +90,7 @@ public class GemListScene : WindowDialog
         Simplest nOwned = CountGemsOwned(gem);
         gemEntry.Labels[0].BbcodeText = gem.Explain(false);
         gemEntry.Labels[1].BbcodeText = $"[color=green][center]{MathBB.Build(nOwned)}[/center][/color]";
-        gemEntry.Labels[2].BbcodeText = $"[color=yellow][center]{MathBB.Build(Shop.PriceOf(gem))}[/center][/color]";
+        gemEntry.Labels[2].BbcodeText = $"[color=yellow][center]{MathBB.Build(NPC.Shop.PriceOf(gem))}[/center][/color]";
     }
     private void FillEntryEdit(GemEntry gemEntry, Gem gem)
     {
