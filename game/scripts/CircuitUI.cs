@@ -9,7 +9,7 @@ public class CircuitUI : AspectRatioContainer
     [Signal] public delegate void new_explain();
     [Signal] public delegate void modified();
     private static readonly int MAX_PARTICLES = 8;
-    private static readonly double EMIT_LAMBDA = .5;
+    private static readonly double EMIT_LAMBDA = 2;
     private static readonly double ADVECT_LAMBDA = 8;
     // poisson distribution, prob / sec
     private static readonly float ADVECT_LEN = .3f;

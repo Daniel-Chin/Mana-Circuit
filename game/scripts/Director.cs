@@ -46,12 +46,16 @@ public class Director
         NowEvent.NextStep();
     }
 
-    public static void OnSpecialSpawn()
+    public static void SpecialSpawned()
     {
 
     }
-    public static void OnSpecialDespawn(SpawnableSpecial s)
+    public static void SpecialDespawned(
+        SpawnableSpecial s, bool exposed
+    )
     {
+        if (! exposed)
+            return;
         if (GameState.Transient.NextSpawn == null)
             return;
         if (GameState.Transient.NextSpawn is Wand.Staff)

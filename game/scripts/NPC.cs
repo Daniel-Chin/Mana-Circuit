@@ -106,6 +106,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
         public void Bye() {
             SaveLoad.Save();
             Director.UnpauseWorld();
+            Main.Singleton.MySidePanel.MyCircuitUI.Rebuild();
         }
     }
 }

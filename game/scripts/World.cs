@@ -68,9 +68,11 @@ public class World : Node2D
             GameState.Transient.Update();
             UpdateBack();
             MyMageUI.Walking();
+            Vector2 halfSize = BackRect.RectSize * .5f;
             foreach (SpawnableSpecialUI s in SpawnedSpecialUIs)
             {
                 s.Position -= displace * BackRect.RectSize.x;
+                s.Moved(halfSize);
             }
             foreach (Money m in Moneys)
             {
@@ -197,7 +199,7 @@ public class World : Node2D
             {
                 Console.WriteLine("Spawning " + GameState.Transient.NextSpawn);
                 Spawn(GameState.Transient.NextSpawn, direction);
-                Director.OnSpecialSpawn();
+                Director.SpecialSpawned();
             }
         }
         // spawn non-event
@@ -392,7 +394,9 @@ public class World : Node2D
     {
         SpawnedSpecialUIs.Remove(ui);
         ui.QueueFree();
-        Director.OnSpecialDespawn(ui.MySpawnable);
+        Director.SpecialDespawned(
+            ui.MySpawnable, ui.Exposed
+        );
     }
 
     private void HitEnemy(Attack attack, EnemyUI enemyUI)
