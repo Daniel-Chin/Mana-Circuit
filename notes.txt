@@ -97,4 +97,10 @@ Gem Expert
     if x >= w^2, "You see, if you hit me with a class-w^x attack, I will unlock Meta^x Custom Gems."
 
 Acknowledge
-    font m5x7. 
+    font m5x7
+    Godot 3.5.1 
+    C#
+Related works
+    VSauce. "How To Count Past Infinity". https://youtu.be/SrU9YDoXE88
+    Miner Gun Builder
+    Patrick's Parabox
