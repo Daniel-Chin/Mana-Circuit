@@ -220,6 +220,33 @@ public class GameState
             }
             return false;
         }
+
+        public Simplest CountGemsOwned(Gem gem)
+        {
+            if (gem is CustomGem cG)
+            {
+                (int, CustomGem) HasCG = (0, null);
+                if (cG.MetaLevel.MyRank == Rank.FINITE)
+                {
+                    if (HasCustomGems.TryGetValue(
+                        (int)cG.MetaLevel.K, out HasCG
+                    ))
+                        return new Simplest(Rank.FINITE, HasCG.Item1);
+                    return Simplest.Zero();
+                }
+                else
+                {
+                    // typeless
+                    if (MyTypelessGem == null)
+                        return Simplest.Zero();
+                    return Simplest.W();
+                }
+            }
+            int n = 0;
+            if (!HasGems.TryGetValue(gem.Name(), out n))
+                n = 0;
+            return new Simplest(Rank.FINITE, n);
+        }
     }
 
     public class TransientClass

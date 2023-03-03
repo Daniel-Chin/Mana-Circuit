@@ -92,7 +92,7 @@ public class GemListScene : WindowDialog
     {
         gemEntry.PresetBigMidMoney();
         gemEntry.Pad();
-        Simplest nOwned = CountGemsOwned(gem);
+        Simplest nOwned = GameState.Persistent.CountGemsOwned(gem);
         Simplest price = NPC.Shop.PriceOf(gem);
         string priceTag;
         if (price <= GameState.Persistent.Money) {
@@ -170,7 +170,7 @@ public class GemListScene : WindowDialog
         {
             if (
                 _mode == Mode.PLACE
-                && CountGemsOwned(gem).Equals(Simplest.Zero())
+                && GameState.Persistent.CountGemsOwned(gem).Equals(Simplest.Zero())
             )
                 continue;
             {
@@ -267,33 +267,6 @@ public class GemListScene : WindowDialog
         }
     }
 
-    public static Simplest CountGemsOwned(Gem gem)
-    {
-        if (gem is CustomGem cG)
-        {
-            (int, CustomGem) HasCG = (0, null);
-            if (cG.MetaLevel.MyRank == Rank.FINITE)
-            {
-                if (GameState.Persistent.HasCustomGems.TryGetValue(
-                    (int)cG.MetaLevel.K, out HasCG
-                ))
-                    return new Simplest(Rank.FINITE, HasCG.Item1);
-                return Simplest.Zero();
-            }
-            else
-            {
-                // typeless
-                if (GameState.Persistent.MyTypelessGem == null)
-                    return Simplest.Zero();
-                return Simplest.W();
-            }
-        }
-        int n = 0;
-        if (!GameState.Persistent.HasGems.TryGetValue(gem.Name(), out n))
-            n = 0;
-        return new Simplest(Rank.FINITE, n);
-    }
-
     private int CountGemsInCircuit(Gem gem, Circuit circuit)
     {
         int acc = 0;
@@ -344,7 +317,7 @@ public class GemListScene : WindowDialog
     {
         int nInWand = CountGemsInWand(gem);
         int nInCGs = CountGemsInCGs(gem);
-        Simplest nOwned = CountGemsOwned(gem);
+        Simplest nOwned = GameState.Persistent.CountGemsOwned(gem);
         Simplest nAvailable;
         if (nOwned.MyRank == Rank.FINITE)
         {

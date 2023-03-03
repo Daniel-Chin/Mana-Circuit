@@ -1,3 +1,5 @@
+using System;
+
 public class Director
 {
     public static Main MainUI;
@@ -23,20 +25,19 @@ public class Director
             GameState.Transient.EnemiesTillNextSpawn = 0;
             return;
         }
+        if (SpawnShopIf(Simplest.Finite(4), (new Gem.AddOne(), 0)))
+            return;
+        if (SpawnShopIf(Simplest.Finite(6), (new Gem.WeakMult(), 0)))
+            return;
+        if (SpawnShopIf(Simplest.Finite(9), (new Gem.AddOne(), 1)))
+            return;
         if (
-            GameState.Persistent.Money >= Simplest.Finite(4) &&
-            GameState.Persistent.HasGems["addOne"] == 0
+            GameState.Persistent.MyWand is Wand.Staff
+            && SpawnShopIf(Simplest.Finite(13))
         )
-        {
-            if (GameState.Transient.NextSpawn is NPC.Shop) 
-            {
-                ;
-            } else {
-                Shared.Assert(GameState.Transient.NextSpawn == null);
-                GameState.Transient.NextSpawn = new NPC.Shop();
-                GameState.Transient.EnemiesTillNextSpawn = 0;
-            }
-        }
+            return;
+        if (FillGuitar())
+            return;
     }
 
     public static void StartEvent(MagicEvent e)
@@ -48,7 +49,8 @@ public class Director
 
     public static void SpecialSpawned()
     {
-
+        if (GameState.Transient.NextSpawn is NPC.WandSmith)
+            GameState.Transient.NextSpawn = null;
     }
     public static void SpecialDespawned(
         SpawnableSpecial s, bool exposed
@@ -111,5 +113,54 @@ public class Director
     }
     public static void UnpauseWorld() {
         GameState.Transient.WorldPaused = false;
+    }
+
+    private static bool SpawnShopIf(
+        Simplest money, Tuple<Gem, int> maxGems
+    ) {
+        if (!(GameState.Persistent.Money >= money))
+            return false;
+        if (maxGems is Tuple<Gem, int> _maxGems) {
+            var (gem, num) = _maxGems;
+            if (GameState.Persistent.HasGems[gem.Name()] > num)
+                return false;
+        }
+        if (GameState.Transient.NextSpawn is NPC.Shop) 
+        {
+            ;
+        } else {
+            Shared.Assert(GameState.Transient.NextSpawn == null);
+            GameState.Transient.NextSpawn = new NPC.Shop();
+            GameState.Transient.EnemiesTillNextSpawn = 0;
+        }
+        return true;
+    }
+    private static bool SpawnShopIf(
+        Simplest money
+    ) {
+        return SpawnShopIf(money, null);
+    }
+    private static bool SpawnShopIf(
+        Simplest money, (Gem, int) maxGems
+    ) {
+        return SpawnShopIf(money, new Tuple<Gem, int>(
+            maxGems.Item1, maxGems.Item2
+        ));
+    }
+
+    private static bool FillGuitar() {
+        if (! (GameState.Persistent.MyWand is Wand.Guitar))
+            return false;
+        double needMoney = 0;
+        Gem gem;
+        gem = new Gem.Focus(null);
+        if (GameState.Persistent.CountGemsOwned(gem).Equals(Simplest.Zero()))
+            needMoney += NPC.Shop.PriceOf(gem).K;
+        gem = new Gem.Mirror(false);
+        if (GameState.Persistent.CountGemsOwned(gem) <= Simplest.One())
+            needMoney += NPC.Shop.PriceOf(gem, 1).K;
+        if (GameState.Persistent.CountGemsOwned(gem).Equals(Simplest.Zero()))
+            needMoney += NPC.Shop.PriceOf(gem, 0).K;
+        return SpawnShopIf(Simplest.Finite(needMoney));
     }
 }

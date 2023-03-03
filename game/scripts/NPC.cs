@@ -46,7 +46,10 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
         }
         public static Simplest PriceOf(Gem gem)
         {
-            int k = (int)GemListScene.CountGemsOwned(gem).K;
+            return PriceOf(gem, (int)GameState.Persistent.CountGemsOwned(gem).K);
+        }
+        public static Simplest PriceOf(Gem gem, int owned) {
+            int k = owned;
             switch (gem)
             {
                 case Gem.AddOne _:
