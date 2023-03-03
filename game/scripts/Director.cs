@@ -129,6 +129,7 @@ public class Director
         {
             ;
         } else {
+            Console.WriteLine("Shop as event");
             if (GameState.Transient.NextSpawn == null) {
                 GameState.Transient.NextSpawn = new NPC.Shop();
                 GameState.Transient.EnemiesTillNextSpawn = 0;
@@ -162,6 +163,8 @@ public class Director
             needMoney += NPC.Shop.PriceOf(gem, 1).K;
         if (GameState.Persistent.CountGemsOwned(gem).Equals(Simplest.Zero()))
             needMoney += NPC.Shop.PriceOf(gem, 0).K;
+        if (needMoney == 0)
+            return false;
         return SpawnShopIf(Simplest.Finite(needMoney));
     }
 }

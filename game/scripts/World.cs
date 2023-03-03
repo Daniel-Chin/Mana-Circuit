@@ -259,6 +259,11 @@ public class World : Node2D
                 ui.MySprite.Texture = GD.Load<Texture>("res://texture/wand/staff.png");
                 break;
             case NPC npc:
+                // unique
+                foreach (var _ui in SpawnedSpecialUIs) {
+                    if (s.GetType() == _ui.MySpawnable.GetType())
+                        return;
+                }
                 ui = new NPCUI(npc);
                 break;
             default:
