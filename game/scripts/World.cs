@@ -431,7 +431,7 @@ public class World : Node2D
             amount = new Simplest(Rank.FINITE, Math.Ceiling(
                 enemyHP.K * Params.MONEY_DROP_MULT
             ));
-            if (amount.K < 12)
+            if (amount.K < 7)
             {
                 for (int i = 0; i < amount.K; i++)
                 {
