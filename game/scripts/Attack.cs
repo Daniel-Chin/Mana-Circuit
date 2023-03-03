@@ -37,8 +37,9 @@ public class Attack : ManaTrail, SpawnableUI
             return true;
         }
         double interval = 1 / (
-            // Math.Log(Mana.K) * 4
-            Mana.K * .3
+            // Math.Log(Mana.K) + .3
+            Math.Pow(Mana.K, .8) * .3
+            // Mana.K * .3
             + Params.ATTACK_FLY_BASE_SPEED
         );
         if (_time_since_last_advance >= interval)
