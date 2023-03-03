@@ -220,6 +220,9 @@ public class World : Node2D
                 ui = new DroppedItemUI(staff);
                 ui.MySprite.Texture = GD.Load<Texture>("res://texture/wand/staff.png");
                 break;
+            case NPC npc:
+                ui = new NPCUI(npc);
+                break;
             default:
                 throw new Shared.TypeError();
         }
@@ -324,7 +327,13 @@ public class World : Node2D
     }
     private void CollidedWithNPC(NPCUI npcUI)
     {
-        // todo
+        switch (npcUI.MySpawnable) {
+            case NPC.Shop shop:
+                shop.Enter();
+                break;
+            default:
+                throw new Shared.TypeError();
+        }
     }
     private void CollidedWithDroppedItem(DroppedItemUI dUI)
     {

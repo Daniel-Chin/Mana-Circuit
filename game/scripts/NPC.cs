@@ -62,6 +62,13 @@ public abstract class NPC : SpawnableSpecial
                     throw new Shared.TypeError();
             }
         }
+        public void Enter() {
+            GameState.Transient.WorldPaused = true;
+            Director.MainUI.MyLowPanel.SetFace(this);
+            Director.MainUI.MyLowPanel.Display(
+                "Welcome to the shop!"
+            );
+        }
     }
     public class WandSmith : NPC
     {

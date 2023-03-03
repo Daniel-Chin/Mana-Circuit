@@ -7,6 +7,7 @@ public interface SpawnableSpecial
 
 public interface SpawnableUI
 {
+    // money, attack
 }
 
 public class SpawnableSpecialUI : Node2D, SpawnableUI

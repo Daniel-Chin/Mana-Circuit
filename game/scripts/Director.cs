@@ -50,8 +50,24 @@ public class Director
 
     public static void Process(float dt)
     {
-        if (NowEvent != null)
+        if (NowEvent != null) {
             NowEvent.Process(dt);
+            return;
+        }
+        if (
+            GameState.Persistent.Money >= Simplest.Finite(4) &&
+            GameState.Persistent.HasGems["addOne"].Equals(Simplest.Zero())
+        )
+        {
+            if (GameState.Transient.NextSpawn is NPC.Shop) 
+            {
+                ;
+            } else {
+                Shared.Assert(GameState.Transient.NextSpawn == null);
+                GameState.Transient.NextSpawn = new NPC.Shop();
+                GameState.Transient.EnemiesTillNextSpawn = 0;
+            }
+        }
     }
 
     public static void EventFinished()

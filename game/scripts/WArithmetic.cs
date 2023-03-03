@@ -533,6 +533,11 @@ public class Simplest : JSONable
         return new Simplest(Rank.W_TO_THE_K, 1);
     }
 
+    public static Simplest Finite(double k)
+    {
+        return new Simplest(Rank.FINITE, k);
+    }
+
     public static Simplest Bottom(Rank rank)
     {
         switch (rank)
