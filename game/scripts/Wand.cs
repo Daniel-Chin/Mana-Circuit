@@ -208,7 +208,47 @@ public abstract class Wand : MagicItem, JSONable
 
         public override Wand UpgradeInto()
         {
-            throw new NotImplementedException();
+            Ricecooker ricecooker = new Ricecooker();
+            ricecooker.Init();
+            ricecooker.Salvage(this, new PointInt(0, 0));
+            return ricecooker;
+        }
+    }
+
+    public class Ricecooker : Wand
+    {
+        public override string Name()
+        {
+            return "ricecooker";
+        }
+        public override string DisplayName()
+        {
+            return "Ricecooker";
+        }
+        public override void Init()
+        {
+            Circuit c = new Circuit(new PointInt(5, 5));
+            for (int i = 0; i < c.Size.IntX; i++)
+            {
+                c.Add(new Gem.Wall(), new PointInt(i, 0), false);
+                c.Add(new Gem.Wall(), new PointInt(i, c.Size.IntY - 1), false);
+            }
+            c.Add(new Gem.Wall(), new PointInt(4, 2), false);
+            c.Add(new Gem.Wall(), new PointInt(4, 3), false);
+
+            c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 1));
+            c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 2));
+            c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 3));
+
+            Gem drain = new Gem.Drain();
+            c.Add(drain, new PointInt(4, 1));
+
+            MyCircuit = c;
+        }
+
+        public override Wand UpgradeInto()
+        {
+            return null;
         }
     }
 }

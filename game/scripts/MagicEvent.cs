@@ -170,6 +170,34 @@ public abstract class MagicEvent : Godot.Object
                     }
                     Director.EventFinished();
                     break;
+                case 10:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Wait... Your wand is already max-tier."
+                    );
+                    _step++;
+                    break;
+                case 11:
+                    if (GameState.Transient.Mana >= Simplest.Finite(4000)) {
+                        if (GameState.Transient.Mana.MyRank == Rank.FINITE) {
+                            Director.MainUI.MyLowPanel.Display(
+                                "You should focus on customizing gems."
+                            );
+                        } else {
+                            Director.MainUI.MyLowPanel.Display(
+                                "Only the Gem Expert can help you now."
+                            );
+                        }
+                    } else {
+                        Director.MainUI.MyLowPanel.Display(
+                            "To realize its true potential, try redesigning its circuit."
+                        );
+                    }
+                    _step++;
+                    break;
+                case 12:
+                    Director.UnpauseWorld();
+                    Director.EventFinished();
+                    break;
                 default:
                     Console.WriteLine("_step " + _step);
                     throw new Shared.ValueError();
@@ -190,6 +218,11 @@ public abstract class MagicEvent : Godot.Object
                 gemListScene.PopupCentered();
             } else if (buttonID == 1) {
                 // Upgrade wand
+                if (GameState.Persistent.MyWand.UpgradeInto() == null) {
+                    _step = 10;
+                    NextStep();
+                    return;
+                }
                 UpgradeWand upgradeWand = new UpgradeWand();
                 Director.MainUI.AddChild(upgradeWand);
                 upgradeWand.Connect(

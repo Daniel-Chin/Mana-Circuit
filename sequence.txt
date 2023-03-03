@@ -49,11 +49,9 @@ once $19, jumper NPC spawns
     NPC leaves
 
 $25 -> upgrade wand
-    xx!
-    ooo
-    ooo
-    ooo
-    ^^^
+    >ooox
+    >ooox
+    >ooo!
     "Only few mages can realize its true potential."
 
 $9 -> 3rd x1.4 gem

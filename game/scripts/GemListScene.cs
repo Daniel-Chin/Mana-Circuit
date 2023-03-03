@@ -335,7 +335,7 @@ public class GemListScene : WindowDialog
     public void ListEditable()
     {
         _mode = Mode.EDIT;
-        Title.Text = "Which one to design?";
+        Title.Text = "Whose circuit to alter?";
         _lastEntry = null;
 
         Wand wand = GameState.Persistent.MyWand;

@@ -95,6 +95,8 @@ public class UpgradeWand : WindowDialog
         {
             case Wand.Guitar _:
                 return new Simplest(Rank.FINITE, 13);
+            case Wand.Ricecooker _:
+                return new Simplest(Rank.FINITE, 25);
             default:
                 throw new Shared.TypeError();
         }
