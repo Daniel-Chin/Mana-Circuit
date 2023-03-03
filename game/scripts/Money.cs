@@ -7,7 +7,7 @@ public class Money : Node2D, SpawnableUI
     public RichTextLabel Label;
     public Simplest Amount;
     private static readonly float REPEL = 5000f;
-    private static readonly float FRICTION = 200f;
+    private static readonly float FRICTION = 400f;
     public Vector2 Velocity = new Vector2(0, 0);
     public Money() : base() { }
     public Money(Simplest amount) : base()
