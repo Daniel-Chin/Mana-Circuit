@@ -24,15 +24,6 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
         }
     }
 
-    public class Inventor : NPC
-    {
-        public override string Name()
-        {
-            return "inventor";
-        }
-        public override void Collided() {
-        }
-    }
     public class Shop : NPC
     {
         public Shop() : base() {
@@ -110,6 +101,17 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
             SaveLoad.Save();
             Director.UnpauseWorld();
             Main.Singleton.MySidePanel.MyCircuitUI.Rebuild();
+        }
+    }
+
+    public class Inventor : NPC
+    {
+        public override string Name()
+        {
+            return "inventor";
+        }
+        public override void Collided() {
+            Director.StartEvent(new MagicEvent.Jumping(this));
         }
     }
 }

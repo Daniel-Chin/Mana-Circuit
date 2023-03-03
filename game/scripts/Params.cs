@@ -1,3 +1,5 @@
+using Godot;
+
 public class Params
 {
     public static readonly float TEXT_ROLL_SPEED = 34;
@@ -17,4 +19,5 @@ public class Params
     public static readonly int N_ENEMIES_AFTER_REJ_EVENT = 1;
     public static readonly float LMB_HOLD_DEADZONE = .3f;
     public static readonly double PROB_NPC_AS_NONEVENT = .2f;
+    public static readonly Vector2 SPRITE_SCALE = new Vector2(4, 4);
 }

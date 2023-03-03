@@ -1,4 +1,5 @@
 using System;
+using Godot;
 
 public abstract class MagicEvent : Godot.Object
 {
@@ -151,7 +152,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.PauseWorld();
                     Director.MainUI.MyLowPanel.SetFace(_npc);
                     Director.MainUI.MyLowPanel.Display(
-                        "Welcome to the shop!"
+                        "I sell, you buy! Welcome~"
                     );
                     Director.MainUI.MyLowPanel.SetButtons(
                         "Buy gems", "Upgrade wand"
@@ -216,6 +217,73 @@ public abstract class MagicEvent : Godot.Object
                     return "Remember: The further you go, the stronger the enemies!";
                 default:
                     throw new Shared.ValueError();
+            }
+        }
+    }
+
+    public class Jumping : MagicEvent {
+        private static readonly float ANIMATION_LENGTH = 2;
+        private int _step;
+        private float animationTime;
+        private SpawnableSpecialUI _npcUI;
+        private Sprite _sprite;
+        public Jumping(SpawnableSpecialUI npcUI)
+        {
+            _step = 0;
+            _npcUI = npcUI;
+        }
+        public override void NextStep() {
+
+            switch (_step)
+            {
+                case 0:
+                    Director.PauseWorld();
+                    Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
+                    Director.MainUI.MyLowPanel.Display(
+                        "I make skateboards as a hobby."
+                    );
+                    _step++;
+                    break;
+                case 1:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Check out my latest design: *Jumper MK-I*!!!"
+                    );
+                    _sprite = new Sprite();
+                    _sprite.Texture = GD.Load<Texture>("res://texture/misc/jumper.png");
+                    _sprite.Scale = Params.SPRITE_SCALE;
+                    Main.Singleton.MyWorld.AddChild(_sprite);
+                    _step++;
+                    animationTime = 0;
+                    Process(0);
+                    break;
+                case 3:
+                    _sprite.QueueFree();
+                    Director.MainUI.MyLowPanel.Display(
+                        "It converts 10% of your mana to jumping power."
+                    );
+                    _step++;
+                    break;
+                case 4:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Try it! Hold J to jump."
+                    );
+                    Director.UnpauseWorld();
+                    _step++;
+                    break;
+                default:
+                    throw new Shared.ValueError();
+            }
+        }
+        public override void Process(float dt) {
+            if (_step == 2) {
+                float ratio = animationTime / ANIMATION_LENGTH;
+                if (ratio > 1f) {
+                    _step ++;
+                    NextStep();
+                    return;
+                }
+                _sprite.Position = _npcUI.Position * (1f - ratio);
+                animationTime += dt;
             }
         }
     }

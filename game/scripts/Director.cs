@@ -38,6 +38,8 @@ public class Director
             return;
         if (FillGuitar())
             return;
+        if (JumperMk1())
+            return;
     }
 
     public static void StartEvent(MagicEvent e)
@@ -166,5 +168,25 @@ public class Director
         if (needMoney == 0)
             return false;
         return SpawnShopIf(Simplest.Finite(needMoney));
+    }
+
+    private static bool JumperMk1() {
+        if (GameState.Persistent.Event_JumperStage != 0)
+            return false;
+        if (GameState.Persistent.MyWand is Wand.Staff)
+            return false;
+        if (GameState.Persistent.Money <= Simplest.Finite(18))
+            return false;
+        if (GameState.Transient.NextSpawn is NPC.Inventor) 
+        {
+            ;
+        } else {
+            Console.WriteLine("Inventor as event");
+            if (GameState.Transient.NextSpawn == null) {
+                GameState.Transient.NextSpawn = new NPC.Inventor();
+                GameState.Transient.EnemiesTillNextSpawn = 0;
+            }
+        }
+        return true;
     }
 }

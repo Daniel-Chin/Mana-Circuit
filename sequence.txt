@@ -34,7 +34,7 @@ $8 -> 2nd mirror
 $9 -> 2nd x1.4 gem
 
 once $19, jumper NPC spawns
-    "Hello! I make skateboards as a hobby."
+    "I make skateboards as a hobby."
     "Check out my latest design: *Jumper MK-I*!!!"
     skateboard moves from NPC to player
     "It converts 10% of your mana to jumping power."

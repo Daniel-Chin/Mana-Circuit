@@ -21,7 +21,7 @@ public class SpawnableSpecialUI : Node2D, SpawnableUI
         MySpawnable = s;
         MySprite = new Sprite();
         AddChild(MySprite);
-        MySprite.Scale = new Vector2(4, 4);
+        MySprite.Scale = Params.SPRITE_SCALE;
         Exposed = false;
     }
     public void Moved(Vector2 viewRadius) {
