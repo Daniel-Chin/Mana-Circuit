@@ -5,7 +5,7 @@ public class Jumper {
     private static readonly float CHARGE_TIME = 1.5f;
     private static readonly float JUMP_TIME = 3f;
     private static readonly float ACC_STAGE = .3f;
-    private static readonly float FINITE_SPEED = 1f;
+    private static readonly float FINITE_SPEED = .01f;
 
     public static bool Charging;
     private static float charged;
@@ -41,16 +41,21 @@ public class Jumper {
                     - Math.Pow(.5, 2) 
                 )
             );
+            Vector2 displace;
             if (isFinite) {
-                GameState.Transient.LocationOffset += jumpDirection * FINITE_SPEED;
+                displace = jumpDirection * FINITE_SPEED * dt;
+                GameState.Transient.LocationOffset += displace;
+                Main.Singleton.MyWorld.ReverseMoveWorld(displace);
             } else {
                 if (ratio < ACC_STAGE) {
                     float speed = (float)-Math.Log(1f - ratio / ACC_STAGE);
-                    GameState.Transient.LocationOffset += jumpDirection * speed;
+                    displace = jumpDirection * speed * dt;
+                    GameState.Transient.LocationOffset += displace;
+                    Main.Singleton.MyWorld.ReverseMoveWorld(displace);
                 } else if (ratio > 1 - ACC_STAGE) {
                     float speed = (float)-Math.Log(1f - (1f - ratio) / ACC_STAGE);
-                    GameState.Transient.LocationOffset += jumpDirection * speed;
-                    Main.Singleton.MyWorld.ClearSpawns();
+                    displace = jumpDirection * speed * dt;
+                    GameState.Transient.LocationOffset += displace;
                 } else {
                     double dist = Params.INF_DISTANCE + Shared.Rand.NextDouble();
                     double theta = GameState.Persistent.Location_theta;
@@ -58,6 +63,7 @@ public class Jumper {
                         (float) (dist * Math.Cos(theta)), 
                         (float) (dist * Math.Sin(theta))
                     );
+                    Main.Singleton.MyWorld.ClearSpawns();
                 }
             }
             Main.Singleton.MyWorld.UpdateBack();
@@ -65,7 +71,13 @@ public class Jumper {
             jumpedTime += dt;
         } else {
             Charging = Input.IsKeyPressed((int)KeyList.J);
-            if (Charging) {
+            if (Charging && (
+                GameState.Persistent.Event_JumperStage == 2
+                || (
+                    Director.NowEvent is MagicEvent.Jumping e
+                    && e.JumpDemo
+                )
+            )) {
                 charged += dt;
                 Main.Singleton.MyMageUI.Charging();
                 if (charged >= CHARGE_TIME) {

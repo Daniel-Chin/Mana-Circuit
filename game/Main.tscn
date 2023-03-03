@@ -25,8 +25,6 @@ margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 1024, 600 )
 
-[node name="SidePanel" parent="HBox" instance=ExtResource( 6 )]
-
 [node name="World" type="Node2D" parent="HBox"]
 position = Vector2( 664, 300 )
 z_index = -1
@@ -41,6 +39,8 @@ texture = ExtResource( 5 )
 expand = true
 
 [node name="MageUI" parent="HBox/World" instance=ExtResource( 2 )]
+
+[node name="SidePanel" parent="HBox" instance=ExtResource( 6 )]
 
 [node name="Overlay" type="MarginContainer" parent="."]
 margin_right = 1024.0

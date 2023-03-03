@@ -7,6 +7,7 @@ public class World : Node2D
 {
     [Signal] public delegate void wand_replaced();
     [Signal] public delegate void player_died();
+    private static readonly int Z_INDEX_RANGE = 512;
     public TextureRect BackRect;
     public MageUI MyMageUI;
     ShaderMaterial BackShader;
@@ -23,6 +24,7 @@ public class World : Node2D
     {
         BackRect = GetNode<TextureRect>("Background");
         MyMageUI = GetNode<MageUI>("MageUI");
+        // MyMageUI.ZIndex = ZIndexOf(MyMageUI);
         BackShader = (ShaderMaterial)BackRect.Material;
         AspectRatio = BackRect.RectMinSize.y / BackRect.RectMinSize.x;
         BackShader.SetShaderParam("aspect_ratio", AspectRatio);
@@ -43,6 +45,9 @@ public class World : Node2D
         Vector2 drag = GetLocalMousePosition();
         Vector2 direction = drag.Normalized();
         Jumper.Process(delta, direction);
+        // foreach (var ui in SpawnedSpecialUIs) {
+        //     ui.ZIndex = ZIndexOf(ui);
+        // }
         if (GameState.Transient.WorldPaused)
             return;
         Time += delta;
@@ -70,20 +75,7 @@ public class World : Node2D
                 }
                 UpdateBack();
                 MyMageUI.Walking();
-                Vector2 halfSize = BackRect.RectSize * .5f;
-                foreach (SpawnableSpecialUI s in SpawnedSpecialUIs)
-                {
-                    s.Position -= displace * BackRect.RectSize.x;
-                    s.Moved(halfSize);
-                }
-                foreach (Money m in Moneys)
-                {
-                    m.Position -= displace * BackRect.RectSize.x;
-                }
-                foreach (Attack a in Attacks)
-                {
-                    a.Position -= displace * BackRect.RectSize.x;
-                }
+                ReverseMoveWorld(displace);
                 OnWalk(direction);
             }
             else
@@ -474,5 +466,28 @@ public class World : Node2D
         Moneys.Clear();
         Shared.QFreeList<Attack>(Attacks);
         Attacks.Clear();
+    }
+
+    public void ReverseMoveWorld(Vector2 displace) {
+        Vector2 halfSize = BackRect.RectSize * .5f;
+        foreach (SpawnableSpecialUI s in SpawnedSpecialUIs)
+        {
+            s.Position -= displace * BackRect.RectSize.x;
+            s.Moved(halfSize);
+        }
+        foreach (Money m in Moneys)
+        {
+            m.Position -= displace * BackRect.RectSize.x;
+        }
+        foreach (Attack a in Attacks)
+        {
+            a.Position -= displace * BackRect.RectSize.x;
+        }
+    }
+
+    private int ZIndexOf(Node2D ui) {
+        return (int)((
+            ui.Position.y / BackRect.RectMinSize.y + 1f
+        ) * Z_INDEX_RANGE);
     }
 }

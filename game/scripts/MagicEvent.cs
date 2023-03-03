@@ -222,6 +222,7 @@ public abstract class MagicEvent : Godot.Object
     }
 
     public class Jumping : MagicEvent {
+        public bool JumpDemo;
         private static readonly float ANIMATION_LENGTH = 2;
         private int _step;
         private float animationTime;
@@ -231,6 +232,7 @@ public abstract class MagicEvent : Godot.Object
         {
             _step = 0;
             _npcUI = npcUI;
+            JumpDemo = false;
         }
         public override void NextStep() {
 
@@ -248,6 +250,9 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.Display(
                         "Check out my latest design: *Jumper MK-I*!!!"
                     );
+                    _step++;
+                    break;
+                case 2:
                     _sprite = new Sprite();
                     _sprite.Texture = GD.Load<Texture>("res://texture/misc/jumper.png");
                     _sprite.Scale = Params.SPRITE_SCALE;
@@ -256,18 +261,18 @@ public abstract class MagicEvent : Godot.Object
                     animationTime = 0;
                     Process(0);
                     break;
-                case 3:
-                    _sprite.QueueFree();
+                case 5:
                     Director.MainUI.MyLowPanel.Display(
                         "It converts 10% of your mana to jumping power."
                     );
                     _step++;
                     break;
-                case 4:
+                case 6:
                     Director.MainUI.MyLowPanel.Display(
                         "Try it! Hold J to jump."
                     );
                     Director.UnpauseWorld();
+                    JumpDemo = true;
                     _step++;
                     break;
                 default:
@@ -275,14 +280,23 @@ public abstract class MagicEvent : Godot.Object
             }
         }
         public override void Process(float dt) {
-            if (_step == 2) {
+            if (_step == 3) {
                 float ratio = animationTime / ANIMATION_LENGTH;
                 if (ratio > 1f) {
                     _step ++;
-                    NextStep();
+                    animationTime = 0;
+                    _sprite.QueueFree();
                     return;
                 }
                 _sprite.Position = _npcUI.Position * (1f - ratio);
+                animationTime += dt;
+            } else if (_step == 4) {
+                if (animationTime > 1) {
+                    _step ++;
+                    animationTime = 0;
+                    NextStep();
+                    return;
+                }
                 animationTime += dt;
             }
         }
