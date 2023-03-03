@@ -371,7 +371,7 @@ public class World : Node2D
 
     private float SpawnRadius()
     {
-        return .7f * BackRect.RectSize.x;
+        return .75f * BackRect.RectSize.x;
     }
 
     private void DespawnSpecial(SpawnableSpecialUI ui)
