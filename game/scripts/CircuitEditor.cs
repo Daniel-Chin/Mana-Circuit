@@ -6,6 +6,7 @@ using System.Text;
 public class CircuitEditor : WindowDialog
 {
     // code-defined
+    [Signal] public delegate void finished();
     public GemListScene _gemList;
     public VBoxContainer VBox;
     public RichTextLabel HeadingLabel;
@@ -63,6 +64,7 @@ public class CircuitEditor : WindowDialog
     public void OnPopupHide()
     {
         QueueFree();
+        EmitSignal("finished");
     }
 
     public void CircuitModified()

@@ -364,8 +364,8 @@ public class World : Node2D
     private void CollidedWithNPC(NPCUI npcUI)
     {
         switch (npcUI.MySpawnable) {
-            case NPC.Shop shop:
-                shop.Enter();
+            case NPC npc:
+                npc.Collided();
                 break;
             default:
                 throw new Shared.TypeError();

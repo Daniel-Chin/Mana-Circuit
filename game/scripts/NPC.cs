@@ -1,8 +1,9 @@
 using Godot;
 
-public abstract class NPC : SpawnableSpecial
+public abstract class NPC : Godot.Object, SpawnableSpecial
 {
     public abstract string Name();
+    public abstract void Collided();
     public Texture Texture()
     {
         return GD.Load<Texture>($"res://texture/npc/{Name()}.png");
@@ -19,6 +20,8 @@ public abstract class NPC : SpawnableSpecial
         {
             return "expert";
         }
+        public override void Collided() {
+        }
     }
 
     public class Inventor : NPC
@@ -26,6 +29,8 @@ public abstract class NPC : SpawnableSpecial
         public override string Name()
         {
             return "inventor";
+        }
+        public override void Collided() {
         }
     }
     public class Shop : NPC
@@ -74,7 +79,7 @@ public abstract class NPC : SpawnableSpecial
                     throw new Shared.TypeError();
             }
         }
-        public void Enter() {
+        public override void Collided() {
             Director.StartEvent(new MagicEvent.Shopping(this));
         }
     }
@@ -88,6 +93,19 @@ public abstract class NPC : SpawnableSpecial
         public override string Name()
         {
             return "wandSmith";
+        }
+        public override void Collided() {
+            CircuitEditor circuitEditor = new CircuitEditor();
+            Main.Singleton.AddChild(circuitEditor);
+            circuitEditor.Popup();
+            Director.PauseWorld();
+            circuitEditor.Connect(
+                "finished", this, "Bye"
+            );
+        }
+        public void Bye() {
+            SaveLoad.Save();
+            Director.UnpauseWorld();
         }
     }
 }
