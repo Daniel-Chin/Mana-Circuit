@@ -198,6 +198,8 @@ public class GemListScene : WindowDialog
         Gem gem = (Gem)Selected;
         _gems.Clear();
         Shared.QFreeChildren(VBox);
+        _lastEntry = null;
+        _header = null;
         Title.Text = "Which way?";
         switch (gem)
         {
