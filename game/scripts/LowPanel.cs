@@ -26,7 +26,7 @@ public class LowPanel : PanelContainer
         Button0.Connect(
             "pressed", this, "Button0Clicked"
         );
-        Button0.Connect(
+        Button1.Connect(
             "pressed", this, "Button1Clicked"
         );
     }

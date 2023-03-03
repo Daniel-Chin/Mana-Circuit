@@ -33,7 +33,8 @@ public class GemEntry : HBoxContainer
     }
 
     private static readonly int SMALL = 45;
-    private static readonly int MONEY_WIDTH = 100;
+    private static readonly int MID = 90;
+    private static readonly int MONEY_WIDTH = 150;
     public void PresetFiveSmallOneBig()
     {
         Labels = new RichTextLabel[6];
@@ -54,11 +55,11 @@ public class GemEntry : HBoxContainer
         Labels = new RichTextLabel[1];
         OneLabel(0).SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
     }
-    public void PresetBigSmallMoney()
+    public void PresetBigMidMoney()
     {
         Labels = new RichTextLabel[3];
         OneLabel(0).SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
-        OneLabel(1);
+        OneLabel(1).RectMinSize = new Vector2(MID, 0);
         OneLabel(2).RectMinSize = new Vector2(MONEY_WIDTH, 0);
     }
     public void Pad()

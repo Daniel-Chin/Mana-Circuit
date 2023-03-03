@@ -22,11 +22,11 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.Display(
                         "You instictively know to *hold* the *Right Mouse Button*."
                     );
-                    GameState.Transient.WorldPaused = false;
+                    Director.UnpauseWorld();
                     _step++;
                     break;
                 case 1:
-                    GameState.Transient.WorldPaused = false;
+                    Director.UnpauseWorld();
                     _step++;
                     // wait for movement
                     break;
@@ -34,18 +34,18 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.Display(
                         "You feel urged to discover this game's true content."
                     );
-                    GameState.Transient.WorldPaused = true;
+                    Director.PauseWorld();
                     _step++;
                     break;
                 case 3:
                     Director.MainUI.MyLowPanel.Display(
                         "However, you can't shake off the suspicion that your previous thought was injected by the narrator."
                     );
-                    GameState.Transient.WorldPaused = true;
+                    Director.PauseWorld();
                     _step++;
                     break;
                 case 4:
-                    GameState.Transient.WorldPaused = false;
+                    Director.UnpauseWorld();
                     EventFinished();
                     break;
                 default:
@@ -87,7 +87,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.Display(
                         "You pick up the *staff*."
                     );
-                    GameState.Transient.WorldPaused = true;
+                    Director.PauseWorld();
                     _step++;
                     break;
                 case 1:
@@ -112,7 +112,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.Display(
                         "*Hold* the left mouse button!"
                     );
-                    GameState.Transient.WorldPaused = false;
+                    Director.UnpauseWorld();
                     _step++;
                     break;
                 case 5:
@@ -146,7 +146,7 @@ public abstract class MagicEvent : Godot.Object
             switch (_step)
             {
                 case 0:
-                    GameState.Transient.WorldPaused = true;
+                    Director.PauseWorld();
                     Director.MainUI.MyLowPanel.SetFace(_npc);
                     Director.MainUI.MyLowPanel.Display(
                         "Welcome to the shop!"
@@ -158,7 +158,7 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 2:
                     SaveLoad.Save();
-                    GameState.Transient.WorldPaused = false;
+                    Director.UnpauseWorld();
                     if (GameState.Persistent.HasGems["addOne"] == 0) {
                         GameState.Transient.EventRejected();
                     } else {

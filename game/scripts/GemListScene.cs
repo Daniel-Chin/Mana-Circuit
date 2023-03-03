@@ -15,6 +15,8 @@ public class GemListScene : WindowDialog
     public Simplest MetaLevel;
     public MagicItem Selected;
     private bool _rotated;
+    private GemEntry _header;
+    private GemEntry _lastEntry;
     public enum Mode
     {
         PLACE, EDIT, BUY,
@@ -55,6 +57,7 @@ public class GemListScene : WindowDialog
             "pressed", this, "OnClickGem",
             new Godot.Collections.Array() { gemI }
         );
+        _lastEntry = gemEntry;
         return gemEntry;
     }
 
@@ -86,11 +89,18 @@ public class GemListScene : WindowDialog
     }
     private void FillEntryShop(GemEntry gemEntry, Gem gem)
     {
-        gemEntry.PresetBigSmallMoney();
+        gemEntry.PresetBigMidMoney();
         Simplest nOwned = CountGemsOwned(gem);
+        Simplest price = NPC.Shop.PriceOf(gem);
+        string priceTag;
+        if (price <= GameState.Persistent.Money) {
+            priceTag = MathBB.Build(price);
+        } else {
+            priceTag = "can't\nafford";
+        }
         gemEntry.Labels[0].BbcodeText = gem.Explain(false);
         gemEntry.Labels[1].BbcodeText = $"[color=green][center]{MathBB.Build(nOwned)}[/center][/color]";
-        gemEntry.Labels[2].BbcodeText = $"[color=yellow][center]{MathBB.Build(NPC.Shop.PriceOf(gem))}[/center][/color]";
+        gemEntry.Labels[2].BbcodeText = $"[color=yellow][center]{priceTag}[/center][/color]";
     }
     private void FillEntryEdit(GemEntry gemEntry, Gem gem)
     {
@@ -105,23 +115,24 @@ public class GemListScene : WindowDialog
         MetaLevel = metaLevel;
         _rotated = false;
         Title.Text = "Which gem?";
+        _lastEntry = null;
 
         // header
-        GemEntry gemEntry = new GemEntry(null);
-        OuterVBox.AddChild(gemEntry);
-        OuterVBox.MoveChild(gemEntry, 1);
-        gemEntry.PresetFiveSmallMerged();
-        gemEntry.MyGemUI.Empty();
+        _header = new GemEntry(null);
+        OuterVBox.AddChild(_header);
+        OuterVBox.MoveChild(_header, 1);
+        _header.PresetFiveSmallMerged();
+        _header.MyGemUI.Empty();
         string wandName = GameState.Persistent.MyWand.DisplayName();
-        gemEntry.Labels[0].BbcodeText = (
+        _header.Labels[0].BbcodeText = (
             "[center][color=lime]Available[/color] /\n"
             + $"[color=aqua]In {wandName}[/color] /\n"
             + "[color=yellow]In Custom Gems[/color][/center]"
         );
 
         Gem gem = new Gem.RemoveGem();
-        gemEntry = Add(gem);
-        FillEntryRemove(gemEntry, gem);
+        _header = Add(gem);
+        FillEntryRemove(_header, gem);
 
         ListGems(AllBuyableGems());
         ListGems(AllBuyableCGs());
@@ -339,18 +350,19 @@ public class GemListScene : WindowDialog
     {
         _mode = Mode.EDIT;
         Title.Text = "Which one to design?";
+        _lastEntry = null;
 
         Wand wand = GameState.Persistent.MyWand;
-        GemEntry gemEntry = new GemEntry(null);
-        gemEntry.PresetOneBig();
-        gemEntry.Pad();
-        MaskButton maskButton = new MaskButton(gemEntry);
+        _header = new GemEntry(null);
+        _header.PresetOneBig();
+        _header.Pad();
+        MaskButton maskButton = new MaskButton(_header);
         VBox.AddChild(maskButton);
         maskButton.Mask.Connect(
             "pressed", this, "OnClickWand"
         );
-        gemEntry.MyGemUI.Button.TextureNormal = wand.Texture();
-        gemEntry.Labels[0].BbcodeText = wand.DisplayName();
+        _header.MyGemUI.Button.TextureNormal = wand.Texture();
+        _header.Labels[0].BbcodeText = wand.DisplayName();
 
         ListGems(AllBuyableCGs());
     }
@@ -365,17 +377,18 @@ public class GemListScene : WindowDialog
     {
         _mode = Mode.BUY;
         Title.Text = "Gem shop";
+        _lastEntry = null;
 
         // header
-        GemEntry gemEntry = new GemEntry(null);
-        OuterVBox.AddChild(gemEntry);
-        OuterVBox.MoveChild(gemEntry, 1);
-        gemEntry.PresetBigSmallMoney();
-        gemEntry.MyGemUI.Empty();
-        gemEntry.Labels[1].BbcodeText = (
+        _header = new GemEntry(null);
+        OuterVBox.AddChild(_header);
+        OuterVBox.MoveChild(_header, 1);
+        _header.PresetBigMidMoney();
+        _header.MyGemUI.Empty();
+        _header.Labels[1].BbcodeText = (
             "[center][color=green]Owned[/color][/center]"
         );
-        gemEntry.Labels[2].BbcodeText = (
+        _header.Labels[2].BbcodeText = (
             "[center][color=yellow]Price[/color][/center]"
         );
 
@@ -391,5 +404,10 @@ public class GemListScene : WindowDialog
     public void OnPopupHide()
     {
         Finish();
+    }
+
+    public override void _Process(float delta)
+    {
+        _header.RectSize = _lastEntry.RectSize;
     }
 }

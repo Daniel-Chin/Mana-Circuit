@@ -99,4 +99,12 @@ public class Director
             e.NextStep();
         }
     }
+
+    public static void PauseWorld() {
+        MainUI.MyMageUI.Resting();
+        GameState.Transient.WorldPaused = true;
+    }
+    public static void UnpauseWorld() {
+        GameState.Transient.WorldPaused = false;
+    }
 }

@@ -32,7 +32,7 @@ public class Revive : PanelContainer
         Button3.Disabled = true;
         Visible = true;
         GameState.Transient.Mana = Simplest.Zero();
-        GameState.Transient.WorldPaused = true;
+        Director.PauseWorld();
         Update();
         Main.Singleton.MySidePanel.Update();
     }
@@ -81,7 +81,7 @@ public class Revive : PanelContainer
     {
         Visible = false;
         Main.Singleton.MyWorld.Reset();
-        GameState.Transient.WorldPaused = false;
+        Director.UnpauseWorld();
     }
 
     public new void Update()
