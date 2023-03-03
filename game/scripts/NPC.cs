@@ -3,7 +3,7 @@ using Godot;
 public abstract class NPC : Godot.Object, SpawnableSpecial
 {
     public abstract string Name();
-    public abstract void Collided();
+    public abstract void Collided(NPCUI npcUI);
     public Texture Texture()
     {
         return GD.Load<Texture>($"res://texture/npc/{Name()}.png");
@@ -20,7 +20,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
         {
             return "expert";
         }
-        public override void Collided() {
+        public override void Collided(NPCUI npcUI) {
         }
     }
 
@@ -73,7 +73,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
                     throw new Shared.TypeError();
             }
         }
-        public override void Collided() {
+        public override void Collided(NPCUI npcUI) {
             Director.StartEvent(new MagicEvent.Shopping(this));
         }
     }
@@ -88,7 +88,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
         {
             return "wandSmith";
         }
-        public override void Collided() {
+        public override void Collided(NPCUI npcUI) {
             CircuitEditor circuitEditor = new CircuitEditor();
             Main.Singleton.AddChild(circuitEditor);
             circuitEditor.Popup();
@@ -110,8 +110,8 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
         {
             return "inventor";
         }
-        public override void Collided() {
-            Director.StartEvent(new MagicEvent.Jumping(this));
+        public override void Collided(NPCUI npcUI) {
+            Director.StartEvent(new MagicEvent.Jumping(npcUI));
         }
     }
 }
