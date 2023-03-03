@@ -11,7 +11,7 @@ public class Main : Node2D
     public World MyWorld;
     public MageUI MyMageUI;
     public Revive MyRevive;
-    public static float WorldTime;
+    public static float MainTime;
     public Main() : base()
     {
         Shared.Assert(Singleton == null);
@@ -19,7 +19,7 @@ public class Main : Node2D
     }
     public override void _Ready()
     {
-        WorldTime = 0f;
+        MainTime = 0f;
         Director.MainUI = this;
         MyWorld = GetNode<World>("HBox/World");
         MyMageUI = GetNode<MageUI>("HBox/World/MageUI");
@@ -46,7 +46,7 @@ public class Main : Node2D
 
     public override void _Process(float delta)
     {
-        WorldTime += delta;
+        MainTime += delta;
         Director.Process(delta);
     }
 

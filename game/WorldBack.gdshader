@@ -5,6 +5,8 @@ uniform float aspect_ratio = .833333;
 uniform vec2 offset_g = vec2(-0.5, -.2);
 // uniform vec2 offset_b = vec2(40.0, 99.0);
 
+uniform float worldTime = 0;
+
 float rand(vec2 co){
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
 }
@@ -19,9 +21,9 @@ float rand(vec2 co){
 vec2 f_g(vec2 screen_pos) {
 	vec2 pos = round((offset_g + screen_pos) * 64.0) / 64.0;
 	float dist = length(pos);
-	float str = pow((sin(TIME) + 1.0) * .5, 3);
+	float str = pow((sin(worldTime) + 1.0) * .5, 3);
 	float accent = pow(rand(pos), 12);
-	pos.x += round(TIME * 2.0);
+	pos.x += round(worldTime * 2.0);
 	if (accent > .6 * str && rand(pos) < .1) {
 		accent *= (2.0 + str * 2.0);
 	}

@@ -161,6 +161,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.UnpauseWorld();
                     if (GameState.Persistent.HasGems["addOne"] == 0) {
                         GameState.Transient.EventRejected();
+                        // maybe: reject only when shop despawns? to do that, comment out the line above.
                     } else {
                         GameState.Transient.NextSpawn = null;
                     }

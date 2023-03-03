@@ -14,6 +14,7 @@ public class World : Node2D
     public List<SpawnableSpecialUI> SpawnedSpecialUIs;
     public List<Money> Moneys;
     public List<Attack> Attacks;
+    public float Time;
 
     private float _lastLeftUp;
     private bool _isLeftDownLastFrame;
@@ -33,6 +34,7 @@ public class World : Node2D
         Attacks = new List<Attack>();
 
         _lastLeftUp = 0;
+        Time = 0;
     }
 
     private static readonly float SOFTZONE = 0;
@@ -40,6 +42,8 @@ public class World : Node2D
     {
         if (GameState.Transient.WorldPaused)
             return;
+        Time += delta;
+        BackShader.SetShaderParam("worldTime", Time);
         Vector2 drag = GetLocalMousePosition();
         Vector2 direction = drag.Normalized();
         bool walking = false;
@@ -87,12 +91,12 @@ public class World : Node2D
         bool risingEdge = (!_isLeftDownLastFrame) && isLeftDown;
         _isLeftDownLastFrame = isLeftDown;
         if (!isLeftDown)
-            _lastLeftUp = Main.WorldTime;
+            _lastLeftUp = Main.MainTime;
         if (
             (
                 risingEdge || (
                     isLeftDown 
-                    && Main.WorldTime - _lastLeftUp >= Params.LMB_HOLD_DEADZONE
+                    && Main.MainTime - _lastLeftUp >= Params.LMB_HOLD_DEADZONE
                 )
             )
             && !GameState.Transient.Mana.Equals(Simplest.Zero())

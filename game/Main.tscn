@@ -15,6 +15,7 @@
 shader = ExtResource( 8 )
 shader_param/aspect_ratio = 0.833333
 shader_param/offset_g = Vector2( -0.5, -0.2 )
+shader_param/worldTime = 0.0
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
