@@ -76,6 +76,7 @@ public class UpgradeWand : WindowDialog
         );
         GameState.Persistent.MyWand = NewWand;
         Main.Singleton.WandReplaced();
+        Hide();
     }
 
     public void Leave()

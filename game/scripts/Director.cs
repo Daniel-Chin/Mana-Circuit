@@ -129,9 +129,10 @@ public class Director
         {
             ;
         } else {
-            Shared.Assert(GameState.Transient.NextSpawn == null);
-            GameState.Transient.NextSpawn = new NPC.Shop();
-            GameState.Transient.EnemiesTillNextSpawn = 0;
+            if (GameState.Transient.NextSpawn == null) {
+                GameState.Transient.NextSpawn = new NPC.Shop();
+                GameState.Transient.EnemiesTillNextSpawn = 0;
+            }
         }
         return true;
     }

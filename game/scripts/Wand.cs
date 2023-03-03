@@ -60,6 +60,9 @@ public abstract class Wand : MagicItem, JSONable
             case Staff w:
                 JSON.Store("staff", writer);
                 break;
+            case Guitar w:
+                JSON.Store("guitar", writer);
+                break;
             default:
                 throw new Shared.ValueError();
         }
@@ -81,6 +84,9 @@ public abstract class Wand : MagicItem, JSONable
                 break;
             case "staff":
                 wand = new Staff();
+                break;
+            case "guitar":
+                wand = new Guitar();
                 break;
             default:
                 throw new Shared.ValueError();
