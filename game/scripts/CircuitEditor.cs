@@ -46,7 +46,7 @@ public class CircuitEditor : WindowDialog
     {
         if (_gemList.Selected == null)
         {
-            QueueFree();
+            Hide();
             return;
         }
         Editee = _gemList.Selected;
