@@ -145,7 +145,7 @@ public class World : Node2D
             if (
                 walking 
                 && distance < Params.NPC_COLLISION_RANGE
-                && ui.Position.Normalized().Dot(direction) > 0
+                && ui.Position.Normalized().Dot(direction) > .5
             ) {
                 switch (ui)
                 {
