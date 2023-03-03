@@ -1,3 +1,5 @@
+using System;
+
 public abstract class MagicEvent : Godot.Object
 {
     // Part of the game state is in the event. 
@@ -168,6 +170,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.EventFinished();
                     break;
                 default:
+                    Console.WriteLine("_step " + _step);
                     throw new Shared.ValueError();
             }
         }

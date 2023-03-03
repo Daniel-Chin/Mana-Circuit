@@ -25,6 +25,9 @@ public class SaveLoad
         }
         int which = Int32.Parse(reader9.ReadLine());
         reader9.Close();
+        if (which == 1) {
+            Console.WriteLine("Save file corrupted. Reverting to previous.");
+        }
         StreamReader reader = new StreamReader(
             Filename(which)
         );

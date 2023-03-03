@@ -76,17 +76,17 @@ public class UpgradeWand : WindowDialog
         );
         GameState.Persistent.MyWand = NewWand;
         Main.Singleton.WandReplaced();
-        Hide();
+        Leave();
     }
 
     public void Leave()
     {
-        EmitSignal("finished");
-        QueueFree();
+        Hide();
     }
     public void OnPopupHide()
     {
-        Leave();
+        EmitSignal("finished");
+        QueueFree();
     }
 
     private Simplest PriceOf(Wand wand)
