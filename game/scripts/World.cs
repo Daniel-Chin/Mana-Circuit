@@ -58,16 +58,16 @@ public class World : Node2D
                 Vector2 displace = (
                     delta * Params.WALK_SPEED * direction
                 );
+                GameState.Transient.LocationOffset += displace;
                 if (GameState.Persistent.Location_dist.MyRank == Rank.FINITE)
                 {
-                    GameState.Transient.LocationOffset += displace;
                     GameState.Persistent.Location_dist = new Simplest(
                         Rank.FINITE,
                         GameState.Transient.LocationOffset.Length()
                     );
                     GameState.Persistent.Location_theta = GameState.Transient.LocationOffset.Angle();
+                    GameState.Transient.Update();
                 }
-                GameState.Transient.Update();
                 UpdateBack();
                 MyMageUI.Walking();
                 Vector2 halfSize = BackRect.RectSize * .5f;
