@@ -189,4 +189,15 @@ public class Director
         }
         return true;
     }
+
+    public static void JumpBegan() {
+        if (NowEvent is MagicEvent.Jumping e) {
+            e.JumpBegan();
+        }
+    }
+    public static void JumpFinished() {
+        if (NowEvent is MagicEvent.Jumping e) {
+            e.JumpFinished();
+        }
+    }
 }

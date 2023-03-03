@@ -113,11 +113,11 @@ public class LowPanel : PanelContainer
     }
 
     public void Button0Clicked() {
-        Director.NowEvent.ButtonClicked(0);
         Main.Singleton.VBoxLowPanel.Visible = false;
+        Director.NowEvent.ButtonClicked(0);
     }
     public void Button1Clicked() {
-        Director.NowEvent.ButtonClicked(1);
         Main.Singleton.VBoxLowPanel.Visible = false;
+        Director.NowEvent.ButtonClicked(1);
     }
 }

@@ -33,6 +33,7 @@ public class Jumper {
                 }
                 GameState.Transient.Jumping = false;
                 Director.UnpauseWorld();
+                Director.JumpFinished();
                 return;
             }
             Main.Singleton.MyMageUI.Position = new Vector2(
@@ -96,6 +97,7 @@ public class Jumper {
                             GameState.Persistent.Location_theta = jumpDirection.Angle();
                         }
                     }
+                    Director.JumpBegan();
                 }
             } else {
                 charged = 0;

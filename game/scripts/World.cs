@@ -390,7 +390,7 @@ public class World : Node2D
         return .75f * BackRect.RectSize.x;
     }
 
-    private void DespawnSpecial(SpawnableSpecialUI ui)
+    public void DespawnSpecial(SpawnableSpecialUI ui)
     {
         SpawnedSpecialUIs.Remove(ui);
         ui.QueueFree();

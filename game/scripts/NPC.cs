@@ -111,7 +111,11 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
             return "inventor";
         }
         public override void Collided(NPCUI npcUI) {
-            Director.StartEvent(new MagicEvent.Jumping(npcUI));
+            if (Director.NowEvent is MagicEvent.Jumping e) {
+                e.CollideAgain();
+            } else {
+                Director.StartEvent(new MagicEvent.Jumping(npcUI));
+            }
         }
     }
 }

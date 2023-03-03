@@ -275,6 +275,67 @@ public abstract class MagicEvent : Godot.Object
                     JumpDemo = true;
                     _step++;
                     break;
+                case 7:
+                    break;
+                case 8:
+                    Director.PauseWorld();
+                    JumpDemo = false;
+                    Director.MainUI.MyLowPanel.Display(
+                        "What do you think?"
+                    );
+                    Director.MainUI.MyLowPanel.SetButtons(
+                        "It's pathetic.", 
+                        "Hmm, I like the sound it makes."
+                    );
+                    _step++;
+                    break;
+                case 20:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Hehe, exactly my thoughts."
+                    );
+                    _step++;
+                    break;
+                case 21:
+                    Director.MainUI.MyLowPanel.Display(
+                        "I'll take some time to improve the deisgn. You just wait and see!"
+                    );
+                    _step = 40;
+                    break;
+                case 30:
+                    Director.MainUI.MyLowPanel.Display(
+                        "I know right!"
+                    );
+                    _step++;
+                    break;
+                case 31:
+                    Director.MainUI.MyLowPanel.Display(
+                        "..."
+                    );
+                    _step++;
+                    break;
+                case 32:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Still, the jumping power is way too low. I need to take it back home and improve the design."
+                    );
+                    _step = 40;
+                    break;
+                case 40:
+                    _sprite = new Sprite();
+                    _sprite.Texture = GD.Load<Texture>("res://texture/misc/jumper.png");
+                    _sprite.Scale = Params.SPRITE_SCALE;
+                    Main.Singleton.MyWorld.AddChild(_sprite);
+                    _step++;
+                    animationTime = 0;
+                    Process(0);
+                    break;
+                case 43:
+                    GameState.Persistent.Event_JumperStage = 1;
+                    SaveLoad.Save();
+                    Director.UnpauseWorld();
+                    Main.Singleton.MyWorld.DespawnSpecial(_npcUI);
+                    GameState.Transient.NextSpawn = null;
+                    Director.EventFinished();
+                    break;
                 default:
                     throw new Shared.ValueError();
             }
@@ -283,8 +344,8 @@ public abstract class MagicEvent : Godot.Object
             if (_step == 3) {
                 float ratio = animationTime / ANIMATION_LENGTH;
                 if (ratio > 1f) {
-                    _step ++;
                     animationTime = 0;
+                    _step ++;
                     _sprite.QueueFree();
                     return;
                 }
@@ -292,13 +353,65 @@ public abstract class MagicEvent : Godot.Object
                 animationTime += dt;
             } else if (_step == 4) {
                 if (animationTime > 1) {
-                    _step ++;
                     animationTime = 0;
+                    _step ++;
+                    NextStep();
+                    return;
+                }
+                animationTime += dt;
+            } else if (_step == 41) {
+                float ratio = animationTime / ANIMATION_LENGTH;
+                if (ratio > 1f) {
+                    animationTime = 0;
+                    _step ++;
+                    _sprite.QueueFree();
+                    return;
+                }
+                _sprite.Position = _npcUI.Position * ratio;
+                animationTime += dt;
+            } else if (_step == 42) {
+                if (animationTime > 1) {
+                    animationTime = 0;
+                    _step ++;
                     NextStep();
                     return;
                 }
                 animationTime += dt;
             }
+            if (JumpDemo) {
+                float theta = _npcUI.Position.Angle();
+                float distance = _npcUI.Position.Length();
+                if (distance > 300f) {
+                    distance = 300f;
+                    _npcUI.Position = new Vector2(
+                        (float) (distance * Math.Cos(theta)), 
+                        (float) (distance * Math.Sin(theta))
+                    );
+                }
+            }
+        }
+
+        public void JumpBegan() {
+            Main.Singleton.VBoxLowPanel.Visible = false;
+        }
+        public void JumpFinished() {
+            _step ++;
+            NextStep();
+        }
+        public override void ButtonClicked(int buttonID) {
+            Director.MainUI.MyLowPanel.NoButtons();
+            if (buttonID == 0) {
+                _step = 20;
+                NextStep();
+            } else {
+                _step = 30;
+                NextStep();
+            }
+        }
+        public void CollideAgain() {
+            Shared.Assert(JumpDemo);
+            _step = 6;
+            NextStep();
         }
     }
 }
