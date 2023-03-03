@@ -40,82 +40,85 @@ public class World : Node2D
     private static readonly float SOFTZONE = 0;
     public override void _Process(float delta)
     {
+        Vector2 drag = GetLocalMousePosition();
+        Vector2 direction = drag.Normalized();
+        Jumper.Process(delta, direction);
         if (GameState.Transient.WorldPaused)
             return;
         Time += delta;
         BackShader.SetShaderParam("worldTime", Time);
-        Vector2 drag = GetLocalMousePosition();
-        Vector2 direction = drag.Normalized();
         bool walking = false;
-        if (Input.IsMouseButtonPressed(((int)ButtonList.Right)))
-        {
-            walking = true;
-            float l = drag.Length() / SOFTZONE;
-            if (l < 1)
-                direction *= l;
-            Vector2 displace = (
-                delta * Params.WALK_SPEED * direction
-            );
-            if (GameState.Persistent.Location_dist.MyRank == Rank.FINITE)
+        if (! Jumper.Charging) {
+            if (Input.IsMouseButtonPressed(((int)ButtonList.Right)))
             {
-                GameState.Transient.LocationOffset += displace;
-                GameState.Persistent.Location_dist = new Simplest(
-                    Rank.FINITE,
-                    GameState.Transient.LocationOffset.Length()
+                walking = true;
+                float l = drag.Length() / SOFTZONE;
+                if (l < 1)
+                    direction *= l;
+                Vector2 displace = (
+                    delta * Params.WALK_SPEED * direction
                 );
-                GameState.Persistent.Location_theta = GameState.Transient.LocationOffset.Angle();
+                if (GameState.Persistent.Location_dist.MyRank == Rank.FINITE)
+                {
+                    GameState.Transient.LocationOffset += displace;
+                    GameState.Persistent.Location_dist = new Simplest(
+                        Rank.FINITE,
+                        GameState.Transient.LocationOffset.Length()
+                    );
+                    GameState.Persistent.Location_theta = GameState.Transient.LocationOffset.Angle();
+                }
+                GameState.Transient.Update();
+                UpdateBack();
+                MyMageUI.Walking();
+                Vector2 halfSize = BackRect.RectSize * .5f;
+                foreach (SpawnableSpecialUI s in SpawnedSpecialUIs)
+                {
+                    s.Position -= displace * BackRect.RectSize.x;
+                    s.Moved(halfSize);
+                }
+                foreach (Money m in Moneys)
+                {
+                    m.Position -= displace * BackRect.RectSize.x;
+                }
+                foreach (Attack a in Attacks)
+                {
+                    a.Position -= displace * BackRect.RectSize.x;
+                }
+                OnWalk(direction);
             }
-            GameState.Transient.Update();
-            UpdateBack();
-            MyMageUI.Walking();
-            Vector2 halfSize = BackRect.RectSize * .5f;
-            foreach (SpawnableSpecialUI s in SpawnedSpecialUIs)
+            else
             {
-                s.Position -= displace * BackRect.RectSize.x;
-                s.Moved(halfSize);
+                MyMageUI.Resting();
             }
-            foreach (Money m in Moneys)
-            {
-                m.Position -= displace * BackRect.RectSize.x;
-            }
-            foreach (Attack a in Attacks)
-            {
-                a.Position -= displace * BackRect.RectSize.x;
-            }
-            OnWalk(direction);
-        }
-        else
-        {
-            MyMageUI.Resting();
-        }
-        // attack
-        bool isLeftDown = Input.IsMouseButtonPressed(((int)ButtonList.Left));
-        bool risingEdge = (!_isLeftDownLastFrame) && isLeftDown;
-        _isLeftDownLastFrame = isLeftDown;
-        if (!isLeftDown)
-            _lastLeftUp = Main.MainTime;
-        if (
-            (
-                risingEdge || (
-                    isLeftDown 
-                    && Main.MainTime - _lastLeftUp >= Params.LMB_HOLD_DEADZONE
+            // attack
+            bool isLeftDown = Input.IsMouseButtonPressed(((int)ButtonList.Left));
+            bool risingEdge = (!_isLeftDownLastFrame) && isLeftDown;
+            _isLeftDownLastFrame = isLeftDown;
+            if (!isLeftDown)
+                _lastLeftUp = Main.MainTime;
+            if (
+                (
+                    risingEdge || (
+                        isLeftDown 
+                        && Main.MainTime - _lastLeftUp >= Params.LMB_HOLD_DEADZONE
+                    )
                 )
+                && !GameState.Transient.Mana.Equals(Simplest.Zero())
             )
-            && !GameState.Transient.Mana.Equals(Simplest.Zero())
-        )
-        {
-            Attack attack = new Attack()
             {
-                Direction = direction,
-                Mana = GameState.Transient.Mana,
-            };
-            attack.Head = direction * Params.ENEMY_COLLISION_RANGE;
-            GameState.Transient.Mana = Simplest.Zero();
-            Main.Singleton.MySidePanel.Update(); // Ideally, a signal
-            attack.LineWidth = 3;
-            Attacks.Add(attack);
-            AddChild(attack);
-            Director.WandAttacked();
+                Attack attack = new Attack()
+                {
+                    Direction = direction,
+                    Mana = GameState.Transient.Mana,
+                };
+                attack.Head = direction * Params.ENEMY_COLLISION_RANGE;
+                GameState.Transient.Mana = Simplest.Zero();
+                Main.Singleton.MySidePanel.Update(); // Ideally, a signal
+                attack.LineWidth = 3;
+                Attacks.Add(attack);
+                AddChild(attack);
+                Director.WandAttacked();
+            }
         }
         UpdateMoneys(delta);
         UpdateAttacks(delta);
@@ -463,7 +466,7 @@ public class World : Node2D
         return money;
     }
 
-    public void Reset()
+    public void ClearSpawns()
     {
         Shared.QFreeList<SpawnableSpecialUI>(SpawnedSpecialUIs);
         SpawnedSpecialUIs.Clear();

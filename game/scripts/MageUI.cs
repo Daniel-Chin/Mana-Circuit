@@ -33,7 +33,7 @@ public class MageUI : Node2D
         Jump.Visible = false;
         WalkBody.Playing = true;
     }
-    public void Preping()
+    public void Charging()
     {
         Walk.Visible = false;
         Jump.Visible = true;

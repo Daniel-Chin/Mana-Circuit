@@ -257,6 +257,7 @@ public class GameState
         public SpawnableSpecial NextSpawn;
         public int EnemiesTillNextSpawn;
         public Vector2 LastLocationNoneventSpawn;
+        public bool Jumping;
         public TransientClass()
         {
             Mana = Simplest.Zero();
@@ -265,6 +266,7 @@ public class GameState
             NextSpawn = null;
             EnemiesTillNextSpawn = 0;
             LastLocationNoneventSpawn = new Vector2(0, 0);
+            Jumping = false;
         }
 
         public void Update()
