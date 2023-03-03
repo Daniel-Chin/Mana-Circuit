@@ -16,4 +16,5 @@ public class Params
     public static readonly double MONEY_DROP_MULT = .1;
     public static readonly int N_ENEMIES_AFTER_REJ_EVENT = 1;
     public static readonly float LMB_HOLD_DEADZONE = .3f;
+    public static readonly double PROB_NPC_AS_NONEVENT = .1f;
 }

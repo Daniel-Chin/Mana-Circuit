@@ -163,7 +163,7 @@ public abstract class MagicEvent : Godot.Object
                         GameState.Transient.EventRejected();
                         // maybe: reject only when shop despawns? to do that, comment out the line above.
                     } else {
-                        GameState.Transient.NextSpawn = null;
+                        GameState.Transient.NextSpawn = new NPC.WandSmith();
                     }
                     Director.EventFinished();
                     break;

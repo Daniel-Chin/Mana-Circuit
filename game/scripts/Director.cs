@@ -50,13 +50,14 @@ public class Director
     {
 
     }
-    public static void OnSpecialDespawn()
+    public static void OnSpecialDespawn(SpawnableSpecial s)
     {
         if (GameState.Transient.NextSpawn == null)
             return;
         if (GameState.Transient.NextSpawn is Wand.Staff)
             return;
-        GameState.Transient.EventRejected();
+        if (GameState.Transient.NextSpawn == s)
+            GameState.Transient.EventRejected();
     }
 
     public static void OnEventStepComplete()

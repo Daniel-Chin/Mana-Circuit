@@ -209,23 +209,37 @@ public class World : Node2D
             ).Length() >= Params.SPAWN_EVERY_DISTANCE)
             {
                 GameState.Transient.LastLocationNoneventSpawn = GameState.Transient.LocationOffset;
-                // if event shows can spawn shops, spawn w/ low prob
-                // todo. Loneliness
-                Simplest hp;
-                Simplest d = GameState.Persistent.Location_dist;
-                if (d.MyRank == Rank.FINITE)
-                {
-                    hp = new Simplest(Rank.FINITE, Math.Ceiling(
-                        Math.Exp(d.K + Params.BASE_LOG_ENEMY_HP)
-                    ));
+                if (
+                    GameState.Persistent.Event_Staff
+                    && GameState.Persistent.HasAnyNonCGem()
+                    && Shared.Rand.NextDouble() < Params.PROB_NPC_AS_NONEVENT
+                ) {
+                    // todo: check if GemExpert can spawn
+                    if (
+                        GameState.Persistent.Loneliness_Shop >
+                        GameState.Persistent.Loneliness_WandSmith
+                    ) {
+                        Spawn(new NPC.Shop(), direction);
+                    } else {
+                        Spawn(new NPC.WandSmith(), direction);
+                    }
+                } else {
+                    Simplest hp;
+                    Simplest d = GameState.Persistent.Location_dist;
+                    if (d.MyRank == Rank.FINITE)
+                    {
+                        hp = new Simplest(Rank.FINITE, Math.Ceiling(
+                            Math.Exp(d.K + Params.BASE_LOG_ENEMY_HP)
+                        ));
+                    }
+                    else
+                    {
+                        hp = d;
+                    }
+                    Spawn(new Enemy(hp), direction);
+                    if (GameState.Transient.EnemiesTillNextSpawn > 0)
+                        GameState.Transient.EnemiesTillNextSpawn--;
                 }
-                else
-                {
-                    hp = d;
-                }
-                Spawn(new Enemy(hp), direction);
-                if (GameState.Transient.EnemiesTillNextSpawn > 0)
-                    GameState.Transient.EnemiesTillNextSpawn--;
             }
         }
     }
@@ -378,7 +392,7 @@ public class World : Node2D
     {
         SpawnedSpecialUIs.Remove(ui);
         ui.QueueFree();
-        Director.OnSpecialDespawn();
+        Director.OnSpecialDespawn(ui.MySpawnable);
     }
 
     private void HitEnemy(Attack attack, EnemyUI enemyUI)

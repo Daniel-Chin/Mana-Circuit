@@ -10,6 +10,11 @@ public abstract class NPC : SpawnableSpecial
 
     public class GemExpert : NPC
     {
+        public GemExpert() : base() {
+            GameState.Persistent.Loneliness_GemExpert = 0;
+            GameState.Persistent.Loneliness_Shop ++;
+            GameState.Persistent.Loneliness_WandSmith ++;
+        }
         public override string Name()
         {
             return "expert";
@@ -25,6 +30,11 @@ public abstract class NPC : SpawnableSpecial
     }
     public class Shop : NPC
     {
+        public Shop() : base() {
+            GameState.Persistent.Loneliness_Shop = 0;
+            GameState.Persistent.Loneliness_WandSmith ++;
+            GameState.Persistent.Loneliness_GemExpert ++;
+        }
         public override string Name()
         {
             return "shop";
@@ -70,6 +80,11 @@ public abstract class NPC : SpawnableSpecial
     }
     public class WandSmith : NPC
     {
+        public WandSmith() : base() {
+            GameState.Persistent.Loneliness_WandSmith = 0;
+            GameState.Persistent.Loneliness_GemExpert ++;
+            GameState.Persistent.Loneliness_Shop ++;
+        }
         public override string Name()
         {
             return "wandSmith";

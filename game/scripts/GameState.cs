@@ -212,6 +212,14 @@ public class GameState
             }
 
         }
+
+        public bool HasAnyNonCGem() {
+            foreach (var item in HasGems)
+            {
+                if (item.Value != 0) return true;
+            }
+            return false;
+        }
     }
 
     public class TransientClass
