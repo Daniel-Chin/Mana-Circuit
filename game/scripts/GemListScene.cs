@@ -26,6 +26,7 @@ public class GemListScene : WindowDialog
     public GemListScene() : base()
     {
         _gems = new List<Gem>();
+        _header = null;
         Connect("popup_hide", this, "OnPopupHide");
 
         Theme = Shared.THEME;
@@ -54,7 +55,7 @@ public class GemListScene : WindowDialog
         MaskButton maskButton = new MaskButton(gemEntry);
         VBox.AddChild(maskButton);
         maskButton.Mask.Connect(
-            "pressed", this, "OnClickGem",
+            "pressed", this, "GemClicked",
             new Godot.Collections.Array() { gemI }
         );
         _lastEntry = gemEntry;
@@ -99,7 +100,7 @@ public class GemListScene : WindowDialog
             priceTag = "can't\nafford";
         }
         gemEntry.Labels[0].BbcodeText = gem.Explain(false);
-        gemEntry.Labels[1].BbcodeText = $"[color=green][center]{MathBB.Build(nOwned)}[/center][/color]";
+        gemEntry.Labels[1].BbcodeText = $"[color=lightgreen][center]{MathBB.Build(nOwned)}[/center][/color]";
         gemEntry.Labels[2].BbcodeText = $"[color=yellow][center]{priceTag}[/center][/color]";
     }
     private void FillEntryEdit(GemEntry gemEntry, Gem gem)
@@ -219,7 +220,7 @@ public class GemListScene : WindowDialog
         return true;
     }
 
-    public void OnClickGem(int gemI)
+    public void GemClicked(int gemI)
     {
         Gem gem = _gems[gemI];
         CustomGem cG = gem as CustomGem;
@@ -251,7 +252,16 @@ public class GemListScene : WindowDialog
             if (AskRotate())
                 return;
         }
-        Hide();
+        if (_mode == Mode.BUY) {
+            if (BuyGem((Gem)Selected)) {
+                Shared.QFreeChildren(VBox);
+                _header.QueueFree();
+                ListBuyable();
+                Main.Singleton.MySidePanel.Update();
+            }
+        } else {
+            Hide();
+        }
     }
 
     public static Simplest CountGemsOwned(Gem gem)
@@ -353,16 +363,16 @@ public class GemListScene : WindowDialog
         _lastEntry = null;
 
         Wand wand = GameState.Persistent.MyWand;
-        _header = new GemEntry(null);
-        _header.PresetOneBig();
-        _header.Pad();
-        MaskButton maskButton = new MaskButton(_header);
+        GemEntry wandEntry = new GemEntry(null);
+        wandEntry.PresetOneBig();
+        wandEntry.Pad();
+        MaskButton maskButton = new MaskButton(wandEntry);
         VBox.AddChild(maskButton);
         maskButton.Mask.Connect(
             "pressed", this, "OnClickWand"
         );
-        _header.MyGemUI.Button.TextureNormal = wand.Texture();
-        _header.Labels[0].BbcodeText = wand.DisplayName();
+        wandEntry.MyGemUI.Button.TextureNormal = wand.Texture();
+        wandEntry.Labels[0].BbcodeText = wand.DisplayName();
 
         ListGems(AllBuyableCGs());
     }
@@ -386,7 +396,7 @@ public class GemListScene : WindowDialog
         _header.PresetBigMidMoney();
         _header.MyGemUI.Empty();
         _header.Labels[1].BbcodeText = (
-            "[center][color=green]Owned[/color][/center]"
+            "[center][color=lightgreen]Owned[/color][/center]"
         );
         _header.Labels[2].BbcodeText = (
             "[center][color=yellow]Price[/color][/center]"
@@ -408,6 +418,31 @@ public class GemListScene : WindowDialog
 
     public override void _Process(float delta)
     {
+        if (_header == null) return;
+        if (_lastEntry == null) return;
         _header.RectSize = _lastEntry.RectSize;
+    }
+
+    private bool BuyGem(Gem gem) {
+        Simplest price = NPC.Shop.PriceOf(gem);
+        if (price <= GameState.Persistent.Money) {
+            GameState.Persistent.Money = Simplest.Eval(
+                GameState.Persistent.Money, 
+                Operator.MINUS, price
+            );
+            if (gem is CustomGem cG) {
+                Shared.Assert(cG.MetaLevel.MyRank == Rank.FINITE);
+                int metaLevel = (int)cG.MetaLevel.K;
+                var (nOwned, _cG) = GameState.Persistent.HasCustomGems[metaLevel];
+                Shared.Assert(cG == _cG);
+                GameState.Persistent.HasCustomGems[metaLevel] = (
+                    nOwned + 1, cG
+                );
+            } else {
+                GameState.Persistent.HasGems[gem.Name()] ++;
+            }
+            return true;
+        }
+        return false;
     }
 }
