@@ -370,6 +370,10 @@ public abstract class MagicEvent : Godot.Object
                 _sprite.Position = _npcUI.Position * ratio;
                 animationTime += dt;
             } else if (_step == 42) {
+                _npcUI.Position = new Vector2(
+                    _npcUI.Position.x, 
+                    _npcUI.Position.y + dt * 1000f
+                );
                 if (animationTime > 1) {
                     animationTime = 0;
                     _step ++;
