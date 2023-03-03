@@ -75,12 +75,12 @@ public class Revive : PanelContainer
         Button3.Disabled = false;
 
         GameState.Transient.Update();
+        Main.Singleton.MyWorld.Reset();
         Main.Singleton.MyWorld.UpdateBack();
     }
     public void Button3Pressed()
     {
         Visible = false;
-        Main.Singleton.MyWorld.Reset();
         Director.UnpauseWorld();
     }
 
