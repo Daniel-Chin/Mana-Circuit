@@ -9,15 +9,15 @@ public abstract class Gem : MagicItem
     static Gem()
     {
         // verify consistency
-        // FromID(N_IDS - 1);
-        // bool ok = true;
-        // try
-        // {
-        //     FromID(N_IDS);
-        //     ok = false;
-        // }
-        // catch (Shared.ValueError) { }
-        // Shared.Assert(ok);
+        FromID(N_IDS - 1);
+        bool ok = true;
+        try
+        {
+            FromID(N_IDS);
+            ok = false;
+        }
+        catch (Shared.ValueError) { }
+        Shared.Assert(ok);
     }
     public Gem()
     {
@@ -399,27 +399,27 @@ public abstract class Gem : MagicItem
         }
     }
 
-    // public static readonly int N_IDS = 7;
-    // public static Gem FromID(int id)
-    // {
-    //     switch (id)
-    //     {
-    //         case 0:
-    //             return new Source(new PointInt(0, 1));
-    //         case 1:
-    //             return new Drain();
-    //         case 2:
-    //             return new AddOne();
-    //         case 3:
-    //             return new WeakMult();
-    //         case 4:
-    //             return new Focus(new PointInt(0, 1));
-    //         case 5:
-    //             return new Mirror(true);
-    //         case 6:
-    //             return new Stochastic(true);
-    //         default:
-    //             throw new Shared.ValueError();
-    //     }
-    // }
+    public static readonly int N_IDS = 7;
+    public static Gem FromID(int id)
+    {
+        switch (id)
+        {
+            case 0:
+                return new Source(new PointInt(0, 1));
+            case 1:
+                return new Drain();
+            case 2:
+                return new AddOne();
+            case 3:
+                return new WeakMult();
+            case 4:
+                return new Focus(new PointInt(0, 1));
+            case 5:
+                return new Mirror(true);
+            case 6:
+                return new Stochastic(true);
+            default:
+                throw new Shared.ValueError();
+        }
+    }
 }

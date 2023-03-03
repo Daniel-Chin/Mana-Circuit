@@ -59,13 +59,6 @@ rect_pivot_offset = Vector2( 100, 0 )
 text = "FPS: 60"
 script = ExtResource( 3 )
 
-[node name="VBox" type="VBoxContainer" parent="Overlay"]
-margin_right = 1024.0
-margin_bottom = 600.0
-alignment = 2
-
-[node name="LowPanel" parent="Overlay/VBox" instance=ExtResource( 7 )]
-
 [node name="VBox2" type="VBoxContainer" parent="Overlay"]
 margin_right = 1024.0
 margin_bottom = 600.0
@@ -82,3 +75,10 @@ visible = false
 margin_left = 310.0
 margin_right = 714.0
 margin_bottom = 550.0
+
+[node name="VBoxLowPanel" type="VBoxContainer" parent="Overlay"]
+margin_right = 1024.0
+margin_bottom = 600.0
+alignment = 2
+
+[node name="LowPanel" parent="Overlay/VBoxLowPanel" instance=ExtResource( 7 )]

@@ -58,8 +58,8 @@ public class GemEntry : HBoxContainer
     {
         Labels = new RichTextLabel[3];
         OneLabel(0).SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
-        OneLabel(1).RectMinSize = new Vector2(MONEY_WIDTH, 0);
-        OneLabel(2);
+        OneLabel(1);
+        OneLabel(2).RectMinSize = new Vector2(MONEY_WIDTH, 0);
     }
     public void Pad()
     {

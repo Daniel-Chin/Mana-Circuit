@@ -32,6 +32,7 @@ public class GameState
         public int Loneliness_Shop { get; set; }
         public int Loneliness_GemExpert { get; set; }
         public int Loneliness_WandSmith { get; set; }
+        public int ShopTip { get; set; }
         public PersistentClass()
         {
             Money = Simplest.Zero();
@@ -42,12 +43,18 @@ public class GameState
             HasCustomGems = new Dictionary<int, (int, CustomGem)>();
             MyTypelessGem = null;
 
+            for (int i = 0; i < Gem.N_IDS; i++) {
+                HasGems[Gem.FromID(i).Name()] = 0;
+            }
+
             Event_Intro = false;
             Event_Staff = false;
             Event_JumperStage = 0;
             Loneliness_Shop = 0;
             Loneliness_GemExpert = 0;
             Loneliness_WandSmith = 0;
+
+            ShopTip = 0;
         }
 
         public void DebugInit()
@@ -148,6 +155,8 @@ public class GameState
             writer.WriteLine(',');
             writer.Write(Loneliness_WandSmith);
             writer.WriteLine(',');
+            writer.Write(ShopTip);
+            writer.WriteLine(',');
 
             writer.WriteLine("],");
         }
@@ -185,6 +194,7 @@ public class GameState
             Loneliness_Shop = Int32.Parse(JSON.NoLast(reader));
             Loneliness_GemExpert = Int32.Parse(JSON.NoLast(reader));
             Loneliness_WandSmith = Int32.Parse(JSON.NoLast(reader));
+            ShopTip = Int32.Parse(JSON.NoLast(reader));
 
             Shared.Assert(reader.ReadLine().Equals("],"));
 
@@ -232,6 +242,10 @@ public class GameState
                     (float)(dist * Math.Sin(Persistent.Location_theta))
                 );
             }
+        }
+
+        public void EventRejected() {
+            EnemiesTillNextSpawn = Params.N_ENEMIES_AFTER_REJ_EVENT;
         }
     }
 }

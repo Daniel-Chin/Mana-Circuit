@@ -9,7 +9,7 @@ public class Director
 
     public static void CheckEvent()
     {
-        Shared.Assert(NowEvent == null);
+        if (NowEvent != null) return;
         if (!GameState.Persistent.Event_Intro)
         {
             StartEvent(new MagicEvent.Intro());
@@ -22,6 +22,20 @@ public class Director
             GameState.Transient.NextSpawn = (SpawnableSpecial)staff;
             GameState.Transient.EnemiesTillNextSpawn = 0;
             return;
+        }
+        if (
+            GameState.Persistent.Money >= Simplest.Finite(4) &&
+            GameState.Persistent.HasGems["addOne"] == 0
+        )
+        {
+            if (GameState.Transient.NextSpawn is NPC.Shop) 
+            {
+                ;
+            } else {
+                Shared.Assert(GameState.Transient.NextSpawn == null);
+                GameState.Transient.NextSpawn = new NPC.Shop();
+                GameState.Transient.EnemiesTillNextSpawn = 0;
+            }
         }
     }
 
@@ -38,9 +52,11 @@ public class Director
     }
     public static void OnSpecialDespawn()
     {
+        if (GameState.Transient.NextSpawn == null)
+            return;
         if (GameState.Transient.NextSpawn is Wand.Staff)
             return;
-        GameState.Transient.EnemiesTillNextSpawn = Shared.Rand.Next(2, 4);
+        GameState.Transient.EventRejected();
     }
 
     public static void OnEventStepComplete()
@@ -53,20 +69,6 @@ public class Director
         if (NowEvent != null) {
             NowEvent.Process(dt);
             return;
-        }
-        if (
-            GameState.Persistent.Money >= Simplest.Finite(4) &&
-            GameState.Persistent.HasGems["addOne"].Equals(Simplest.Zero())
-        )
-        {
-            if (GameState.Transient.NextSpawn is NPC.Shop) 
-            {
-                ;
-            } else {
-                Shared.Assert(GameState.Transient.NextSpawn == null);
-                GameState.Transient.NextSpawn = new NPC.Shop();
-                GameState.Transient.EnemiesTillNextSpawn = 0;
-            }
         }
     }
 

@@ -46,6 +46,8 @@ public abstract class NPC : SpawnableSpecial
                     if (k == 1)
                         return new Simplest(Rank.FINITE, 9);
                     return new Simplest(Rank.FINITE, 5 * k);
+                case Gem.Focus _:
+                    return new Simplest(Rank.FINITE, 10 + k);
                 case Gem.Stochastic _:
                     if (k == 0)
                         return new Simplest(Rank.FINITE, 20);
@@ -63,11 +65,7 @@ public abstract class NPC : SpawnableSpecial
             }
         }
         public void Enter() {
-            GameState.Transient.WorldPaused = true;
-            Director.MainUI.MyLowPanel.SetFace(this);
-            Director.MainUI.MyLowPanel.Display(
-                "Welcome to the shop!"
-            );
+            Director.StartEvent(new MagicEvent.Shopping(this));
         }
     }
     public class WandSmith : NPC

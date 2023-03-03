@@ -10,7 +10,6 @@ size = 100
 font_data = ExtResource( 3 )
 
 [node name="UpgradeWand" type="WindowDialog"]
-visible = true
 margin_right = 48.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 900, 500 )

@@ -37,8 +37,10 @@ public class World : Node2D
             return;
         Vector2 drag = GetLocalMousePosition();
         Vector2 direction = drag.Normalized();
+        bool walking = false;
         if (Input.IsMouseButtonPressed(((int)ButtonList.Right)))
         {
+            walking = true;
             float l = drag.Length() / SOFTZONE;
             if (l < 1)
                 direction *= l;
@@ -119,21 +121,21 @@ public class World : Node2D
                 }
                 continue;
             }
-            if (distance < Params.NPC_COLLISION_RANGE)
-            {
-                if (ui.Position.Normalized().Dot(direction) > 0)
+            if (
+                walking 
+                && distance < Params.NPC_COLLISION_RANGE
+                && ui.Position.Normalized().Dot(direction) > 0
+            ) {
+                switch (ui)
                 {
-                    switch (ui)
-                    {
-                        case DroppedItemUI dUI:
-                            CollidedWithDroppedItem(dUI);
-                            break;
-                        case NPCUI npcUI:
-                            CollidedWithNPC(npcUI);
-                            break;
-                        default:
-                            throw new Shared.TypeError();
-                    }
+                    case DroppedItemUI dUI:
+                        CollidedWithDroppedItem(dUI);
+                        break;
+                    case NPCUI npcUI:
+                        CollidedWithNPC(npcUI);
+                        break;
+                    default:
+                        throw new Shared.TypeError();
                 }
             }
         }
@@ -189,6 +191,7 @@ public class World : Node2D
             {
                 GameState.Transient.LastLocationNoneventSpawn = GameState.Transient.LocationOffset;
                 // if event shows can spawn shops, spawn w/ low prob
+                // todo. Loneliness
                 Simplest hp;
                 Simplest d = GameState.Persistent.Location_dist;
                 if (d.MyRank == Rank.FINITE)

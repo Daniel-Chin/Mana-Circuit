@@ -3,14 +3,32 @@ using System;
 
 public class LowPanel : PanelContainer
 {
-    TextureRect Face;
-    RichTextLabel Label;
+    public TextureRect Face;
+    public RichTextLabel Label;
+    public HBoxContainer ButtonsHBox;
+    public Button Button0;
+    public Button Button1;
+    public TextureButton Mask;
     private float _timeElasped;
+    private bool _hasButtons;
     public override void _Ready()
     {
+        _hasButtons = false;
+
         Face = GetNode<TextureRect>("HBox/Face");
-        Label = GetNode<RichTextLabel>("HBox/Label");
-        Visible = false;
+        Label = GetNode<RichTextLabel>("HBox/VBox/Label");
+        ButtonsHBox = GetNode<HBoxContainer>("HBox/VBox/Buttons");
+        Button0 = GetNode<Button>("HBox/VBox/Buttons/Centerer0/Button0");
+        Button1 = GetNode<Button>("HBox/VBox/Buttons/Centerer1/Button1");
+        Mask = GetNode<TextureButton>("Mask");
+        ButtonsHBox.Visible = false;
+
+        Button0.Connect(
+            "pressed", this, "Button0Clicked"
+        );
+        Button0.Connect(
+            "pressed", this, "Button1Clicked"
+        );
     }
 
     public void SetFace(NPC npc)
@@ -37,7 +55,7 @@ public class LowPanel : PanelContainer
             }
             else
             {
-                Label.PushColor(Colors.LightCyan);
+                Label.PushColor(Colors.Cyan);
             }
             inCyan = !inCyan;
         }
@@ -45,15 +63,35 @@ public class LowPanel : PanelContainer
             Label.Pop();
         Label.PercentVisible = 0;
         _timeElasped = 0;
-        Visible = true;
+        Main.Singleton.VBoxLowPanel.Visible = true;
+    }
+
+    public void SetButtons(string text0, string text1)
+    {
+        _hasButtons = true;
+        Button0.Text = $" {text0} ";
+        Button1.Text = $" {text1} ";
+    }
+    public void NoButtons()
+    {
+        _hasButtons = false;
+        ButtonsHBox.Visible = false;
+        Mask.Visible = true;
     }
 
     public override void _Process(float delta)
     {
         _timeElasped += delta;
-        Label.PercentVisible = Math.Min(
-            1f, Params.TEXT_ROLL_SPEED * _timeElasped / Label.Text.Length
-        );
+        float rollProgress = Params.TEXT_ROLL_SPEED * _timeElasped / Label.Text.Length;
+        if (rollProgress >= 1) {
+            Label.PercentVisible = 1;
+            if (_hasButtons) {
+                ButtonsHBox.Visible = true;
+                Mask.Visible = false;
+            }
+        } else {
+            Label.PercentVisible = rollProgress;
+        }
     }
 
     public void SkipRoll()
@@ -68,7 +106,16 @@ public class LowPanel : PanelContainer
             SkipRoll();
             return;
         }
-        Visible = false;
+        Main.Singleton.VBoxLowPanel.Visible = false;
         Director.OnEventStepComplete();
+    }
+
+    public void Button0Clicked() {
+        Director.NowEvent.ButtonClicked(0);
+        Main.Singleton.VBoxLowPanel.Visible = false;
+    }
+    public void Button1Clicked() {
+        Director.NowEvent.ButtonClicked(1);
+        Main.Singleton.VBoxLowPanel.Visible = false;
     }
 }

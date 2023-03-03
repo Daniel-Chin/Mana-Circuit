@@ -4,7 +4,7 @@ public class Params
     public static readonly float WALK_SPEED = .1f;
     public static readonly float ENEMY_SPEED = .1f;
     public static readonly float SPAWN_EVERY_DISTANCE = .3f;
-    public static readonly float NPC_COLLISION_RANGE = 100;
+    public static readonly float NPC_COLLISION_RANGE = 140;
     public static readonly float ENEMY_COLLISION_RANGE = 50;
     public static readonly float MONEY_COLLISION_RANGE = 50;
     public static readonly int WAND_MAX_PARTICLES = 10;
@@ -14,4 +14,5 @@ public class Params
     public static readonly double ATTACK_FLY_BASE_SPEED = 4;
     public static readonly double BASE_LOG_ENEMY_HP = 1;
     public static readonly double MONEY_DROP_MULT = .1;
+    public static readonly int N_ENEMIES_AFTER_REJ_EVENT = 1;
 }

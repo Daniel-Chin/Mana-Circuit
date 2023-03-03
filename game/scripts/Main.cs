@@ -5,6 +5,7 @@ using System;
 public class Main : Node2D
 {
     public static Main Singleton = null;
+    public VBoxContainer VBoxLowPanel;
     public LowPanel MyLowPanel;
     public SidePanel MySidePanel;
     public World MyWorld;
@@ -22,8 +23,9 @@ public class Main : Node2D
         Director.MainUI = this;
         MyWorld = GetNode<World>("HBox/World");
         MyMageUI = GetNode<MageUI>("HBox/World/MageUI");
+        VBoxLowPanel = GetNode<VBoxContainer>("Overlay/VBoxLowPanel");
         MySidePanel = GetNode<SidePanel>("HBox/SidePanel");
-        MyLowPanel = GetNode<LowPanel>("Overlay/VBox/LowPanel");
+        MyLowPanel = GetNode<LowPanel>("Overlay/VBoxLowPanel/LowPanel");
         MyRevive = GetNode<Revive>("Overlay/VBox2/HBox/Revive");
         MyWorld.Connect(
             "wand_replaced", this, "WandReplaced"
@@ -31,6 +33,7 @@ public class Main : Node2D
         MyWorld.Connect(
             "player_died", this, "PlayerDied"
         );
+        VBoxLowPanel.Visible = false;
 
         SaveLoad.Load();
         // GameState.Persistent.DebugInit();

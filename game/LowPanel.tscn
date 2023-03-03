@@ -40,15 +40,52 @@ margin_right = 194.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 10, 0 )
 
-[node name="Label" type="RichTextLabel" parent="HBox"]
+[node name="VBox" type="VBoxContainer" parent="HBox"]
 margin_left = 198.0
 margin_right = 984.0
 margin_bottom = 180.0
 size_flags_horizontal = 3
+
+[node name="Label" type="RichTextLabel" parent="HBox/VBox"]
+margin_right = 786.0
+margin_bottom = 131.0
+size_flags_vertical = 3
 custom_fonts/normal_font = SubResource( 1 )
 bbcode_enabled = true
 bbcode_text = "My words here. "
 text = "My words here. "
+
+[node name="Buttons" type="HBoxContainer" parent="HBox/VBox"]
+margin_top = 135.0
+margin_right = 786.0
+margin_bottom = 180.0
+
+[node name="Centerer0" type="HBoxContainer" parent="HBox/VBox/Buttons"]
+margin_right = 391.0
+margin_bottom = 45.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Button0" type="Button" parent="HBox/VBox/Buttons/Centerer0"]
+margin_left = 153.0
+margin_right = 237.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 0, 45 )
+text = " Left "
+
+[node name="Centerer1" type="HBoxContainer" parent="HBox/VBox/Buttons"]
+margin_left = 395.0
+margin_right = 786.0
+margin_bottom = 45.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Button1" type="Button" parent="HBox/VBox/Buttons/Centerer1"]
+margin_left = 148.0
+margin_right = 242.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 0, 45 )
+text = " Right "
 
 [node name="Mask" type="TextureButton" parent="."]
 margin_left = 20.0
