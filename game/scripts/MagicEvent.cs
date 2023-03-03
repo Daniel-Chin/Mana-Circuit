@@ -198,6 +198,25 @@ public abstract class MagicEvent : Godot.Object
                     Director.UnpauseWorld();
                     Director.EventFinished();
                     break;
+                case 20:
+                    Director.MainUI.MyLowPanel.Display(
+                        "*" + GameState.Persistent.MyWand.DisplayName()
+                        + "*. The ultimate wand."
+                    );
+                    _step++;
+                    break;
+                case 21:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Only few mages can realize its true potential."
+                    );
+                    _step++;
+                    break;
+                case 22:
+                    SaveLoad.Save();
+                    Director.UnpauseWorld();
+                    GameState.Transient.NextSpawn = new NPC.WandSmith();
+                    Director.EventFinished();
+                    break;
                 default:
                     Console.WriteLine("_step " + _step);
                     throw new Shared.ValueError();
@@ -226,7 +245,7 @@ public abstract class MagicEvent : Godot.Object
                 UpgradeWand upgradeWand = new UpgradeWand();
                 Director.MainUI.AddChild(upgradeWand);
                 upgradeWand.Connect(
-                    "finished", this, "Bye"
+                    "finished", this, "ByeUpgradeWand"
                 );
                 upgradeWand.PopupCentered();
             }
@@ -236,6 +255,14 @@ public abstract class MagicEvent : Godot.Object
             Director.MainUI.MyLowPanel.SetFace(_npc);
             Director.MainUI.MyLowPanel.Display(Tip());
             _step++;
+        }
+        public void ByeUpgradeWand() {
+            if (GameState.Persistent.MyWand is Wand.Ricecooker) {
+                _step = 20;
+                NextStep();
+            } else {
+                Bye();
+            }
         }
 
         private string Tip() {

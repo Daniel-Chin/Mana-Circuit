@@ -38,7 +38,7 @@ public class Attack : ManaTrail, SpawnableUI
         }
         double interval = 1 / (
             // Math.Log(Mana.K) + .3
-            Math.Pow(Mana.K, .8) * .3
+            Math.Pow(Math.Min(500.0, Mana.K), .8) * .3
             // Mana.K * .3
             + Params.ATTACK_FLY_BASE_SPEED
         );

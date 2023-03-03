@@ -40,6 +40,11 @@ public class Director
             return;
         if (JumperMk1())
             return;
+        if (
+            GameState.Persistent.MyWand is Wand.Guitar
+            && SpawnShopIf(Simplest.Finite(25))
+        )
+            return;
     }
 
     public static void StartEvent(MagicEvent e)
