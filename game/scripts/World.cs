@@ -15,6 +15,9 @@ public class World : Node2D
     public List<Money> Moneys;
     public List<Attack> Attacks;
 
+    private float _lastLeftUp;
+    private bool _isLeftDownLastFrame;
+
     public override void _Ready()
     {
         BackRect = GetNode<TextureRect>("Background");
@@ -28,6 +31,8 @@ public class World : Node2D
         Moneys = new List<Money>();
         SpawnedSpecialUIs = new List<SpawnableSpecialUI>();
         Attacks = new List<Attack>();
+
+        _lastLeftUp = 0;
     }
 
     private static readonly float SOFTZONE = 0;
@@ -78,8 +83,18 @@ public class World : Node2D
             MyMageUI.Resting();
         }
         // attack
+        bool isLeftDown = Input.IsMouseButtonPressed(((int)ButtonList.Left));
+        bool risingEdge = (!_isLeftDownLastFrame) && isLeftDown;
+        _isLeftDownLastFrame = isLeftDown;
+        if (!isLeftDown)
+            _lastLeftUp = Main.WorldTime;
         if (
-            Input.IsMouseButtonPressed(((int)ButtonList.Left))
+            (
+                risingEdge || (
+                    isLeftDown 
+                    && Main.WorldTime - _lastLeftUp >= Params.LMB_HOLD_DEADZONE
+                )
+            )
             && !GameState.Transient.Mana.Equals(Simplest.Zero())
         )
         {
