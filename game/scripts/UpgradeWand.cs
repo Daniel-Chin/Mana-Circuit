@@ -4,6 +4,7 @@ using System;
 public class UpgradeWand : WindowDialog
 {
     // code-defined
+    [Signal] public delegate void finished();
     Wand NewWand;
     public UpgradeWand() : base()
     {
@@ -79,6 +80,7 @@ public class UpgradeWand : WindowDialog
 
     public void Leave()
     {
+        EmitSignal("finished");
         QueueFree();
     }
     public void OnPopupHide()

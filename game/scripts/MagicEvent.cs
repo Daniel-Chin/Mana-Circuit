@@ -187,6 +187,9 @@ public abstract class MagicEvent : Godot.Object
                 // Upgrade wand
                 UpgradeWand upgradeWand = new UpgradeWand();
                 Director.MainUI.AddChild(upgradeWand);
+                upgradeWand.Connect(
+                    "finished", this, "Bye"
+                );
                 upgradeWand.PopupCentered();
             }
         }
