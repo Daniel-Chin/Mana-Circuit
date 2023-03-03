@@ -106,6 +106,8 @@ public class LowPanel : PanelContainer
             SkipRoll();
             return;
         }
+        if (_hasButtons)
+            return;
         Main.Singleton.VBoxLowPanel.Visible = false;
         Director.OnEventStepComplete();
     }
