@@ -74,6 +74,7 @@ public class Revive : PanelContainer
         Update();
         Button3.Disabled = false;
 
+        GameState.Transient.NextSpawn = null;
         GameState.Transient.Update();
         Main.Singleton.MyWorld.Reset();
         Main.Singleton.MyWorld.UpdateBack();
