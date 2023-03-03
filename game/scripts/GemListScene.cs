@@ -91,6 +91,7 @@ public class GemListScene : WindowDialog
     private void FillEntryShop(GemEntry gemEntry, Gem gem)
     {
         gemEntry.PresetBigMidMoney();
+        gemEntry.Pad();
         Simplest nOwned = CountGemsOwned(gem);
         Simplest price = NPC.Shop.PriceOf(gem);
         string priceTag;
@@ -100,7 +101,7 @@ public class GemListScene : WindowDialog
             priceTag = "can't\nafford";
         }
         gemEntry.Labels[0].BbcodeText = gem.Explain(false);
-        gemEntry.Labels[1].BbcodeText = $"[color=lightgreen][center]{MathBB.Build(nOwned)}[/center][/color]";
+        gemEntry.Labels[1].BbcodeText = $"[color=#00ff00][center]{MathBB.Build(nOwned)}[/center][/color]";
         gemEntry.Labels[2].BbcodeText = $"[color=yellow][center]{priceTag}[/center][/color]";
     }
     private void FillEntryEdit(GemEntry gemEntry, Gem gem)
@@ -394,9 +395,10 @@ public class GemListScene : WindowDialog
         OuterVBox.AddChild(_header);
         OuterVBox.MoveChild(_header, 1);
         _header.PresetBigMidMoney();
+        _header.Pad();
         _header.MyGemUI.Empty();
         _header.Labels[1].BbcodeText = (
-            "[center][color=lightgreen]Owned[/color][/center]"
+            "[center][color=#00ff00]Owned[/color][/center]"
         );
         _header.Labels[2].BbcodeText = (
             "[center][color=yellow]Price[/color][/center]"
