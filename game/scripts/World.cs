@@ -416,16 +416,17 @@ public class World : Node2D
             if (Director.NowEvent is MagicEvent.Experting e) {
                 e.Attacked(attack);
                 return true;
-            } else {
-                if (
-                    GameState.Persistent.HasCustomGems.ContainsKey(0)
-                    && GameState.Persistent.MyTypelessGem == null
-                ) {
-                    MagicEvent.Experting ex = new MagicEvent.Experting(npcUI);
-                    Director.NowEvent = ex;
-                    ex.Attacked(attack);
-                    return true;
-                }
+            // } else {
+                // Just don't allow. I'd be confusing if the player randomly hit Expert. 
+                // if (
+                //     GameState.Persistent.HasCustomGems.ContainsKey(0)
+                //     && GameState.Persistent.MyTypelessGem == null
+                // ) {
+                //     MagicEvent.Experting ex = new MagicEvent.Experting(npcUI);
+                //     Director.NowEvent = ex;
+                //     ex.Attacked(attack);
+                //     return true;
+                // }
             }
         }
         return false;

@@ -750,6 +750,7 @@ public abstract class MagicEvent : Godot.Object
         }
 
         public void Attacked(Attack attack) {
+            Shared.Assert(_step == 2 | _step == 3);
             Director.PauseWorld();
             if (attack.Mana.MyRank == Rank.FINITE) {
                 _metaLevel = Simplest.Zero();
