@@ -42,14 +42,13 @@ public class World : Node2D
     private static readonly float SOFTZONE = 0;
     public override void _Process(float delta)
     {
-        Vector2 drag = GetLocalMousePosition();
-        Vector2 direction = drag.Normalized();
-        Jumper.Process(delta, direction);
         // foreach (var ui in SpawnedSpecialUIs) {
         //     ui.ZIndex = ZIndexOf(ui);
         // }
         if (GameState.Transient.WorldPaused)
             return;
+        Vector2 drag = GetLocalMousePosition();
+        Vector2 direction = drag.Normalized();
         Time += delta;
         BackShader.SetShaderParam("worldTime", Time);
         bool walking = false;

@@ -49,4 +49,11 @@ public class Attack : ManaTrail, SpawnableUI
         }
         return false;
     }
+
+    public override void _Process(float delta)
+    {
+        if (GameState.Transient.WorldPaused)
+            return;
+        base._Process(delta);
+    }
 }

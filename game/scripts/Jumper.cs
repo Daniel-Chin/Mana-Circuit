@@ -17,7 +17,9 @@ public class Jumper {
         charged = 0;
         Charging = false;
     }
-    public static void Process(float dt, Vector2 mouseDirection) {
+    public static void Process(float dt) {
+        Vector2 drag = Main.Singleton.MyWorld.GetLocalMousePosition();
+        Vector2 mouseDirection = drag.Normalized();
         if (GameState.Transient.Jumping) {
             float ratio = jumpedTime / JUMP_TIME;
             if (ratio >= 1) {

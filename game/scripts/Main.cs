@@ -48,6 +48,7 @@ public class Main : Node2D
     {
         MainTime += delta;
         Director.Process(delta);
+        Jumper.Process(delta);
     }
 
     public void WandReplaced()

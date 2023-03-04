@@ -45,8 +45,6 @@ public class ManaTrail : Node2D
 
     public override void _Process(float delta)
     {
-        if (GameState.Transient.WorldPaused)
-            return;
         foreach (LineWithAge line in _lines)
         {
             line.Remaining -= delta;
