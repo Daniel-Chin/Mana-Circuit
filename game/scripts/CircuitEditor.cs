@@ -46,7 +46,7 @@ public class CircuitEditor : WindowDialog
     {
         if (_gemList.Selected == null)
         {
-            Hide();
+            OnPopupHide();
             return;
         }
         Editee = _gemList.Selected;
