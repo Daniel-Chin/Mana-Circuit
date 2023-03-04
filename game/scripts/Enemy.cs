@@ -1,11 +1,12 @@
 public class Enemy : SpawnableSpecial
 {
-    public Simplest MaxHP;
+    public Simplest Money;
     public Simplest HP;
     public int HitTimes;
-    public Enemy(Simplest hp)
+    // public Enemy(Simplest hp) : this(hp, hp) { }
+    public Enemy(Simplest hp, Simplest money)
     {
-        MaxHP = hp;
+        Money = money;
         HP = hp;
         HitTimes = 0;
     }

@@ -261,7 +261,7 @@ public abstract class Gem : MagicItem
             return "+1 to any mana flowing through it.";
         }
     }
-    public class Mult : Gem
+    public abstract class Mult : Gem
     {
         protected abstract double Multiplier();
         public override Particle Apply(Particle input)
@@ -271,11 +271,11 @@ public abstract class Gem : MagicItem
         }
         public override string DisplayName()
         {
-            return $"x{MULT} Gem";
+            return $"x{Multiplier()} Gem";
         }
         public override string Explain(bool inCG)
         {
-            return $"Multiply any mana flowing through it by {MULT:#.#}.";
+            return $"Multiply any mana flowing through it by {Multiplier():#.#}.";
         }
     }
     public class WeakMult : Mult

@@ -206,6 +206,7 @@ public class World : Node2D
                 GameState.Transient.LastLocationNoneventSpawn = GameState.Transient.LocationOffset;
                 if (! TrySpawnNPCAsNonEvent(direction)) {
                     Simplest hp;
+                    Simplest money;
                     Simplest d = GameState.Persistent.Location_dist;
                     if (d.MyRank == Rank.FINITE)
                     {
@@ -213,12 +214,20 @@ public class World : Node2D
                             // Math.Pow(d.K, 3) + Params.BASE_ENEMY_HP
                             Math.Exp(d.K + Math.Log(Params.BASE_ENEMY_HP))
                         ));
+                        money = hp;
+                        if (
+                            GameState.Persistent.HasGems["strongMult"] >= 2
+                            && Shared.Rand.NextDouble() < Params.PROB_ENEMY_INF
+                        ) {
+                            hp = Simplest.W();
+                        }
                     }
                     else
                     {
                         hp = d;
+                        money = d;
                     }
-                    Spawn(new Enemy(hp), direction);
+                    Spawn(new Enemy(hp, money), direction);
                     if (GameState.Transient.EnemiesTillNextSpawn > 0)
                         GameState.Transient.EnemiesTillNextSpawn--;
                 }
@@ -400,7 +409,7 @@ public class World : Node2D
         {
             SpawnedSpecialUIs.Remove(enemyUI);
             enemyUI.QueueFree();
-            DropMoneyCluster(enemy.MaxHP, enemyUI.Position);
+            DropMoneyCluster(enemy.Money, enemyUI.Position);
             Director.CheckEvent();
         }
         else
