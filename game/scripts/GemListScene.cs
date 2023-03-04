@@ -410,13 +410,14 @@ public class GemListScene : WindowDialog
                 Operator.MINUS, price
             );
             if (gem is CustomGem cG) {
-                Shared.Assert(cG.MetaLevel.MyRank == Rank.FINITE);
-                int metaLevel = (int)cG.MetaLevel.K;
-                var (nOwned, _cG) = GameState.Persistent.HasCustomGems[metaLevel];
-                Shared.Assert(cG == _cG);
-                GameState.Persistent.HasCustomGems[metaLevel] = (
-                    nOwned + 1, cG
-                );
+                if (cG.MetaLevel.MyRank == Rank.FINITE) {
+                    int metaLevel = (int)cG.MetaLevel.K;
+                    var (nOwned, _cG) = GameState.Persistent.HasCustomGems[metaLevel];
+                    Shared.Assert(cG == _cG);
+                    GameState.Persistent.HasCustomGems[metaLevel] = (
+                        nOwned + 1, cG
+                    );
+                }
             } else {
                 GameState.Persistent.HasGems[gem.Name()] ++;
             }

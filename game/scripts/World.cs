@@ -519,6 +519,8 @@ public class World : Node2D
         }
         if (!GameState.Persistent.HasCustomGems.ContainsKey(0))
             return false;
+        if (GameState.Persistent.MyTypelessGem != null)
+            return false;
         if (
             GameState.Persistent.Loneliness_GemExpert >= Params.NPC_LINELINESS_MAX
         ) {

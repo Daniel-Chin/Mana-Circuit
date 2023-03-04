@@ -55,7 +55,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
                     return new Simplest(Rank.FINITE, 7 + k);
                 case CustomGem cG:
                     if (cG.MetaLevel.MyRank != Rank.FINITE)
-                        return Simplest.Zero();
+                        return Simplest.W();
                     return new Simplest(Rank.FINITE, Math.Round(
                         9 * Math.Exp(k * 6 + cG.MetaLevel.K)
                     ));
