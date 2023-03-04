@@ -60,8 +60,6 @@ public class CircuitEditor : WindowDialog
         );
         CircuitModified();
         PopupCentered();
-        MyCircuitUI.Rebuild();
-        MyCircuitUI.Update();
     }
     public void OnPopupHide()
     {
@@ -93,5 +91,19 @@ public class CircuitEditor : WindowDialog
     public void NewExplain(string explain)
     {
         ExplainLabel.BbcodeText = explain;
+    }
+
+    int layoutWarm = 2;
+    public override void _Process(float delta)
+    {
+        // the aspectContainer circuitUI doesn't refresh its rect when it should.
+        if (layoutWarm != 0 && MyCircuitUI != null) {
+            layoutWarm --;
+            if (layoutWarm % 2 == 0) {
+                VBox.Show();
+            } else {
+                VBox.Hide();
+            }
+        }
     }
 }
