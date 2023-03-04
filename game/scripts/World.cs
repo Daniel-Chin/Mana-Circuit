@@ -220,7 +220,7 @@ public class World : Node2D
                         ));
                         money = hp;
                         if (
-                            GameState.Persistent.HasGems["strongMult"] >= 2
+                            GameState.Persistent.KillsSinceStrongMult >= Params.INF_AFTER_KILLS_AFTER_STRONG_MULT
                             && Shared.Rand.NextDouble() < Params.PROB_ENEMY_INF
                         ) {
                             hp = Simplest.W();
@@ -417,7 +417,7 @@ public class World : Node2D
             SpawnedSpecialUIs.Remove(enemyUI);
             enemyUI.QueueFree();
             DropMoneyCluster(enemy.Money, enemyUI.Position);
-            Director.CheckEvent();
+            Director.EnemyDied();
         }
         else
         {

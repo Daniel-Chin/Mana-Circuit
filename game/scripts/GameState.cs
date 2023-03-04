@@ -33,6 +33,7 @@ public class GameState
         public int Loneliness_GemExpert { get; set; }
         public int Loneliness_WandSmith { get; set; }
         public int ShopTip { get; set; }
+        public int KillsSinceStrongMult { get; set; }
         public PersistentClass()
         {
             Money = Simplest.Zero();
@@ -55,6 +56,7 @@ public class GameState
             Loneliness_WandSmith = 0;
 
             ShopTip = 0;
+            KillsSinceStrongMult = 0;
         }
 
         public void ToJSON(StreamWriter writer)
@@ -114,6 +116,8 @@ public class GameState
             writer.WriteLine(',');
             writer.Write(ShopTip);
             writer.WriteLine(',');
+            writer.Write(ShopTip);
+            writer.WriteLine(',');
 
             writer.WriteLine("],");
         }
@@ -152,6 +156,7 @@ public class GameState
             Loneliness_GemExpert = Int32.Parse(JSON.NoLast(reader));
             Loneliness_WandSmith = Int32.Parse(JSON.NoLast(reader));
             ShopTip = Int32.Parse(JSON.NoLast(reader));
+            KillsSinceStrongMult = Int32.Parse(JSON.NoLast(reader));
 
             Shared.Assert(reader.ReadLine().Equals("],"));
 

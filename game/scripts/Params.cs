@@ -22,4 +22,5 @@ public class Params
     public static readonly double INF_DISTANCE = 1e4;   // 8 hours of walk time
     public static readonly int NPC_LINELINESS_MAX = 8;
     public static readonly double PROB_ENEMY_INF = .2;
+    public static readonly int INF_AFTER_KILLS_AFTER_STRONG_MULT = 10;
 }

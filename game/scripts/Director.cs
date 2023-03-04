@@ -226,4 +226,11 @@ public class Director
             GameState.Transient.EnemiesTillNextSpawn = 0;
         }
     }
+
+    public static void EnemyDied() {
+        if (GameState.Persistent.HasGems[new Gem.StrongMult().Name()] != 0) {
+            GameState.Persistent.KillsSinceStrongMult ++;
+        }
+        CheckEvent();
+    }
 }
