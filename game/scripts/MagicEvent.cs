@@ -264,7 +264,7 @@ public abstract class MagicEvent : Godot.Object
             if (GameState.Persistent.MyWand is Wand.Ricecooker) {
                 _step = 20;
                 NextStep();
-            } else if (GameState.Persistent.MyWand is Wand.Ricecooker) {
+            } else if (GameState.Persistent.MyWand is Wand.Guitar) {
                 _step = 30;
                 NextStep();
             } else {
