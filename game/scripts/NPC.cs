@@ -27,7 +27,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
                     if (k == 0)
                         return new Simplest(Rank.FINITE, 4);
                     if (k == 1)
-                        return new Simplest(Rank.FINITE, 9);
+                        return new Simplest(Rank.FINITE, 11);
                     return new Simplest(Rank.FINITE, 10 * k);
                 case Gem.WeakMult _:
                     if (k == 0)
