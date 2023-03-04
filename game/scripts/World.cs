@@ -108,7 +108,7 @@ public class World : Node2D
                 attack.LineWidth = 3;
                 Attacks.Add(attack);
                 AddChild(attack);
-                Director.WandAttacked();
+                Director.WandAttacked(attack);
             }
         }
         UpdateMoneys(delta);
@@ -209,32 +209,7 @@ public class World : Node2D
                 if (TrySpawnNPCAsNonEvent(direction)) {
                     Console.WriteLine("Spawned NPC. ");
                 } else {
-                    Simplest hp;
-                    Simplest money;
-                    Simplest d = GameState.Persistent.Location_dist;
-                    if (d.MyRank == Rank.FINITE)
-                    {
-                        hp = new Simplest(Rank.FINITE, Math.Ceiling(
-                            // Math.Pow(d.K, 3) + Params.BASE_ENEMY_HP
-                            Math.Exp(d.K + Math.Log(Params.BASE_ENEMY_HP))
-                        ));
-                        money = hp;
-                        if (
-                            GameState.Persistent.KillsSinceStrongMult >= Params.INF_AFTER_KILLS_AFTER_STRONG_MULT
-                            && Shared.Rand.NextDouble() < Params.PROB_ENEMY_INF
-                        ) {
-                            hp = Simplest.W();
-                        }
-                    }
-                    else
-                    {
-                        hp = d;
-                        money = d;
-                    }
-                    Spawn(new Enemy(hp, money), direction);
-                    if (GameState.Transient.EnemiesTillNextSpawn > 0)
-                        GameState.Transient.EnemiesTillNextSpawn--;
-                    Console.WriteLine("Spawned enemy. ");
+                    SpawnEnemy(direction);
                 }
             }
         // } else {
@@ -551,5 +526,35 @@ public class World : Node2D
             return true;
         }
         return false;
+    }
+
+    private void SpawnEnemy(Vector2 direction) {
+        Simplest hp;
+        Simplest money;
+        Simplest d = GameState.Persistent.Location_dist;
+        if (d.MyRank == Rank.FINITE)
+        {
+            hp = new Simplest(Rank.FINITE, Math.Ceiling(
+                // Math.Pow(d.K, 3) + Params.BASE_ENEMY_HP
+                Math.Exp(d.K + Math.Log(Params.BASE_ENEMY_HP))
+            ));
+            money = hp;
+            if (
+                 ! GameState.Persistent.MadeInf
+                && GameState.Persistent.KillsSinceStrongMult >= Params.INF_AFTER_KILLS_AFTER_STRONG_MULT
+                && Shared.Rand.NextDouble() < Params.PROB_ENEMY_INF
+            ) {
+                hp = Simplest.W();
+            }
+        }
+        else
+        {
+            hp = d;
+            money = d;
+        }
+        Spawn(new Enemy(hp, money), direction);
+        if (GameState.Transient.EnemiesTillNextSpawn > 0)
+            GameState.Transient.EnemiesTillNextSpawn--;
+        Console.WriteLine("Spawned enemy. ");
     }
 }

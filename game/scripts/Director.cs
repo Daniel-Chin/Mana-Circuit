@@ -131,12 +131,15 @@ public class Director
         return true;
     }
 
-    public static void WandAttacked()
+    public static void WandAttacked(Attack attack)
     {
         if (NowEvent is MagicEvent.Staff e)
         {
             e.Attacked = true;
             e.NextStep();
+        }
+        if (attack.Mana.MyRank != Rank.FINITE) {
+            GameState.Persistent.MadeInf = true;
         }
     }
 
