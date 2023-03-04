@@ -225,7 +225,7 @@ public class World : Node2D
                     if (d.MyRank == Rank.FINITE)
                     {
                         hp = new Simplest(Rank.FINITE, Math.Ceiling(
-                            Math.Pow(d.K, 2) + Params.BASE_ENEMY_HP
+                            Math.Pow(d.K, 3) + Params.BASE_ENEMY_HP
                         ));
                     }
                     else
@@ -290,12 +290,17 @@ public class World : Node2D
         foreach (Money m0 in Moneys)
         {
             Vector2 force = new Vector2(0, 0);
-            foreach (Money m1 in Moneys)
+            List<Node2D> repellers = new List<Node2D>();
+            repellers.AddRange(Moneys);
+            repellers.AddRange(SpawnedSpecialUIs);
+            foreach (Node2D repeller in repellers)
             {
-                if (m0 == m1) continue;
-                Vector2 displace = m0.Position - m1.Position;
+                if (m0 == repeller) continue;
+                Vector2 displace = m0.Position - repeller.Position;
                 float dist = Math.Max(3f, displace.Length());
-                force += displace.Normalized() / dist;
+                force += displace.Normalized() / (float)Math.Pow(dist, 2) * (
+                    repeller is NPCUI ? 20 : 1
+                );
             }
             m0.Step(force, dt);
         }
