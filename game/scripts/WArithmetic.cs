@@ -329,6 +329,8 @@ public class Simplest : JSONable
                         return new Simplest(
                             Rank.FINITE, left.K - right.K
                         );
+                    if (left.K > right.K)
+                        return left;
                 }
                 return Simplest.Zero();
             case Operator.TIMES:
