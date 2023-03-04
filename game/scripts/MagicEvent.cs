@@ -450,18 +450,30 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.Display(
                         "Try it! I'd like to see just how much it has improved."
                     );
-                    Director.UnpauseWorld();
                     _step++;
                     break;
                 case 107:
+                    _sprite = new Sprite();
+                    _sprite.Texture = GD.Load<Texture>("res://texture/misc/jumper.png");
+                    _sprite.Scale = Params.SPRITE_SCALE;
+                    Main.Singleton.MyWorld.AddChild(_sprite);
+                    _step++;
+                    animationTime = 0;
+                    Process(0);
+                    break;
+                case 109:
                     Director.UnpauseWorld();
+                    JumpDemo = true;
                     _step++;
                     break;
                 case 110:
+                    Director.UnpauseWorld();
+                    break;
+                case 115:
                     Director.MainUI.MyLowPanel.Display(
                         "Hold J. In case you forgot."
                     );
-                    _step = 107;
+                    _step = 110;
                     break;
                 case 120:
                     Director.PauseWorld();
@@ -474,7 +486,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.Display(
                         "How does he know everything?"
                     );
-                    _step = 107;
+                    _step = 110;
                     break;
                 case 130:
                     GameState.Persistent.Event_JumperStage = 2;
@@ -484,16 +496,21 @@ public abstract class MagicEvent : Godot.Object
                     Director.EventFinished();
                     break;
                 default:
+                    Console.WriteLine("_step=" + _step);
                     throw new Shared.ValueError();
             }
         }
         public override void Process(float dt) {
-            if (_step == 3) {
+            if (!IsInstanceValid(_npcUI))
+                return;
+            if (_step == 3 || _step == 108) {
                 float ratio = animationTime / ANIMATION_LENGTH;
                 if (ratio > 1f) {
                     animationTime = 0;
                     _step ++;
                     _sprite.QueueFree();
+                    if (_step == 109)
+                        NextStep();
                     return;
                 }
                 _sprite.Position = _npcUI.Position * (1f - ratio);
@@ -550,7 +567,7 @@ public abstract class MagicEvent : Godot.Object
                 _step ++;
                 NextStep();
             } else {
-                Shared.Assert(_step == 107 || _step == 108);
+                Shared.Assert(_step == 110);
                 if (jumpMana.MyRank == Rank.FINITE) {
                     _step = 120;
                     NextStep();
@@ -571,13 +588,12 @@ public abstract class MagicEvent : Godot.Object
             }
         }
         public void CollideAgain() {
+            Shared.Assert(JumpDemo);
             if (GameState.Persistent.Event_JumperStage == 0) {
-                Shared.Assert(JumpDemo);
                 _step = 6;
                 NextStep();
             } else {
-                Shared.Assert(_step == 107 || _step == 108);
-                _step = 110;
+                _step = 115;
                 NextStep();
             }
         }

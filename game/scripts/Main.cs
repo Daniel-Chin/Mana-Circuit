@@ -36,7 +36,6 @@ public class Main : Node2D
         VBoxLowPanel.Visible = false;
 
         SaveLoad.Load();
-        // GameState.Persistent.DebugInit();
         GameState.Transient.Update();
         WandReplaced();
         MyWorld.UpdateBack();
