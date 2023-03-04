@@ -35,7 +35,7 @@ public class Jumper {
                 }
                 GameState.Transient.Jumping = false;
                 Director.UnpauseWorld();
-                Director.JumpFinished();
+                Director.JumpFinished(jumpMana);
                 return;
             }
             Main.Singleton.MyMageUI.Position = new Vector2(

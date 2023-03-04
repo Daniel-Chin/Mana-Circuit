@@ -66,6 +66,17 @@ public class Director
                 SetNPCToSpawn(new NPC.GemExpert());
                 return;
             }
+            if (
+                GameState.Persistent.Event_JumperStage == 1 && (
+                    GameState.Persistent.HasCustomGems.ContainsKey(1) ||
+                    GameState.Persistent.HasCustomGems.ContainsKey(2) ||
+                    GameState.Persistent.HasCustomGems.ContainsKey(3) ||
+                    GameState.Persistent.HasCustomGems.ContainsKey(4)
+                )
+            ) {
+                SetNPCToSpawn(new NPC.Inventor());
+                return;
+            }
         }
     }
 
@@ -211,9 +222,9 @@ public class Director
             e.JumpBegan();
         }
     }
-    public static void JumpFinished() {
+    public static void JumpFinished(Simplest jumpMana) {
         if (NowEvent is MagicEvent.Jumping e) {
-            e.JumpFinished();
+            e.JumpFinished(jumpMana);
         }
     }
 

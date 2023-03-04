@@ -297,9 +297,13 @@ public abstract class MagicEvent : Godot.Object
         private Sprite _sprite;
         public Jumping(SpawnableSpecialUI npcUI)
         {
-            _step = 0;
             _npcUI = npcUI;
             JumpDemo = false;
+            if (GameState.Persistent.Event_JumperStage == 0) {
+                _step = 0;
+            } else {
+                _step = 100;
+            }
         }
         public override void NextStep() {
 
@@ -403,6 +407,82 @@ public abstract class MagicEvent : Godot.Object
                     GameState.Transient.NextSpawn = null;
                     Director.EventFinished();
                     break;
+
+                case 100:
+                    Director.PauseWorld();
+                    Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
+                    Director.MainUI.MyLowPanel.Display(
+                        "I.          \nAM.          \nBACK."
+                    );
+                    _step++;
+                    break;
+                case 101:
+                    Director.MainUI.MyLowPanel.Display(
+                        "With the all new --- *Jumper MK-II*!!!"
+                    );
+                    _step++;
+                    break;
+                case 102:
+                    Director.MainUI.MyLowPanel.Display(
+                        "*Jumper MK-II* revolutionarily converts 12% of your mana to jumping power, "
+                    );
+                    _step++;
+                    break;
+                case 103:
+                    Director.MainUI.MyLowPanel.Display(
+                        "i.e., a jarring 2% increase in efficiency."
+                    );
+                    _step++;
+                    break;
+                case 104:
+                    Director.MainUI.MyLowPanel.Display(
+                        "It's so powerful, it essentially ends the series."
+                    );
+                    _step++;
+                    break;
+                case 105:
+                    Director.MainUI.MyLowPanel.Display(
+                        "As my beta tester, you get one for free. "
+                    );
+                    _step++;
+                    break;
+                case 106:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Try it! I'd like to see just how much it has improved."
+                    );
+                    Director.UnpauseWorld();
+                    _step++;
+                    break;
+                case 107:
+                    Director.UnpauseWorld();
+                    _step++;
+                    break;
+                case 110:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Hold J. In case you forgot."
+                    );
+                    _step = 107;
+                    break;
+                case 120:
+                    Director.PauseWorld();
+                    Director.MainUI.MyLowPanel.Display(
+                        "Unbelievable. You decreased your mana and used my Jumper MK-II, just like Author predicted!"
+                    );
+                    _step++;
+                    break;
+                case 121:
+                    Director.MainUI.MyLowPanel.Display(
+                        "How does he know everything?"
+                    );
+                    _step = 107;
+                    break;
+                case 130:
+                    GameState.Persistent.Event_JumperStage = 2;
+                    SaveLoad.Save();
+                    Director.UnpauseWorld();
+                    GameState.Transient.NextSpawn = null;
+                    Director.EventFinished();
+                    break;
                 default:
                     throw new Shared.ValueError();
             }
@@ -465,9 +545,20 @@ public abstract class MagicEvent : Godot.Object
         public void JumpBegan() {
             Main.Singleton.VBoxLowPanel.Visible = false;
         }
-        public void JumpFinished() {
-            _step ++;
-            NextStep();
+        public void JumpFinished(Simplest jumpMana) {
+            if (GameState.Persistent.Event_JumperStage == 0) {
+                _step ++;
+                NextStep();
+            } else {
+                Shared.Assert(_step == 107 || _step == 108);
+                if (jumpMana.MyRank == Rank.FINITE) {
+                    _step = 120;
+                    NextStep();
+                } else {
+                    _step = 130;
+                    NextStep();
+                }
+            }
         }
         public override void ButtonClicked(int buttonID) {
             Director.MainUI.MyLowPanel.NoButtons();
@@ -480,9 +571,15 @@ public abstract class MagicEvent : Godot.Object
             }
         }
         public void CollideAgain() {
-            Shared.Assert(JumpDemo);
-            _step = 6;
-            NextStep();
+            if (GameState.Persistent.Event_JumperStage == 0) {
+                Shared.Assert(JumpDemo);
+                _step = 6;
+                NextStep();
+            } else {
+                Shared.Assert(_step == 107 || _step == 108);
+                _step = 110;
+                NextStep();
+            }
         }
     }
 
