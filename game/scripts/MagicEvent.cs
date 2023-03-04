@@ -602,7 +602,7 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 16:
                     Director.MainUI.MyLowPanel.Display(
-                        $"You have potential. However, a {AttackClass()} is nothing I'd call exciting. "
+                        $"You have potential. However, \na {AttackClass()} is nothing I'd call exciting. "
                     );
                     _step++;
                     break;
@@ -673,7 +673,7 @@ public abstract class MagicEvent : Godot.Object
                     _cG = new CustomGem(_metaLevel);
                     Director.MainUI.MyLowPanel.Display(
                         "As per our agreement, I now grant you the ability to make          \n"
-                        + $"*{_cG.DisplayName()}s*"
+                        + $"*{_cG.DisplayName()}s*."
                     );
                     _step++;
                     break;
@@ -782,14 +782,14 @@ public abstract class MagicEvent : Godot.Object
             string x;
             if (_metaLevel.Equals(Simplest.Zero())) {
                 x = "1";
-            } else if (_metaLevel >= Simplest.Bottom(Rank.TWO_TO_THE_W)) {
+            } else if (_metaLevel.MyRank == Rank.FINITE) {
                 x = MathBB.Build(
-                    new Simplest(Rank.STACK_W, 2), 
+                    new Simplest(Rank.W_TO_THE_K, _metaLevel.K), 
                     Main.Singleton.MyLowPanel.FontHeight
                 );
             } else {
                 x = MathBB.Build(
-                    new Simplest(Rank.W_TO_THE_K, _metaLevel.K), 
+                    new Simplest(Rank.STACK_W, 2), 
                     Main.Singleton.MyLowPanel.FontHeight
                 );
             }
