@@ -25,17 +25,25 @@ public class Director
             GameState.Transient.EnemiesTillNextSpawn = 0;
             return;
         }
-        if (SpawnShopIf(Simplest.Finite(4), (new Gem.AddOne(), 0)))
+        if (SpawnShopIf(Simplest.Finite(4), (new Gem.AddOne(), 0))) {
+            Console.WriteLine("hinting to buy +1");
             return;
-        if (SpawnShopIf(Simplest.Finite(6), (new Gem.WeakMult(), 0)))
+        }
+        if (SpawnShopIf(Simplest.Finite(6), (new Gem.WeakMult(), 0))) {
+            Console.WriteLine("hinting to buy x1.4");
             return;
-        if (SpawnShopIf(Simplest.Finite(9), (new Gem.AddOne(), 1)))
+        }
+        if (SpawnShopIf(Simplest.Finite(9), (new Gem.AddOne(), 1))) {
+            Console.WriteLine("hinting to buy +1");
             return;
+        }
         if (
             GameState.Persistent.MyWand is Wand.Staff
             && SpawnShopIf(Simplest.Finite(13))
-        )
+        ) {
+            Console.WriteLine("hinting to buy guitar");
             return;
+        }
         if (FillGuitar())
             return;
         if (JumperMk1())
@@ -43,8 +51,10 @@ public class Director
         if (
             GameState.Persistent.MyWand is Wand.Guitar
             && SpawnShopIf(Simplest.Finite(25))
-        )
+        ) {
+            Console.WriteLine("hinting to buy ricecooker");
             return;
+        }
         if (
             GameState.Persistent.MyWand is Wand.Ricecooker
         ) {

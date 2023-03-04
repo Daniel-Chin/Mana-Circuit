@@ -182,7 +182,7 @@ public class World : Node2D
             bool alreadyThere = false;
             foreach (var ui in SpawnedSpecialUIs)
             {
-                if (ui.MySpawnable == s)
+                if (ui.MySpawnable.GetType() == s.GetType())
                 {
                     alreadyThere = true;
                     break;

@@ -42,20 +42,22 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
                 case Gem.StrongMult _:
                     return new Simplest(Rank.FINITE, 100 * (k + 1));
                 case Gem.Focus _:
-                    return new Simplest(Rank.FINITE, 10 + k);
+                    if (k == 0)
+                        return new Simplest(Rank.FINITE, 10);
+                    // if (k == 1)
+                    //     return new Simplest(Rank.W_TO_THE_K, 1);
+                    return new Simplest(Rank.W_TO_THE_K, k);
                 case Gem.Stochastic _:
                     if (k == 0)
                         return new Simplest(Rank.FINITE, 20);
-                    if (k == 1)
-                        return new Simplest(Rank.W_TO_THE_K, 1);
-                    return new Simplest(Rank.W_TO_THE_K, k);
+                    return new Simplest(Rank.FINITE, 20 + k * 10);
                 case Gem.Mirror _:
                     return new Simplest(Rank.FINITE, 7 + k);
                 case CustomGem cG:
                     if (cG.MetaLevel.MyRank != Rank.FINITE)
                         return Simplest.Zero();
                     return new Simplest(Rank.FINITE, Math.Round(
-                        9 * Math.Exp(k * 4 + cG.MetaLevel.K)
+                        9 * Math.Exp(k * 6 + cG.MetaLevel.K)
                     ));
                 default:
                     throw new Shared.TypeError();

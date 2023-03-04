@@ -171,6 +171,7 @@ public class GemListScene : WindowDialog
         {
             if (
                 _mode == Mode.PLACE
+                && !(gem is CustomGem)
                 && GameState.Persistent.CountGemsOwned(gem).Equals(Simplest.Zero())
             )
                 continue;

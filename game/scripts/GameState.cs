@@ -239,7 +239,7 @@ public class GameState
         }
 
         public void EventRejected() {
-            EnemiesTillNextSpawn = Params.N_ENEMIES_AFTER_REJ_EVENT;
+            EnemiesTillNextSpawn = Params.N_ENEMIES_AFTER_REJECT_EVENT;
         }
     }
 }

@@ -16,7 +16,7 @@ public class Params
     public static readonly double ATTACK_FLY_BASE_SPEED = 4;
     public static readonly double BASE_ENEMY_HP = 3;
     public static readonly double MONEY_DROP_MULT = .1;
-    public static readonly int N_ENEMIES_AFTER_REJ_EVENT = 1;
+    public static readonly int N_ENEMIES_AFTER_REJECT_EVENT = 2;
     public static readonly float LMB_HOLD_DEADZONE = .3f;
     public static readonly Vector2 SPRITE_SCALE = new Vector2(4, 4);
     public static readonly double INF_DISTANCE = 1e4;   // 8 hours of walk time
