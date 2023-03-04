@@ -214,6 +214,13 @@ public abstract class MagicEvent : Godot.Object
                     GameState.Transient.NextSpawn = new NPC.WandSmith();
                     Director.EventFinished();
                     break;
+                case 30:
+                    Director.MainUI.MyLowPanel.Display(
+                        "*" + GameState.Persistent.MyWand.DisplayName()
+                        + "*... It has three radiators. Concentrate their mana into the neck!"
+                    );
+                    _step = 22;
+                    break;
                 default:
                     Console.WriteLine("_step " + _step);
                     throw new Shared.ValueError();
@@ -256,6 +263,9 @@ public abstract class MagicEvent : Godot.Object
         public void ByeUpgradeWand() {
             if (GameState.Persistent.MyWand is Wand.Ricecooker) {
                 _step = 20;
+                NextStep();
+            } else if (GameState.Persistent.MyWand is Wand.Ricecooker) {
+                _step = 30;
                 NextStep();
             } else {
                 Bye();
