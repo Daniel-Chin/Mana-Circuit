@@ -15,6 +15,9 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
         {
             return "shop";
         }
+        public override string ToString() {
+            return Name();
+        }
         public static Simplest PriceOf(Gem gem)
         {
             return PriceOf(gem, (int)GameState.Persistent.CountGemsOwned(gem).K);
