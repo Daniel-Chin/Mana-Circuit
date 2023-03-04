@@ -330,7 +330,7 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 5:
                     Director.MainUI.MyLowPanel.Display(
-                        "You should be able to jump over great distances! *Jumper MK-I* converts 10% of your mana to jumping power."
+                        "You can now jump over great distances! *Jumper MK-I* converts 10% of your mana to jumping power."
                     );
                     _step++;
                     break;
