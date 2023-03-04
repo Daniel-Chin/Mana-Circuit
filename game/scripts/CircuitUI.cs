@@ -157,7 +157,7 @@ public class CircuitUI : AspectRatioContainer
                 Gem gem = MyCircuit.Field[i, j];
                 GemUI gemUI = new GemUI(
                     gem, RecursionDepth,
-                    MyMagicItem is Wand, SimParticles
+                    !(MyMagicItem is Wand), SimParticles
                 );
                 _grid.AddChild(gemUI);
                 GemUIs[i, j] = gemUI;
