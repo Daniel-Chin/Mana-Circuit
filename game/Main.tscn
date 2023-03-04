@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scripts/Main.cs" type="Script" id=1]
 [ext_resource path="res://MageUI.tscn" type="PackedScene" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://WorldBack.gdshader" type="Shader" id=8]
 [ext_resource path="res://scripts/World.cs" type="Script" id=9]
 [ext_resource path="res://Revive.tscn" type="PackedScene" id=10]
+[ext_resource path="res://MadeEpsilon0.tscn" type="PackedScene" id=11]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -84,3 +85,6 @@ margin_bottom = 600.0
 alignment = 2
 
 [node name="LowPanel" parent="Overlay/VBoxLowPanel" instance=ExtResource( 7 )]
+
+[node name="MadeEpsilon0" parent="." instance=ExtResource( 11 )]
+visible = false

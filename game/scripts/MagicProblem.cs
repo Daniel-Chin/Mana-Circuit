@@ -252,8 +252,11 @@ public class MagicProblem
                     if (patience == 0)
                     {
                         patience = UPRANK_EVERY;
-                        if (Guess[i].MyRank == Rank.STACK_W)
-                            throw new Shared.PlayerCreatedEpsilonNaught();
+                        if (Guess[i].MyRank == Rank.STACK_W) {
+                            // throw new Shared.PlayerCreatedEpsilonNaught();
+                            Main.Singleton.MadeEpsilon0.PopupCentered();
+                            return Simplest.Zero();
+                        }
                         Guess[i] = Simplest.Bottom(Guess[i].MyRank + 1);
                     }
                 }
@@ -288,8 +291,11 @@ public class MagicProblem
             patience--;
             if (patience == 0)
             {
-                if (tGuess.MyRank == Rank.STACK_W)
-                    throw new Shared.PlayerCreatedEpsilonNaught();
+                if (tGuess.MyRank == Rank.STACK_W) {
+                    // throw new Shared.PlayerCreatedEpsilonNaught();
+                    Main.Singleton.MadeEpsilon0.PopupCentered();
+                    return Simplest.Zero();
+                }
                 tGuess = Simplest.Bottom(tGuess.MyRank + 1);
             }
             else

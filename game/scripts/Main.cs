@@ -11,6 +11,7 @@ public class Main : Node2D
     public World MyWorld;
     public MageUI MyMageUI;
     public Revive MyRevive;
+    public WindowDialog MadeEpsilon0;
     public static float MainTime;
     public Main() : base()
     {
@@ -27,6 +28,7 @@ public class Main : Node2D
         MySidePanel = GetNode<SidePanel>("HBox/SidePanel");
         MyLowPanel = GetNode<LowPanel>("Overlay/VBoxLowPanel/LowPanel");
         MyRevive = GetNode<Revive>("Overlay/VBox2/HBox/Revive");
+        MadeEpsilon0 = GetNode<WindowDialog>("MadeEpsilon0");
         MyWorld.Connect(
             "wand_replaced", this, "WandReplaced"
         );
