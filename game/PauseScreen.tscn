@@ -1,0 +1,77 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://misc/theme.tres" type="Theme" id=1]
+[ext_resource path="res://misc/font/m5x7.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 60
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0, 0, 1 )
+
+[node name="PauseScreen" type="WindowDialog"]
+visible = true
+margin_right = 48.0
+margin_bottom = 1.0
+rect_min_size = Vector2( 900, 500 )
+theme = ExtResource( 1 )
+
+[node name="VBox" type="VBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 900, 500 )
+custom_constants/separation = 30
+
+[node name="Title" type="Label" parent="VBox"]
+margin_right = 900.0
+margin_bottom = 48.0
+custom_fonts/font = SubResource( 1 )
+text = "Game Paused"
+align = 1
+
+[node name="TextEdit" type="TextEdit" parent="VBox"]
+margin_top = 78.0
+margin_right = 900.0
+margin_bottom = 405.0
+size_flags_vertical = 3
+custom_styles/normal = SubResource( 2 )
+text = "# Related works
+- VSauce. \"How To Count Past Infinity\". https://youtu.be/SrU9YDoXE88
+  - Watch this video to learn the *correct* Math about various infinities. 
+- Germapur. \"Miner Gun Builder\" (MGB). 
+  - Play MGB if you want a much longer power-growing arc. 
+  - MGB also directly inspired my game. 
+- Patrick Traynor. \"Patrick's Parabox\". https://www.patricksparabox.com
+  - An awesome puzzle game where infinity is also a necessary consequence of the game mechanics. 
+
+# Acknowledgements
+- Font \"m5x7\" by Daniel Linssen. https://managore.itch.io/m5x7
+  - Note, the Math displayed in this game is just BBCode images. 
+- Godot 3.5.1 engine. 
+- C#. 
+"
+
+[node name="HBox" type="HBoxContainer" parent="VBox"]
+margin_top = 435.0
+margin_right = 900.0
+margin_bottom = 470.0
+custom_constants/separation = 100
+alignment = 1
+
+[node name="ResumeButton" type="Button" parent="VBox/HBox"]
+margin_left = 216.0
+margin_right = 409.0
+margin_bottom = 35.0
+text = " Resume Game "
+
+[node name="QuitButton" type="Button" parent="VBox/HBox"]
+margin_left = 509.0
+margin_right = 683.0
+margin_bottom = 35.0
+text = " Save & Exit "
+
+[node name="Padder" type="MarginContainer" parent="VBox"]
+margin_top = 500.0
+margin_right = 900.0
+margin_bottom = 500.0
