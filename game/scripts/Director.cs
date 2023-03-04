@@ -51,6 +51,7 @@ public class Director
             if (
                 GameState.Persistent.Money >= Simplest.Finite(50)
                 && !GameState.Persistent.HasCustomGems.ContainsKey(0)
+                && GameState.Persistent.Event_JumperStage >= 1
             ) {
                 SetNPCToSpawn(new NPC.GemExpert());
                 return;
