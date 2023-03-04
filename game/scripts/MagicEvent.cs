@@ -622,6 +622,7 @@ public abstract class MagicEvent : Godot.Object
                     _step = 11;
                     break;
                 case 40:
+                    Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
                     Director.MainUI.MyLowPanel.Display(
                         "Nice try..."
                     );

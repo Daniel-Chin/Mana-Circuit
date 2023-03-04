@@ -71,6 +71,9 @@ public class Director
         if (s is NPC.WandSmith) {
             GameState.Transient.NextSpawn = null;
         }
+        GameState.Persistent.Loneliness_GemExpert ++;
+        GameState.Persistent.Loneliness_Shop ++;
+        GameState.Persistent.Loneliness_WandSmith ++;
     }
     public static void SpecialDespawned(
         SpawnableSpecial s, bool exposed

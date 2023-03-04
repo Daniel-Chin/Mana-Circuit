@@ -193,7 +193,6 @@ public class World : Node2D
             {
                 Console.WriteLine("Spawning " + s);
                 Spawn(s, direction);
-                Director.SpecialSpawned(s);
             }
         }
         // spawn non-event
@@ -205,21 +204,7 @@ public class World : Node2D
             ).Length() >= Params.SPAWN_EVERY_DISTANCE)
             {
                 GameState.Transient.LastLocationNoneventSpawn = GameState.Transient.LocationOffset;
-                if (
-                    GameState.Persistent.Event_Staff
-                    && GameState.Persistent.HasAnyNonCGem()
-                    && Shared.Rand.NextDouble() < Params.PROB_NPC_AS_NONEVENT
-                ) {
-                    // todo: check if GemExpert can spawn
-                    if (
-                        GameState.Persistent.Loneliness_Shop >
-                        GameState.Persistent.Loneliness_WandSmith
-                    ) {
-                        Spawn(new NPC.Shop(), direction);
-                    } else {
-                        Spawn(new NPC.WandSmith(), direction);
-                    }
-                } else {
+                if (! TrySpawnNPCAsNonEvent(direction)) {
                     Simplest hp;
                     Simplest d = GameState.Persistent.Location_dist;
                     if (d.MyRank == Rank.FINITE)
@@ -273,6 +258,7 @@ public class World : Node2D
         // Console.Write("SpawnedUIs ");
         // Shared.PrintList(SpawnedUIs);
         AddChild(ui);
+        Director.SpecialSpawned(s);
     }
 
     private void UpdateMoneys(float dt)
@@ -519,5 +505,36 @@ public class World : Node2D
         return (int)((
             ui.Position.y / BackRect.RectMinSize.y + 1f
         ) * Z_INDEX_RANGE);
+    }
+
+    private bool TrySpawnNPCAsNonEvent(Vector2 direction) {
+        Console.WriteLine("dan");
+        if (!GameState.Persistent.Event_Staff)
+            return false;
+        if (!GameState.Persistent.HasAnyNonCGem())
+            return false;
+        Console.WriteLine("dan2");
+        Console.WriteLine(GameState.Persistent.Loneliness_WandSmith);
+        if (
+            GameState.Persistent.Loneliness_WandSmith >= Params.NPC_LINELINESS_MAX
+        ) {
+            Spawn(new NPC.WandSmith(), direction);
+            return true;
+        }
+        if (
+            GameState.Persistent.Loneliness_Shop >= Params.NPC_LINELINESS_MAX
+        ) {
+            Spawn(new NPC.Shop(), direction);
+            return true;
+        }
+        if (!GameState.Persistent.HasCustomGems.ContainsKey(0))
+            return false;
+        if (
+            GameState.Persistent.Loneliness_GemExpert >= Params.NPC_LINELINESS_MAX
+        ) {
+            Spawn(new NPC.GemExpert(), direction);
+            return true;
+        }
+        return false;
     }
 }
