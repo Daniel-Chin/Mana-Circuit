@@ -99,7 +99,7 @@ public class Test : Node2D
     private void TestMathBB()
     {
         Console.Write("Font height = ");
-        Console.WriteLine(Shared.FONT_SCALE);
+        Console.WriteLine(Shared.FONT.GetHeight());
         var l = new RichTextLabel();
         AddChild(l);
         l.BbcodeEnabled = true;

@@ -9,6 +9,7 @@ public class LowPanel : PanelContainer
     public Button Button0;
     public Button Button1;
     public TextureButton Mask;
+    public float FontHeight;
     private float _timeElasped;
     private bool _hasButtons;
     public override void _Ready()
@@ -29,6 +30,12 @@ public class LowPanel : PanelContainer
         Button1.Connect(
             "pressed", this, "Button1Clicked"
         );
+
+        DynamicFont font = new DynamicFont();
+        font.FontData = Shared.FONT_DATA;
+        font.Size = 60;
+        Label.AddFontOverride("font", font);
+        FontHeight = font.GetHeight();
     }
 
     public void SetFace(NPC npc)

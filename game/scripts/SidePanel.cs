@@ -9,6 +9,7 @@ public class SidePanel : PanelContainer
     public RichTextLabel ManaLabel;
     public RichTextLabel MoneyLabel;
     public WandSimulation MyWandSim;
+    private float _manaFontHeight;
     public override void _Ready()
     {
         VBox = GetNode<VBoxContainer>("VBox");
@@ -16,6 +17,11 @@ public class SidePanel : PanelContainer
         MoneyLabel = GetNode<RichTextLabel>("VBox/Money");
         VBox.Visible = false;
         MyWandSim = new WandSimulation(this);
+        DynamicFont font = new DynamicFont();
+        font.FontData = Shared.FONT_DATA;
+        font.Size = 60;
+        ManaLabel.AddFontOverride("font", font);
+        _manaFontHeight = font.GetHeight();
         Update();
     }
 
@@ -56,7 +62,7 @@ public class SidePanel : PanelContainer
 
     public new void Update()
     {
-        ManaLabel.BbcodeText = $"[center]{MathBB.Build(GameState.Transient.Mana)}[/center]";
+        ManaLabel.BbcodeText = $"[center]{MathBB.Build(GameState.Transient.Mana, _manaFontHeight)}[/center]";
         MoneyLabel.BbcodeText = $" [color=yellow]${MathBB.Build(GameState.Persistent.Money)}[/color]";
         Hold(GameState.Persistent.MyWand);
     }

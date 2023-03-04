@@ -73,7 +73,7 @@ Once $60, Gem Expert NPC spawns.
 
 $10 -> 1st copy of CG0. 
 
-$50 -> 1st x1.5 gem
+$100 -> 1st x1.5 gem
 
 Make w
 

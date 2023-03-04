@@ -91,7 +91,7 @@ public class CustomGem : Gem
             return "Meta Meta Custom Gem";
         StringBuilder sB = new StringBuilder();
         sB.Append("Meta");
-        MathBB.BuildExp(k, sB);
+        MathBB.BuildExp(k, sB, Shared.FONT.GetHeight());
         sB.Append(" Custom Gem");
         return sB.ToString();
     }

@@ -9,10 +9,12 @@ public class MathBB
     {
         public char Char;
         public int Raised;
-        public RaisableChar(char _char, int raised)
+        private float _fontHeight;
+        public RaisableChar(char _char, int raised, float fontHeight)
         {
             Char = _char;
             Raised = raised;
+            _fontHeight = fontHeight;
         }
         public override string ToString()
         {
@@ -33,23 +35,26 @@ public class MathBB
             sB.Append(Char);
             sB.Append(".png");
             string imagePath = sB.ToString();
-            float width = Shared.FONT_SCALE * GD.Load<Texture>(
+            float width = _fontHeight / 7f / 2f * GD.Load<Texture>(
                 imagePath
             ).GetWidth();
             return $"[img={width}]{imagePath}[/img]";
         }
     }
-    public static void BuildExp(double ex, StringBuilder sB)
+    public static void BuildExp(double ex, StringBuilder sB, float fontHeight)
     {
         if (ex >= 2)
         {
             foreach (char c in ex.ToString())
             {
-                sB.Append(new RaisableChar(c, 1));
+                sB.Append(new RaisableChar(c, 1, fontHeight));
             }
         }
     }
-    public static string Build(Simplest simplest)
+    public static string Build(Simplest simplest) {
+        return Build(simplest, Shared.FONT.GetHeight());
+    }
+    public static string Build(Simplest simplest, float fontHeight)
     {
         StringBuilder sB = new StringBuilder();
         double k = simplest.K;
@@ -81,25 +86,25 @@ public class MathBB
                 sB.Append(k.ToString("#.#"));
                 break;
             case Rank.W_TO_THE_K:
-                sB.Append(new RaisableChar('w', 0));
-                BuildExp(k, sB);
+                sB.Append(new RaisableChar('w', 0, fontHeight));
+                BuildExp(k, sB, fontHeight);
                 break;
             case Rank.TWO_TO_THE_W:
                 sB.Append(2);
-                sB.Append(new RaisableChar('w', 1));
+                sB.Append(new RaisableChar('w', 1, fontHeight));
                 break;
             case Rank.STACK_W:
                 for (int i = 0; i < k; i++)
                 {
                     if (k - 1 <= MAX_RAISE)
                     {
-                        sB.Append(new RaisableChar('w', i));
+                        sB.Append(new RaisableChar('w', i, fontHeight));
                     }
                     else
                     {
                         if (i != 0)
                             sB.Append('^');
-                        sB.Append(new RaisableChar('w', 0));
+                        sB.Append(new RaisableChar('w', 0, fontHeight));
                     }
                 }
                 break;

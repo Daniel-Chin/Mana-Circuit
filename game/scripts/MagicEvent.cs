@@ -506,7 +506,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
                     if (GameState.Persistent.MyTypelessGem == null) {
                         Director.MainUI.MyLowPanel.Display(
-                            "Every one is so tremendously weak! How unbearably boring!!!"
+                            "Everyone is so tremendously weak! How unbearably boring!!!"
                         );
                         _step++;
                     } else {
@@ -566,8 +566,12 @@ public abstract class MagicEvent : Godot.Object
                         _metaLevel.MyRank == Rank.W_TO_THE_K
                         && _metaLevel.K >= 2
                     ) {
-                        string w = new MathBB.RaisableChar('w', 0).ToString();
-                        string x = new MathBB.RaisableChar('x', 1).ToString();
+                        string w = new MathBB.RaisableChar(
+                            'w', 0, Main.Singleton.MyLowPanel.FontHeight
+                        ).ToString();
+                        string x = new MathBB.RaisableChar(
+                            'x', 1, Main.Singleton.MyLowPanel.FontHeight
+                        ).ToString();
                         Director.MainUI.MyLowPanel.Display(
                             $"You see, if you hit me with a class-{w}{x} attack, I will unlock Meta{x} Custom Gems."
                         );
@@ -779,9 +783,15 @@ public abstract class MagicEvent : Godot.Object
             if (_metaLevel.Equals(Simplest.Zero())) {
                 x = "1";
             } else if (_metaLevel >= Simplest.Bottom(Rank.TWO_TO_THE_W)) {
-                x = MathBB.Build(new Simplest(Rank.STACK_W, 2));;
+                x = MathBB.Build(
+                    new Simplest(Rank.STACK_W, 2), 
+                    Main.Singleton.MyLowPanel.FontHeight
+                );
             } else {
-                x = MathBB.Build(new Simplest(Rank.W_TO_THE_K, _metaLevel.K));
+                x = MathBB.Build(
+                    new Simplest(Rank.W_TO_THE_K, _metaLevel.K), 
+                    Main.Singleton.MyLowPanel.FontHeight
+                );
             }
             return $"*class-{x} attack*";
         }
