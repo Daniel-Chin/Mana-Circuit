@@ -55,3 +55,4 @@ bbcode_enabled = true
 bbcode_text = "[center]123[/center]"
 text = "123"
 fit_content_height = true
+scroll_active = false

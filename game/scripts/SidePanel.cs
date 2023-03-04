@@ -17,10 +17,8 @@ public class SidePanel : PanelContainer
         MoneyLabel = GetNode<RichTextLabel>("VBox/Money");
         VBox.Visible = false;
         MyWandSim = new WandSimulation(this);
-        DynamicFont font = new DynamicFont();
-        font.FontData = Shared.FONT_DATA;
-        font.Size = 60;
-        ManaLabel.AddFontOverride("font", font);
+        DynamicFont font = Shared.NewFont(60);
+        ManaLabel.AddFontOverride("normal_font", font);
         _manaFontHeight = font.GetHeight();
         Update();
     }

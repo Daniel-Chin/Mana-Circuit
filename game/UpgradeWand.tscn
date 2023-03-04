@@ -28,44 +28,44 @@ size_flags_vertical = 3
 alignment = 1
 
 [node name="VBox" type="VBoxContainer" parent="VBox/HBox"]
-margin_right = 414.0
+margin_right = 383.0
 margin_bottom = 416.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBox/HBox/VBox"]
-margin_right = 414.0
+margin_right = 383.0
 margin_bottom = 29.0
 text = "Wand name"
 align = 1
 
 [node name="CircuitUI" parent="VBox/HBox/VBox" instance=ExtResource( 2 )]
 margin_top = 33.0
-margin_right = 414.0
+margin_right = 383.0
 margin_bottom = 416.0
 
 [node name="Arrow" type="Label" parent="VBox/HBox"]
-margin_left = 418.0
+margin_left = 387.0
 margin_top = 168.0
-margin_right = 481.0
+margin_right = 512.0
 margin_bottom = 248.0
 custom_fonts/font = SubResource( 1 )
-text = "->"
+text = " -> "
 
 [node name="VBox2" type="VBoxContainer" parent="VBox/HBox"]
-margin_left = 485.0
+margin_left = 516.0
 margin_right = 900.0
 margin_bottom = 416.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBox/HBox/VBox2"]
-margin_right = 415.0
+margin_right = 384.0
 margin_bottom = 29.0
 text = "Wand name"
 align = 1
 
 [node name="CircuitUI" parent="VBox/HBox/VBox2" instance=ExtResource( 2 )]
 margin_top = 33.0
-margin_right = 415.0
+margin_right = 384.0
 margin_bottom = 416.0
 
 [node name="MarginContainer" type="MarginContainer" parent="VBox"]

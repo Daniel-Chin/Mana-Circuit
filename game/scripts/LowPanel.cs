@@ -31,10 +31,8 @@ public class LowPanel : PanelContainer
             "pressed", this, "Button1Clicked"
         );
 
-        DynamicFont font = new DynamicFont();
-        font.FontData = Shared.FONT_DATA;
-        font.Size = 60;
-        Label.AddFontOverride("font", font);
+        DynamicFont font = Shared.NewFont(60);
+        Label.AddFontOverride("normal_font", font);
         FontHeight = font.GetHeight();
     }
 
