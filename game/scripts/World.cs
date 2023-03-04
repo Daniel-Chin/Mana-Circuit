@@ -139,7 +139,7 @@ public class World : Node2D
             if (
                 walking 
                 && distance < Params.NPC_COLLISION_RANGE
-                && ui.Position.Normalized().Dot(direction) > .5
+                && ui.Position.Normalized().Dot(direction) > .7
             ) {
                 switch (ui)
                 {
@@ -299,7 +299,7 @@ public class World : Node2D
                 Vector2 displace = m0.Position - repeller.Position;
                 float dist = Math.Max(3f, displace.Length());
                 force += displace.Normalized() / (float)Math.Pow(dist, 2) * (
-                    repeller is NPCUI ? 20 : 1
+                    repeller is NPCUI ? 40 : 1
                 );
             }
             m0.Step(force, dt);
@@ -334,8 +334,11 @@ public class World : Node2D
                 {
                     HitEnemy(attack, enemyUI);
                 } else if (ui is NPCUI npcUI) {
-                    HitNPC(attack, npcUI);
+                    if (!HitNPC(attack, npcUI))
+                        continue;
                 }
+                Attacks.Remove(attack);
+                attack.QueueFree();
                 return;
             }
         }
@@ -420,15 +423,12 @@ public class World : Node2D
             );
             enemyUI.UpdateHP();
         }
-        Attacks.Remove(attack);
-        attack.QueueFree();
     }
-    private void HitNPC(Attack attack, NPCUI npcUI) {
+    private bool HitNPC(Attack attack, NPCUI npcUI) {
         if (npcUI.MySpawnable is NPC.GemExpert) {
             if (Director.NowEvent is MagicEvent.Experting e) {
                 e.Attacked(attack);
-                Attacks.Remove(attack);
-                attack.QueueFree();
+                return true;
             } else {
                 if (
                     GameState.Persistent.HasCustomGems.ContainsKey(0)
@@ -437,11 +437,11 @@ public class World : Node2D
                     MagicEvent.Experting ex = new MagicEvent.Experting(npcUI);
                     Director.NowEvent = ex;
                     ex.Attacked(attack);
-                    Attacks.Remove(attack);
-                    attack.QueueFree();
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     private bool ShouldDespawn(Vector2 location)
