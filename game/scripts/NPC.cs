@@ -9,15 +9,15 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
     {
         return GD.Load<Texture>($"res://texture/npc/{Name()}.png");
     }
+    public override string ToString() {
+        return Name();
+    }
 
     public class Shop : NPC
     {
         public override string Name()
         {
             return "shop";
-        }
-        public override string ToString() {
-            return Name();
         }
         public static Simplest PriceOf(Gem gem)
         {

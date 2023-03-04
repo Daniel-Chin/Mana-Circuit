@@ -191,20 +191,24 @@ public class World : Node2D
             }
             if (!alreadyThere)
             {
-                Console.WriteLine("Spawning " + s);
+                Console.WriteLine("Spawning " + s + " as event");
                 Spawn(s, direction);
             }
         }
         // spawn non-event
-        if (Director.CanSpawnNonevent())
+        if ((
+            GameState.Transient.LastLocationNoneventSpawn
+            - GameState.Transient.LocationOffset
+        ).Length() >= Params.SPAWN_EVERY_DISTANCE)
         {
-            if ((
-                GameState.Transient.LastLocationNoneventSpawn
-                - GameState.Transient.LocationOffset
-            ).Length() >= Params.SPAWN_EVERY_DISTANCE)
-            {
-                GameState.Transient.LastLocationNoneventSpawn = GameState.Transient.LocationOffset;
-                if (! TrySpawnNPCAsNonEvent(direction)) {
+            GameState.Transient.LastLocationNoneventSpawn = GameState.Transient.LocationOffset;
+            Console.Write("Time for non-event. ");
+            if (!Director.CanSpawnNonevent()) {
+                Console.WriteLine("Cannot spawn. ");
+            } else {
+                if (TrySpawnNPCAsNonEvent(direction)) {
+                    Console.WriteLine("Spawned NPC. ");
+                } else {
                     Simplest hp;
                     Simplest money;
                     Simplest d = GameState.Persistent.Location_dist;
@@ -230,8 +234,11 @@ public class World : Node2D
                     Spawn(new Enemy(hp, money), direction);
                     if (GameState.Transient.EnemiesTillNextSpawn > 0)
                         GameState.Transient.EnemiesTillNextSpawn--;
+                    Console.WriteLine("Spawned enemy. ");
                 }
             }
+        // } else {
+        //     Console.WriteLine("cannot spawn non-event");
         }
     }
 
@@ -519,13 +526,10 @@ public class World : Node2D
     }
 
     private bool TrySpawnNPCAsNonEvent(Vector2 direction) {
-        Console.WriteLine("dan");
         if (!GameState.Persistent.Event_Staff)
             return false;
         if (!GameState.Persistent.HasAnyNonCGem())
             return false;
-        Console.WriteLine("dan2");
-        Console.WriteLine(GameState.Persistent.Loneliness_WandSmith);
         if (
             GameState.Persistent.Loneliness_WandSmith >= Params.NPC_LINELINESS_MAX
         ) {

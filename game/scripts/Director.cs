@@ -211,7 +211,7 @@ public class Director
         )
             return; 
         if (GameState.Transient.NextSpawn == null) {
-            Console.WriteLine(npc + " as event");
+            Console.WriteLine("Setting " + npc + " to spawn next");
             GameState.Transient.NextSpawn = npc;
             GameState.Transient.EnemiesTillNextSpawn = 0;
         }

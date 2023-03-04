@@ -20,6 +20,6 @@ public class Params
     public static readonly float LMB_HOLD_DEADZONE = .3f;
     public static readonly Vector2 SPRITE_SCALE = new Vector2(4, 4);
     public static readonly double INF_DISTANCE = 1e4;   // 8 hours of walk time
-    public static readonly int NPC_LINELINESS_MAX = 6;
+    public static readonly int NPC_LINELINESS_MAX = 8;
     public static readonly double PROB_ENEMY_INF = .2;
 }
