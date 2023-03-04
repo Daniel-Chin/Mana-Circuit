@@ -695,23 +695,35 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 108:
                     Director.MainUI.MyLowPanel.Display(
-                        "For all our lives, mages like me seek a way to produce epsilon_naught amount of mana. It is generally suspected to be related to the typeless custom gems."
+                        "For all our lives, mages like me seek a way to produce epsilon_naught amount of mana. "
                     );
                     _step++;
                     break;
                 case 109:
                     Director.MainUI.MyLowPanel.Display(
-                        "However, nobody knows for sure. Even Author has no idea how to produce epsilon_naught, or whether that is possible in this game."
+                        "It is generally suspected to be related to the typeless custom gems."
+                    );
+                    _step = 120;
+                    break;
+                case 120:
+                    Director.MainUI.MyLowPanel.Display(
+                        "However, nobody knows for sure. "
                     );
                     _step++;
                     break;
-                case 110:
+                case 121:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Even Author has no idea how to produce epsilon_naught, or whether that is possible in this game."
+                    );
+                    _step++;
+                    break;
+                case 122:
                     Director.MainUI.MyLowPanel.Display(
                         "Still, if you manage to obtain epsilon_naught, the game has a mechanism to check for that."
                     );
                     _step++;
                     break;
-                case 111:
+                case 123:
                     Director.MainUI.MyLowPanel.Display(
                         "Well. I have taught you all that I know."
                     );
@@ -725,7 +737,7 @@ public abstract class MagicEvent : Godot.Object
                     }
                     _step++;
                     break;
-                case 112:
+                case 124:
                     Director.MainUI.MyLowPanel.Display(
                         "Time to go to sleep."
                     );
