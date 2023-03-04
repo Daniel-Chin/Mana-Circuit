@@ -9,28 +9,8 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
         return GD.Load<Texture>($"res://texture/npc/{Name()}.png");
     }
 
-    public class GemExpert : NPC
-    {
-        public GemExpert() : base() {
-            GameState.Persistent.Loneliness_GemExpert = 0;
-            GameState.Persistent.Loneliness_Shop ++;
-            GameState.Persistent.Loneliness_WandSmith ++;
-        }
-        public override string Name()
-        {
-            return "expert";
-        }
-        public override void Collided(NPCUI npcUI) {
-        }
-    }
-
     public class Shop : NPC
     {
-        public Shop() : base() {
-            GameState.Persistent.Loneliness_Shop = 0;
-            GameState.Persistent.Loneliness_WandSmith ++;
-            GameState.Persistent.Loneliness_GemExpert ++;
-        }
         public override string Name()
         {
             return "shop";
@@ -79,11 +59,6 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
     }
     public class WandSmith : NPC
     {
-        public WandSmith() : base() {
-            GameState.Persistent.Loneliness_WandSmith = 0;
-            GameState.Persistent.Loneliness_GemExpert ++;
-            GameState.Persistent.Loneliness_Shop ++;
-        }
         public override string Name()
         {
             return "wandSmith";
@@ -116,6 +91,17 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
             } else {
                 Director.StartEvent(new MagicEvent.Jumping(npcUI));
             }
+        }
+    }
+
+    public class GemExpert : NPC
+    {
+        public override string Name()
+        {
+            return "expert";
+        }
+        public override void Collided(NPCUI npcUI) {
+            Director.StartEvent(new MagicEvent.Experting(npcUI));
         }
     }
 }

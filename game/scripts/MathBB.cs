@@ -5,7 +5,7 @@ using Godot;
 public class MathBB
 {
     static readonly int MAX_RAISE = 3;
-    private class RaisableChar
+    public class RaisableChar
     {
         public char Char;
         public int Raised;

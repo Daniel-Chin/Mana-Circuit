@@ -37,7 +37,7 @@ once $19, jumper NPC spawns
     "I make skateboards as a hobby."
     "Check out my latest design: *Jumper MK-I*!!!"
     skateboard moves from NPC to player
-    "It converts 10% of your mana to jumping power."
+    "You should be able to jump over great distances! *Jumper MK-I* converts 10% of your mana to jumping power."
     "Try it! Hold J to jump."
 
     you jump very near. over-cool SFX. 
@@ -60,7 +60,7 @@ $20 -> stochastic gem
 NPC:
     "A good mage needs 1% grinding and 99% thinking. "
 
-Once $50, Gem Expert NPC spawns.
+Once $60, Gem Expert NPC spawns.
     "Every one is so weak! I am so bored!!!"
     "Now! Show me your strongest attack!"
     If player doesn't attack, 
@@ -80,7 +80,7 @@ Make w
 Fight 8 enemies
 
 Gem Expert: Meta Custom Gem
-"A Meta Custom Gem can be placed inside a Custom Gem."
+"Meta Custom Gems can contain Custom Gems."
 
 Fight 5 enemies. probabilistically spawn enemies with HP w. This is to hint those who hasn't discovered w. 
 

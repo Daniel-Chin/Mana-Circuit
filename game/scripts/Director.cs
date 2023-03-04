@@ -45,6 +45,17 @@ public class Director
             && SpawnShopIf(Simplest.Finite(25))
         )
             return;
+        if (
+            GameState.Persistent.MyWand is Wand.Ricecooker
+        ) {
+            if (
+                GameState.Persistent.Money >= Simplest.Finite(50)
+                && !GameState.Persistent.HasCustomGems.ContainsKey(0)
+            ) {
+                SetNPCToSpawn(new NPC.GemExpert());
+                return;
+            }
+        }
     }
 
     public static void StartEvent(MagicEvent e)
@@ -54,10 +65,11 @@ public class Director
         NowEvent.NextStep();
     }
 
-    public static void SpecialSpawned()
+    public static void SpecialSpawned(SpawnableSpecial s)
     {
-        if (GameState.Transient.NextSpawn is NPC.WandSmith)
+        if (s is NPC.WandSmith) {
             GameState.Transient.NextSpawn = null;
+        }
     }
     public static void SpecialDespawned(
         SpawnableSpecial s, bool exposed
@@ -132,16 +144,7 @@ public class Director
             if (GameState.Persistent.HasGems[gem.Name()] > num)
                 return false;
         }
-        if (GameState.Transient.NextSpawn is NPC.Shop) 
-        {
-            ;
-        } else {
-            Console.WriteLine("Shop as event");
-            if (GameState.Transient.NextSpawn == null) {
-                GameState.Transient.NextSpawn = new NPC.Shop();
-                GameState.Transient.EnemiesTillNextSpawn = 0;
-            }
-        }
+        SetNPCToSpawn(new NPC.Shop());
         return true;
     }
     private static bool SpawnShopIf(
@@ -182,16 +185,7 @@ public class Director
             return false;
         if (GameState.Persistent.Money <= Simplest.Finite(18))
             return false;
-        if (GameState.Transient.NextSpawn is NPC.Inventor) 
-        {
-            ;
-        } else {
-            Console.WriteLine("Inventor as event");
-            if (GameState.Transient.NextSpawn == null) {
-                GameState.Transient.NextSpawn = new NPC.Inventor();
-                GameState.Transient.EnemiesTillNextSpawn = 0;
-            }
-        }
+        SetNPCToSpawn(new NPC.Inventor());
         return true;
     }
 
@@ -203,6 +197,19 @@ public class Director
     public static void JumpFinished() {
         if (NowEvent is MagicEvent.Jumping e) {
             e.JumpFinished();
+        }
+    }
+
+    private static void SetNPCToSpawn(NPC npc) {
+        if (GameState.Transient.NextSpawn.GetType() == npc.GetType()) 
+        {
+            ;
+        } else {
+            Console.WriteLine(npc + " as event");
+            if (GameState.Transient.NextSpawn == null) {
+                GameState.Transient.NextSpawn = npc;
+                GameState.Transient.EnemiesTillNextSpawn = 0;
+            }
         }
     }
 }

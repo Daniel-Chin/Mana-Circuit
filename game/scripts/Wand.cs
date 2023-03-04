@@ -241,10 +241,10 @@ public abstract class Wand : MagicItem, JSONable
             }
             c.Add(new Gem.Wall(), new PointInt(4, 2), false);
             c.Add(new Gem.Wall(), new PointInt(4, 3), false);
+            c.Add(new Gem.Wall(), new PointInt(0, 2), false);
+            c.Add(new Gem.Wall(), new PointInt(0, 3), false);
 
             c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 1));
-            c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 2));
-            c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 3));
 
             Gem drain = new Gem.Drain();
             c.Add(drain, new PointInt(4, 1));

@@ -5,7 +5,7 @@ public abstract class MagicEvent : Godot.Object
 {
     // Part of the game state is in the event. 
     public abstract void NextStep();
-    public abstract void Process(float dt);
+    public virtual void Process(float dt) {}
     public virtual void ButtonClicked(int buttonID) {
         throw new Shared.ObjectStateIllegal();
     }
@@ -131,8 +131,6 @@ public abstract class MagicEvent : Godot.Object
                     throw new Shared.ValueError();
             }
         }
-
-        public override void Process(float dt) { }
     }
 
     public class Shopping : MagicEvent {
@@ -143,7 +141,6 @@ public abstract class MagicEvent : Godot.Object
             _step = 0;
             _npc = npc;
         }
-        public override void Process(float dt) { }
         public override void NextStep() {
 
             switch (_step)
@@ -323,7 +320,7 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 5:
                     Director.MainUI.MyLowPanel.Display(
-                        "It converts 10% of your mana to jumping power."
+                        "You should be able to jump over great distances! *Jumper MK-I* converts 10% of your mana to jumping power."
                     );
                     _step++;
                     break;
@@ -476,6 +473,282 @@ public abstract class MagicEvent : Godot.Object
             Shared.Assert(JumpDemo);
             _step = 6;
             NextStep();
+        }
+    }
+
+    public class Experting : MagicEvent {
+        private int _step;
+        private NPCUI _npcUI;
+        private float _accTime;
+        private Simplest _metaLevel;
+        private CustomGem _cG;
+        public Experting(NPCUI npcUI)
+        {
+            _step = 0;
+            _npcUI = npcUI;
+        }
+        public override void NextStep() {
+
+            switch (_step)
+            {
+                case 0:
+                    Director.PauseWorld();
+                    Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
+                    if (GameState.Persistent.MyTypelessGem == null) {
+                        Director.MainUI.MyLowPanel.Display(
+                            "Every one is so tremendously weak! How unbearably boring!!!"
+                        );
+                        _step++;
+                    } else {
+                        Director.MainUI.MyLowPanel.Display(
+                            "zzzzzz..."
+                        );
+                        _step = 200;
+                    }
+                    break;
+                case 1:
+                    Director.MainUI.MyLowPanel.Display(
+                        "You there! Show me your strongest attack!"
+                    );
+                    _step++;
+                    break;
+                case 2:
+                    Director.UnpauseWorld();
+                    _step++;
+                    _accTime = 0;
+                    break;
+                case 5:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Attack me!"
+                    );
+                    _step = 2;
+                    _accTime = 0;
+                    break;
+                case 10:
+                    // unlock meta^0
+                    Director.MainUI.MyLowPanel.Display(
+                        "Not bad. You just produced a *class-1 attack*."
+                    );
+                    _step++;
+                    break;
+                case 11:
+                    _cG = new CustomGem(_metaLevel);
+                    Director.MainUI.MyLowPanel.Display(
+                        $"As your reward, I will now unlock *{_cG.DisplayName()}s* for you."
+                    );
+                    _step++;
+                    break;
+                case 12:
+                    Director.MainUI.MyLowPanel.SetFace(null);
+                    Director.MainUI.MyLowPanel.Display(
+                        $"+ *{_cG.DisplayName()}* unlocked! +"
+                    );
+                    GameState.Persistent.HasCustomGems[(int)_metaLevel.K] = (
+                        0, _cG
+                    );
+                    _step++;
+                    break;
+                case 13:
+                    _step++;
+                    if (
+                        _metaLevel.MyRank == Rank.W_TO_THE_K
+                        && _metaLevel.K >= 2
+                    ) {
+                        string w = new MathBB.RaisableChar('w', 0).ToString();
+                        string x = new MathBB.RaisableChar('x', 1).ToString();
+                        Director.MainUI.MyLowPanel.Display(
+                            $"You see, if you hit me with a class-{w}{x} attack, I will unlock Meta{x} Custom Gems."
+                        );
+                    } else {
+                        NextStep();
+                    }
+                    break;
+                case 14:
+                    _step++;
+                    if (
+                        new Simplest(Rank.W_TO_THE_K, 1) <= _metaLevel
+                        && _metaLevel <= new Simplest(Rank.W_TO_THE_K, 3)
+                    ) {
+                        CustomGem subCG = new CustomGem(Simplest.Finite(_metaLevel.K - 1));
+                        Director.MainUI.MyLowPanel.Display(
+                            $"{_cG.DisplayName()}s can contain {subCG.DisplayName()}s."
+                        );
+                    } else {
+                        NextStep();
+                    }
+                    break;
+                case 15:
+                    Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
+                    Director.MainUI.MyLowPanel.Display(
+                        "Custom Gems take the theoretical mean of anything stochastic inside them."
+                    );
+                    _step++;
+                    break;
+                case 16:
+                    Director.MainUI.MyLowPanel.Display(
+                        $"Still, a *class-{MathBB.Build(_metaLevel)} attack* is nothing I'd call exciting. Come back when you are not this weak."
+                    );
+                    _step = 200;
+                    break;
+                case 20:
+                    Director.MainUI.MyLowPanel.Display(
+                        "!!!"
+                    );
+                    _step++;
+                    break;
+                case 21:
+                    Director.MainUI.MyLowPanel.Display(
+                        "You just struck me with             \n"
+                        + $"a *class-{MathBB.Build(_metaLevel)} attack*."
+                    );
+                    _step = 11;
+                    break;
+                case 40:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Nice try..."
+                    );
+                    _step++;
+                    break;
+                case 41:
+                    Director.MainUI.MyLowPanel.Display(
+                        $"But I'm afraid that was still just as strong as a *class-{MathBB.Build(_metaLevel)} attack*."
+                    );
+                    _step = 200;
+                    break;
+                case 100:
+                    Director.MainUI.MyLowPanel.Display(
+                        "!!!"
+                    );
+                    _step++;
+                    break;
+                case 101:
+                    string ww = MathBB.Build(new Simplest(Rank.STACK_W, 2));
+                    Director.MainUI.MyLowPanel.Display(
+                        "You just struck me with          \n"
+                        + $"A *class-{ww} attack*."
+                    );
+                    _step++;
+                    break;
+                case 102:
+                    Director.MainUI.MyLowPanel.Display(
+                        "..."
+                    );
+                    _step++;
+                    break;
+                case 103:
+                    Director.MainUI.MyLowPanel.Display(
+                        "......"
+                    );
+                    _step++;
+                    break;
+                case 104:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Very well."
+                    );
+                    _step++;
+                    break;
+                case 105:
+                    _cG = new CustomGem(_metaLevel);
+                    Director.MainUI.MyLowPanel.Display(
+                        "As per our agreement, I now grant you the ability to make          \n"
+                        + $"*{_cG.DisplayName()}s*"
+                    );
+                    _step++;
+                    break;
+                case 106:
+                    Director.MainUI.MyLowPanel.SetFace(null);
+                    Director.MainUI.MyLowPanel.Display(
+                        $"+ *{_cG.DisplayName()}* unlocked! +"
+                    );
+                    GameState.Persistent.MyTypelessGem = _cG;
+                    _step++;
+                    break;
+                case 107:
+                    Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
+                    Director.MainUI.MyLowPanel.Display(
+                        "You know, you may just be strong enough to achieve what I couldn't."
+                    );
+                    _step++;
+                    break;
+                case 108:
+                    Director.MainUI.MyLowPanel.Display(
+                        "For all our lives, mages like me seek a way to produce epsilon_naught amount of mana. It is generally suspected to be related to the typeless custom gems."
+                    );
+                    _step++;
+                    break;
+                case 109:
+                    Director.MainUI.MyLowPanel.Display(
+                        "However, nobody knows for sure. Even Author has no idea how to produce epsilon_naught, or whether that is possible in this game."
+                    );
+                    _step++;
+                    break;
+                case 110:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Still, if you manage to obtain epsilon_naught, the game has a mechanism to check for that."
+                    );
+                    _step++;
+                    break;
+                case 111:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Well. I have taught you all that I know."
+                    );
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (!GameState.Persistent.HasCustomGems.ContainsKey(i)) {
+                            GameState.Persistent.HasCustomGems[i] = (
+                                0, new CustomGem(Simplest.Finite(i))
+                            );
+                        }
+                    }
+                    _step++;
+                    break;
+                case 112:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Time to go to sleep."
+                    );
+                    _step = 200;
+                    break;
+                case 200:
+                    Director.EventFinished();
+                    SaveLoad.Save();
+                    Director.UnpauseWorld();
+                    break;
+            }
+        }
+
+        public override void Process(float dt)
+        {
+            _accTime += dt;
+            if (_step == 3) {
+                // waiting for attack
+                if (_accTime >= 4) {
+                    _step = 5;
+                    NextStep();
+                    return;
+                }
+            }
+        }
+
+        public void Attacked(Attack attack) {
+            Director.PauseWorld();
+            if (attack.Mana.MyRank == Rank.FINITE) {
+                _metaLevel = Simplest.Zero();
+            } else if (attack.Mana.MyRank == Rank.W_TO_THE_K) {
+                _metaLevel = Simplest.Finite(attack.Mana.K);
+            } else {
+                _metaLevel = Simplest.W();
+                _step = 100;
+                return;
+            }
+            if (GameState.Persistent.HasCustomGems.ContainsKey((int)_metaLevel.K)) {
+                _step = 40;
+            } else {
+                if (_metaLevel.K.Equals(Simplest.Zero())) {
+                    _step = 10;
+                } else {
+                    _step = 20;
+                }
+            }
         }
     }
 }

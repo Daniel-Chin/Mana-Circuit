@@ -176,14 +176,14 @@ public class World : Node2D
     {
         // spawn event
         if (
-            GameState.Transient.NextSpawn != null
+            GameState.Transient.NextSpawn is SpawnableSpecial s
             && GameState.Transient.EnemiesTillNextSpawn == 0
         )
         {
             bool alreadyThere = false;
             foreach (var ui in SpawnedSpecialUIs)
             {
-                if (ui.MySpawnable == GameState.Transient.NextSpawn)
+                if (ui.MySpawnable == s)
                 {
                     alreadyThere = true;
                     break;
@@ -192,9 +192,9 @@ public class World : Node2D
             }
             if (!alreadyThere)
             {
-                Console.WriteLine("Spawning " + GameState.Transient.NextSpawn);
-                Spawn(GameState.Transient.NextSpawn, direction);
-                Director.SpecialSpawned();
+                Console.WriteLine("Spawning " + s);
+                Spawn(s, direction);
+                Director.SpecialSpawned(s);
             }
         }
         // spawn non-event
@@ -329,9 +329,9 @@ public class World : Node2D
                 if (ui is EnemyUI enemyUI)
                 {
                     HitEnemy(attack, enemyUI);
+                } else if (ui is NPCUI npcUI) {
+                    HitNPC(attack, npcUI);
                 }
-                Attacks.Remove(attack);
-                attack.QueueFree();
                 return;
             }
         }
@@ -415,6 +415,28 @@ public class World : Node2D
                 enemy.HP, Operator.MINUS, attack.Mana
             );
             enemyUI.UpdateHP();
+        }
+        Attacks.Remove(attack);
+        attack.QueueFree();
+    }
+    private void HitNPC(Attack attack, NPCUI npcUI) {
+        if (npcUI.MySpawnable is NPC.GemExpert) {
+            if (Director.NowEvent is MagicEvent.Experting e) {
+                e.Attacked(attack);
+                Attacks.Remove(attack);
+                attack.QueueFree();
+            } else {
+                if (
+                    GameState.Persistent.HasCustomGems.ContainsKey(0)
+                    && GameState.Persistent.MyTypelessGem == null
+                ) {
+                    MagicEvent.Experting ex = new MagicEvent.Experting(npcUI);
+                    Director.NowEvent = ex;
+                    ex.Attacked(attack);
+                    Attacks.Remove(attack);
+                    attack.QueueFree();
+                }
+            }
         }
     }
 
