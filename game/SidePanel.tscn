@@ -12,17 +12,17 @@ border_color = Color( 0.21, 0.21, 0.21, 1 )
 [node name="SidePanel" type="PanelContainer"]
 margin_right = 304.0
 margin_bottom = 600.0
-rect_min_size = Vector2( 300, 600 )
+rect_min_size = Vector2( 304, 600 )
 theme = ExtResource( 2 )
 custom_styles/panel = SubResource( 2 )
 script = ExtResource( 4 )
 
 [node name="VBox" type="VBoxContainer" parent="."]
-margin_right = 300.0
+margin_right = 304.0
 margin_bottom = 600.0
 
 [node name="Money" type="RichTextLabel" parent="VBox"]
-margin_right = 300.0
+margin_right = 304.0
 margin_bottom = 30.0
 bbcode_enabled = true
 bbcode_text = " [color=yellow]$3[/color]"
@@ -31,26 +31,26 @@ fit_content_height = true
 
 [node name="Crystal" type="MarginContainer" parent="VBox"]
 margin_top = 34.0
-margin_right = 300.0
-margin_bottom = 334.0
-rect_min_size = Vector2( 300, 300 )
+margin_right = 304.0
+margin_bottom = 338.0
+rect_min_size = Vector2( 304, 304 )
 
 [node name="TextureRect" type="TextureRect" parent="VBox/Crystal"]
-margin_right = 300.0
-margin_bottom = 300.0
+margin_right = 304.0
+margin_bottom = 304.0
 texture = ExtResource( 1 )
 expand = true
 stretch_mode = 1
 
 [node name="Centerer" type="VBoxContainer" parent="VBox/Crystal"]
-margin_right = 300.0
-margin_bottom = 300.0
+margin_right = 304.0
+margin_bottom = 304.0
 alignment = 1
 
 [node name="Mana" type="RichTextLabel" parent="VBox/Crystal/Centerer"]
-margin_top = 135.0
-margin_right = 300.0
-margin_bottom = 165.0
+margin_top = 137.0
+margin_right = 304.0
+margin_bottom = 167.0
 bbcode_enabled = true
 bbcode_text = "[center]123[/center]"
 text = "123"
