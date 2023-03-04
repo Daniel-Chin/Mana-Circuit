@@ -47,6 +47,9 @@ public abstract class Gem : MagicItem
             case WeakMult g:
                 JSON.Store("weakMult", writer);
                 break;
+            case StrongMult g:
+                JSON.Store("strongMult", writer);
+                break;
             case Focus g:
                 JSON.Store("focus", writer);
                 g.Direction.ToJSON(writer);
@@ -99,6 +102,9 @@ public abstract class Gem : MagicItem
                 break;
             case "weakMult":
                 gem = new WeakMult();
+                break;
+            case "strongMult":
+                gem = new StrongMult();
                 break;
             case "focus":
                 gem = new Focus(PointInt.FromJSON(reader));
@@ -255,17 +261,13 @@ public abstract class Gem : MagicItem
             return "+1 to any mana flowing through it.";
         }
     }
-    public class WeakMult : Gem
+    public class Mult : Gem
     {
-        private static readonly double MULT = 1.4;  // 1.4**2 < 2
+        protected abstract double Multiplier();
         public override Particle Apply(Particle input)
         {
-            input.Multiply(MULT);
+            input.Multiply(Multiplier());
             return input;
-        }
-        public override string Name()
-        {
-            return "weakMult";
         }
         public override string DisplayName()
         {
@@ -274,6 +276,26 @@ public abstract class Gem : MagicItem
         public override string Explain(bool inCG)
         {
             return $"Multiply any mana flowing through it by {MULT:#.#}.";
+        }
+    }
+    public class WeakMult : Mult
+    {
+        protected override double Multiplier() {
+            return 1.4;
+        }  // 1.4**2 < 2
+        public override string Name()
+        {
+            return "weakMult";
+        }
+    }
+    public class StrongMult : Mult
+    {
+        protected override double Multiplier() {
+            return 1.5;
+        }  // 1.4 * 1.5 > 2
+        public override string Name()
+        {
+            return "strongMult";
         }
     }
     // public class Doubler : Gem
@@ -399,7 +421,7 @@ public abstract class Gem : MagicItem
         }
     }
 
-    public static readonly int N_IDS = 7;
+    public static readonly int N_IDS = 8;
     public static Gem FromID(int id)
     {
         switch (id)
@@ -413,10 +435,12 @@ public abstract class Gem : MagicItem
             case 3:
                 return new WeakMult();
             case 4:
-                return new Focus(new PointInt(0, 1));
+                return new StrongMult();
             case 5:
-                return new Mirror(true);
+                return new Focus(new PointInt(0, 1));
             case 6:
+                return new Mirror(true);
+            case 7:
                 return new Stochastic(true);
             default:
                 throw new Shared.ValueError();

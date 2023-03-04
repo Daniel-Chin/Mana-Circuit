@@ -210,7 +210,8 @@ public class World : Node2D
                     if (d.MyRank == Rank.FINITE)
                     {
                         hp = new Simplest(Rank.FINITE, Math.Ceiling(
-                            Math.Pow(d.K, 3) + Params.BASE_ENEMY_HP
+                            // Math.Pow(d.K, 3) + Params.BASE_ENEMY_HP
+                            Math.Exp(d.K + Math.Log(Params.BASE_ENEMY_HP))
                         ));
                     }
                     else

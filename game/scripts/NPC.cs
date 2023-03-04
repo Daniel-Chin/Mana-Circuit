@@ -38,6 +38,8 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
                     if (k == 1)
                         return new Simplest(Rank.FINITE, 9);
                     return new Simplest(Rank.FINITE, 5 * k);
+                case Gem.StrongMult _:
+                    return new Simplest(Rank.FINITE, 50 * (k + 1));
                 case Gem.Focus _:
                     return new Simplest(Rank.FINITE, 10 + k);
                 case Gem.Stochastic _:

@@ -144,6 +144,7 @@ public class GemListScene : WindowDialog
         List<Gem> gems = new List<Gem> {
             new Gem.AddOne(),
             new Gem.WeakMult(),
+            new Gem.StrongMult(),
             new Gem.Focus(new PointInt(0, 1)),
             new Gem.Mirror(true),
             new Gem.Stochastic(true),
