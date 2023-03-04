@@ -63,7 +63,7 @@ public class MathBB
             case Rank.FINITE:
                 if (k > 1000000000)
                 {
-                    sB.Append(k.ToString("e2"));
+                    sB.Append(k.ToString("e1"));
                     break;
                 }
                 if (k > 1000000)

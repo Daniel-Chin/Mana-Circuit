@@ -95,7 +95,7 @@ public class Circuit : JSONable
     {
         Gem gem = Seek(particle.Location);
         Particle[] results;
-        if (gem == null || gem == particle.LastGem)
+        if (gem == null)
         {
             results = new Particle[1];
             results[0] = particle;
