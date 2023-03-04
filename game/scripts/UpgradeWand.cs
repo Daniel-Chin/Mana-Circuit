@@ -23,7 +23,8 @@ public class UpgradeWand : WindowDialog
 
         AddWand(GameState.Persistent.MyWand, hBox);
         Label arrow = new Label();
-        arrow.Text = "->";
+        hBox.AddChild(arrow);
+        arrow.Text = " -> ";
         arrow.AddFontOverride("font", Shared.NewFont(100));
         AddWand(NewWand, hBox);
 
