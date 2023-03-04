@@ -234,7 +234,7 @@ public class GemListScene : WindowDialog
                 var (nInWand, nInCGs, nAvailable) = CountGems(gem);
                 if (nAvailable <= Simplest.Zero())
                 {
-                    // No gem available
+                    Console.WriteLine("No gem available");
                     return;
                 }
                 if (
@@ -243,7 +243,7 @@ public class GemListScene : WindowDialog
                     && cG.MetaLevel.MyRank == Rank.FINITE
                 )
                 {
-                    // Gem type illegal
+                    Console.WriteLine("Gem type illegal");
                     return;
                 }
             }

@@ -484,14 +484,18 @@ public class World : Node2D
         return money;
     }
 
+    public void ClearAttacks()
+    {
+        Shared.QFreeList<Attack>(Attacks);
+        Attacks.Clear();
+    }
     public void ClearSpawns()
     {
         Shared.QFreeList<SpawnableSpecialUI>(SpawnedSpecialUIs);
         SpawnedSpecialUIs.Clear();
         Shared.QFreeList<Money>(Moneys);
         Moneys.Clear();
-        Shared.QFreeList<Attack>(Attacks);
-        Attacks.Clear();
+        ClearAttacks();
     }
 
     public void ReverseMoveWorld(Vector2 displace) {

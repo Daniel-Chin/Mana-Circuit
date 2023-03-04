@@ -96,7 +96,7 @@ public class CircuitUI : AspectRatioContainer
         switch (MyMagicItem)
         {
             case Wand wand:
-                MetaLevel = new Simplest(Rank.FINITE, -1);
+                MetaLevel = new Simplest(Rank.STACK_W, 3);
                 MyCircuit = wand.MyCircuit;
                 break;
             case CustomGem cG:
@@ -157,7 +157,7 @@ public class CircuitUI : AspectRatioContainer
                 Gem gem = MyCircuit.Field[i, j];
                 GemUI gemUI = new GemUI(
                     gem, RecursionDepth,
-                    MetaLevel >= Simplest.Zero(), SimParticles
+                    MyMagicItem is Wand, SimParticles
                 );
                 _grid.AddChild(gemUI);
                 GemUIs[i, j] = gemUI;
@@ -266,6 +266,15 @@ public class CircuitUI : AspectRatioContainer
     }
     private void SetBackGround()
     {
+        if (MyMagicItem is Wand wand)
+        {
+            TextureRect _tRect = new TextureRect();
+            _tRect.Texture = wand.TextureFlat();
+            _tRect.Expand = true;
+            _tRect.StretchMode = TextureRect.StretchModeEnum.Scale;
+            _bgRect = _tRect;
+            return;
+        }
         if (MetaLevel.MyRank != Rank.FINITE)
         {
             TextureRect _tRect = new TextureRect();
@@ -275,15 +284,6 @@ public class CircuitUI : AspectRatioContainer
             ShaderMaterial mat = new ShaderMaterial();
             mat.Shader = _rainbow;
             _tRect.Material = mat;
-            _bgRect = _tRect;
-            return;
-        }
-        if (MyMagicItem is Wand wand)
-        {
-            TextureRect _tRect = new TextureRect();
-            _tRect.Texture = wand.TextureFlat();
-            _tRect.Expand = true;
-            _tRect.StretchMode = TextureRect.StretchModeEnum.Scale;
             _bgRect = _tRect;
             return;
         }

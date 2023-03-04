@@ -517,6 +517,7 @@ public abstract class MagicEvent : Godot.Object
                     }
                     break;
                 case 1:
+                    Main.Singleton.MyWorld.ClearAttacks();
                     Director.MainUI.MyLowPanel.Display(
                         "You there! Show me your strongest attack!"
                     );
@@ -537,7 +538,7 @@ public abstract class MagicEvent : Godot.Object
                 case 10:
                     // unlock meta^0
                     Director.MainUI.MyLowPanel.Display(
-                        "Not bad. You just produced a *class-1 attack*."
+                        $"Not bad. You just produced a {AttackClass()}."
                     );
                     _step++;
                     break;
@@ -551,7 +552,8 @@ public abstract class MagicEvent : Godot.Object
                 case 12:
                     Director.MainUI.MyLowPanel.SetFace(null);
                     Director.MainUI.MyLowPanel.Display(
-                        $"+ *{_cG.DisplayName()}* unlocked! +"
+                        $"+ *{_cG.DisplayName()}* unlocked! +", 
+                        true
                     );
                     GameState.Persistent.HasCustomGems[(int)_metaLevel.K] = (
                         0, _cG
@@ -596,7 +598,13 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 16:
                     Director.MainUI.MyLowPanel.Display(
-                        $"Still, a *class-{MathBB.Build(_metaLevel)} attack* is nothing I'd call exciting. Come back when you are not this weak."
+                        $"You have potential. However, a {AttackClass()} is nothing I'd call exciting. "
+                    );
+                    _step++;
+                    break;
+                case 17:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Find me again when you are not this weak."
                     );
                     _step = 200;
                     break;
@@ -609,7 +617,7 @@ public abstract class MagicEvent : Godot.Object
                 case 21:
                     Director.MainUI.MyLowPanel.Display(
                         "You just struck me with             \n"
-                        + $"a *class-{MathBB.Build(_metaLevel)} attack*."
+                        + $"a {AttackClass()}."
                     );
                     _step = 11;
                     break;
@@ -621,7 +629,7 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 41:
                     Director.MainUI.MyLowPanel.Display(
-                        $"But I'm afraid that was still just as strong as a *class-{MathBB.Build(_metaLevel)} attack*."
+                        $"But I'm afraid that was still just as strong as a {AttackClass()}."
                     );
                     _step = 200;
                     break;
@@ -632,10 +640,9 @@ public abstract class MagicEvent : Godot.Object
                     _step++;
                     break;
                 case 101:
-                    string ww = MathBB.Build(new Simplest(Rank.STACK_W, 2));
                     Director.MainUI.MyLowPanel.Display(
                         "You just struck me with          \n"
-                        + $"A *class-{ww} attack*."
+                        + $"A {AttackClass()}."
                     );
                     _step++;
                     break;
@@ -668,7 +675,8 @@ public abstract class MagicEvent : Godot.Object
                 case 106:
                     Director.MainUI.MyLowPanel.SetFace(null);
                     Director.MainUI.MyLowPanel.Display(
-                        $"+ *{_cG.DisplayName()}* unlocked! +"
+                        $"+ *{_cG.DisplayName()}* unlocked! +", 
+                        true
                     );
                     GameState.Persistent.MyTypelessGem = _cG;
                     _step++;
@@ -722,6 +730,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.EventFinished();
                     SaveLoad.Save();
                     Director.UnpauseWorld();
+                    GameState.Transient.NextSpawn = new NPC.Shop();
                     break;
             }
         }
@@ -748,17 +757,31 @@ public abstract class MagicEvent : Godot.Object
             } else {
                 _metaLevel = Simplest.W();
                 _step = 100;
+                NextStep();
                 return;
             }
             if (GameState.Persistent.HasCustomGems.ContainsKey((int)_metaLevel.K)) {
                 _step = 40;
             } else {
-                if (_metaLevel.K.Equals(Simplest.Zero())) {
+                if (_metaLevel.Equals(Simplest.Zero())) {
                     _step = 10;
                 } else {
                     _step = 20;
                 }
             }
+            NextStep();
+        }
+
+        private string AttackClass() {
+            string x;
+            if (_metaLevel.Equals(Simplest.Zero())) {
+                x = "1";
+            } else if (_metaLevel >= Simplest.Bottom(Rank.TWO_TO_THE_W)) {
+                x = MathBB.Build(new Simplest(Rank.STACK_W, 2));;
+            } else {
+                x = MathBB.Build(new Simplest(Rank.W_TO_THE_K, _metaLevel.K));
+            }
+            return $"*class-{x} attack*";
         }
     }
 }

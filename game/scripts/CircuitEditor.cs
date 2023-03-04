@@ -60,6 +60,8 @@ public class CircuitEditor : WindowDialog
         );
         CircuitModified();
         PopupCentered();
+        MyCircuitUI.Rebuild();
+        MyCircuitUI.Update();
     }
     public void OnPopupHide()
     {

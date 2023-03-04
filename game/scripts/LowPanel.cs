@@ -42,10 +42,17 @@ public class LowPanel : PanelContainer
         Face.Visible = true;
     }
 
-    public void Display(string message)
+    public void Display(string message) {
+        Display(message, false);
+    }
+    public void Display(string message, bool centerLime)
     {
         bool inCyan = false;
         Label.Clear();
+        if (centerLime) {
+            Label.PushColor(Colors.Lime);
+            Label.PushAlign(RichTextLabel.Align.Center);
+        }
         foreach (var part in message.Split('*'))
         {
             Label.AppendBbcode(part);
@@ -61,6 +68,10 @@ public class LowPanel : PanelContainer
         }
         if (inCyan)
             Label.Pop();
+        if (centerLime) {
+            Label.Pop();
+            Label.Pop();
+        }
         Label.PercentVisible = 0;
         _timeElasped = 0;
         Main.Singleton.VBoxLowPanel.Visible = true;

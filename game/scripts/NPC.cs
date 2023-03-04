@@ -104,7 +104,11 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
             return "expert";
         }
         public override void Collided(NPCUI npcUI) {
-            Director.StartEvent(new MagicEvent.Experting(npcUI));
+            if (Director.NowEvent is MagicEvent.Experting e) {
+                ;
+            } else {
+                Director.StartEvent(new MagicEvent.Experting(npcUI));
+            }
         }
     }
 }
