@@ -201,15 +201,15 @@ public class Director
     }
 
     private static void SetNPCToSpawn(NPC npc) {
-        if (GameState.Transient.NextSpawn.GetType() == npc.GetType()) 
-        {
-            ;
-        } else {
+        if (
+            GameState.Transient.NextSpawn != null &&
+            GameState.Transient.NextSpawn.GetType() == npc.GetType()
+        )
+            return; 
+        if (GameState.Transient.NextSpawn == null) {
             Console.WriteLine(npc + " as event");
-            if (GameState.Transient.NextSpawn == null) {
-                GameState.Transient.NextSpawn = npc;
-                GameState.Transient.EnemiesTillNextSpawn = 0;
-            }
+            GameState.Transient.NextSpawn = npc;
+            GameState.Transient.EnemiesTillNextSpawn = 0;
         }
     }
 }
