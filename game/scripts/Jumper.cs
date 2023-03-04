@@ -39,7 +39,7 @@ public class Jumper {
                 return;
             }
             Main.Singleton.MyMageUI.Position = new Vector2(
-                0, (isFinite ? 100 : 300) * (float)(
+                0, (isFinite ? 100 : 600) * (float)(
                     Math.Pow(ratio - .5, 2)
                     - Math.Pow(.5, 2) 
                 )

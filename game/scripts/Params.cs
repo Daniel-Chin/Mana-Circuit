@@ -19,7 +19,7 @@ public class Params
     public static readonly int N_ENEMIES_AFTER_REJECT_EVENT = 2;
     public static readonly float LMB_HOLD_DEADZONE = .3f;
     public static readonly Vector2 SPRITE_SCALE = new Vector2(4, 4);
-    public static readonly double INF_DISTANCE = 1e4;   // 8 hours of walk time
+    public static readonly double INF_DISTANCE = 1e3;   // 45 minutes of walk time
     public static readonly int NPC_LINELINESS_MAX = 8;
     public static readonly double PROB_ENEMY_INF = .2;
     public static readonly int INF_AFTER_KILLS_AFTER_STRONG_MULT = 10;

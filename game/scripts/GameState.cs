@@ -237,14 +237,17 @@ public class GameState
 
         public void Update()
         {
+            double dist;
             if (Persistent.Location_dist.MyRank == Rank.FINITE)
             {
-                double dist = Persistent.Location_dist.K;
-                LocationOffset = new Vector2(
-                    (float)(dist * Math.Cos(Persistent.Location_theta)),
-                    (float)(dist * Math.Sin(Persistent.Location_theta))
-                );
+                dist = Persistent.Location_dist.K;
+            } else {
+                dist = Params.INF_DISTANCE;
             }
+            LocationOffset = new Vector2(
+                (float)(dist * Math.Cos(Persistent.Location_theta)),
+                (float)(dist * Math.Sin(Persistent.Location_theta))
+            );
         }
 
         public void EventRejected() {
