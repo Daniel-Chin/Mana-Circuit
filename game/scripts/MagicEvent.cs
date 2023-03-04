@@ -658,7 +658,7 @@ public abstract class MagicEvent : Godot.Object
                 case 11:
                     _cG = new CustomGem(_metaLevel);
                     Director.MainUI.MyLowPanel.Display(
-                        $"As your reward, I will now unlock *{_cG.DisplayName()}s* for you."
+                        $"As your reward, I will now unlock \n*{_cG.DisplayName()}s* for you."
                     );
                     _step++;
                     break;
@@ -674,9 +674,10 @@ public abstract class MagicEvent : Godot.Object
                     _step++;
                     break;
                 case 13:
+                    Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
                     _step++;
                     if (
-                        _metaLevel.MyRank == Rank.W_TO_THE_K
+                        _metaLevel.MyRank == Rank.FINITE
                         && _metaLevel.K >= 2
                     ) {
                         string w = new MathBB.RaisableChar(
@@ -686,7 +687,7 @@ public abstract class MagicEvent : Godot.Object
                             'x', 1, Main.Singleton.MyLowPanel.FontHeight
                         ).ToString();
                         Director.MainUI.MyLowPanel.Display(
-                            $"You see, if you hit me with a class-{w}{x} attack, I will unlock Meta{x} Custom Gems."
+                            $"You see, if you hit me with a class-\n{w}{x} attack, I will unlock Meta{x} Custom Gems."
                         );
                     } else {
                         NextStep();
@@ -695,8 +696,8 @@ public abstract class MagicEvent : Godot.Object
                 case 14:
                     _step++;
                     if (
-                        new Simplest(Rank.W_TO_THE_K, 1) <= _metaLevel
-                        && _metaLevel <= new Simplest(Rank.W_TO_THE_K, 3)
+                        Simplest.Finite(1) <= _metaLevel
+                        && _metaLevel <= Simplest.Finite(3)
                     ) {
                         CustomGem subCG = new CustomGem(Simplest.Finite(_metaLevel.K - 1));
                         Director.MainUI.MyLowPanel.Display(
@@ -707,7 +708,6 @@ public abstract class MagicEvent : Godot.Object
                     }
                     break;
                 case 15:
-                    Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
                     Director.MainUI.MyLowPanel.Display(
                         "Custom Gems take the theoretical mean of anything stochastic inside them."
                     );

@@ -83,6 +83,9 @@ public class Revive : PanelContainer
     {
         Visible = false;
         Director.UnpauseWorld();
+        if (GameState.Persistent.MyWand is Wand.Ricecooker)
+            GameState.Transient.NextSpawn = new NPC.WandSmith();
+            GameState.Transient.EnemiesTillNextSpawn = 0;
     }
 
     public new void Update()
