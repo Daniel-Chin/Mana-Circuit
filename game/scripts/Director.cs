@@ -25,7 +25,7 @@ public class Director
             GameState.Transient.EnemiesTillNextSpawn = 0;
             return;
         }
-        if (SpawnShopIf(Simplest.Finite(4), (new Gem.AddOne(), 0))) {
+        if (SpawnShopIf(Simplest.Finite(3), (new Gem.AddOne(), 0))) {
             Console.WriteLine("hinting to buy +1");
             return;
         }

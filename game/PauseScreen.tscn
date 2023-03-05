@@ -12,7 +12,6 @@ font_data = ExtResource( 2 )
 bg_color = Color( 0, 0, 0, 1 )
 
 [node name="PauseScreen" type="WindowDialog"]
-visible = true
 margin_right = 48.0
 margin_bottom = 1.0
 rect_min_size = Vector2( 900, 500 )

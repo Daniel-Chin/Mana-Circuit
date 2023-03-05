@@ -29,7 +29,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
             {
                 case Gem.AddOne _:
                     if (k == 0)
-                        return new Simplest(Rank.FINITE, 4);
+                        return new Simplest(Rank.FINITE, 3);
                     if (k == 1)
                         return new Simplest(Rank.FINITE, 11);
                     return new Simplest(Rank.FINITE, 10 * k);
