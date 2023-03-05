@@ -92,6 +92,7 @@ public class Jumper {
                     jumpDirection = mouseDirection;
                     jumpMana = GameState.Transient.Mana;
                     GameState.Transient.Mana = Simplest.Zero();
+                    Main.Singleton.MySidePanel.Update();
                     isFinite = jumpMana.MyRank == Rank.FINITE;
                     if (!isFinite) {
                         if (jumpMana >= GameState.Persistent.Location_dist) {

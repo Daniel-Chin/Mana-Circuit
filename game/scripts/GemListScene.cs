@@ -381,8 +381,8 @@ public class GemListScene : WindowDialog
             "[center][color=yellow]Price[/color][/center]"
         );
 
-        ListGems(AllBuyableGems());
         ListGems(AllBuyableCGs());
+        ListGems(AllBuyableGems());
     }
 
     private void Finish()

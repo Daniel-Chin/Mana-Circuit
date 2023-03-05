@@ -263,7 +263,7 @@ public abstract class MagicEvent : Godot.Object
                 return;
             }
             Director.MainUI.MyLowPanel.SetFace(_npc);
-            Director.MainUI.MyLowPanel.Display(Tip());
+            Director.MainUI.MyLowPanel.Display(tip);
         }
         public void ByeUpgradeWand(bool didBuy) {
             if (didBuy && GameState.Persistent.MyWand is Wand.Ricecooker) {
@@ -290,6 +290,8 @@ public abstract class MagicEvent : Godot.Object
                         GameState.Persistent.ShopTip ++;
                         return "A good mage needs 1% grinding and 99% thinking.";
                     }
+                    return null;
+                case 3:
                     return null;
                 default:
                     throw new Shared.ValueError();
