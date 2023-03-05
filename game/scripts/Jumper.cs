@@ -74,7 +74,7 @@ public class Jumper {
             jumpedTime += dt;
         } else {
             Charging = Input.IsKeyPressed((int)KeyList.J);
-            if (Charging && (
+            if (Charging && !GameState.Transient.WorldPaused && (
                 GameState.Persistent.Event_JumperStage == 2
                 || (
                     Director.NowEvent is MagicEvent.Jumping e
