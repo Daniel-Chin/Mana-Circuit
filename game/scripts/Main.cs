@@ -11,6 +11,7 @@ public class Main : Node2D
     public World MyWorld;
     public MageUI MyMageUI;
     public Revive MyRevive;
+    public PauseScreen MyPauseScreen;
     public WindowDialog MadeEpsilon0;
     public static float MainTime;
     public Main() : base()
@@ -28,6 +29,7 @@ public class Main : Node2D
         MySidePanel = GetNode<SidePanel>("HBox/SidePanel");
         MyLowPanel = GetNode<LowPanel>("Overlay/VBoxLowPanel/LowPanel");
         MyRevive = GetNode<Revive>("Overlay/VBox2/HBox/Revive");
+        MyPauseScreen = GetNode<PauseScreen>("PauseScreen");
         MadeEpsilon0 = GetNode<WindowDialog>("MadeEpsilon0");
         MyWorld.Connect(
             "wand_replaced", this, "WandReplaced"
@@ -50,6 +52,20 @@ public class Main : Node2D
         MainTime += delta;
         Director.Process(delta);
         Jumper.Process(delta);
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if (@event.IsActionPressed("pause")) {
+            if (Director.NowEvent == null) {
+                if (MyPauseScreen.Visible) {
+                    MyPauseScreen.Resume();
+                } else if (!GameState.Transient.WorldPaused) {
+                    Director.PauseWorld();
+                    MyPauseScreen.PopupCentered();
+                }
+            }
+        }
     }
 
     public void WandReplaced()

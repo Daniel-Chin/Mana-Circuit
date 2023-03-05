@@ -50,13 +50,13 @@ public class LowPanel : PanelContainer
     public void Display(string message) {
         Display(message, false);
     }
-    public void Display(string message, bool centerLime)
+    public void Display(string message, bool center)
     {
         bool inCyan = false;
         Label.Clear();
-        if (centerLime) {
-            Label.PushColor(Colors.Lime);
+        if (center) {
             Label.PushAlign(RichTextLabel.Align.Center);
+            Label.AppendBbcode("\n");
         }
         foreach (var part in message.Split('*'))
         {
@@ -73,8 +73,7 @@ public class LowPanel : PanelContainer
         }
         if (inCyan)
             Label.Pop();
-        if (centerLime) {
-            Label.Pop();
+        if (center) {
             Label.Pop();
         }
         Label.PercentVisible = 0;
