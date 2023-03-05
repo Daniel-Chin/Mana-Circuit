@@ -5,10 +5,12 @@ public class UpgradeWand : WindowDialog
 {
     // code-defined
     [Signal] public delegate void finished();
-    Wand NewWand;
+    public Wand NewWand;
+    private bool _didBuy;
     public UpgradeWand() : base()
     {
         NewWand = GameState.Persistent.MyWand.UpgradeInto();
+        _didBuy = false;
         Connect("popup_hide", this, "OnPopupHide");
 
         RectMinSize = new Vector2(900, 500);
@@ -77,6 +79,7 @@ public class UpgradeWand : WindowDialog
         );
         GameState.Persistent.MyWand = NewWand;
         Main.Singleton.WandReplaced();
+        _didBuy = true;
         Leave();
     }
 
@@ -86,7 +89,7 @@ public class UpgradeWand : WindowDialog
     }
     public void OnPopupHide()
     {
-        EmitSignal("finished");
+        EmitSignal("finished", _didBuy);
         QueueFree();
     }
 

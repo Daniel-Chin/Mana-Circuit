@@ -60,7 +60,7 @@ public class SidePanel : PanelContainer
 
     public new void Update()
     {
-        ManaLabel.BbcodeText = $"[center][color=cyan]{MathBB.Build(GameState.Transient.Mana, _manaFontHeight)}[/color][/center]";
+        ManaLabel.BbcodeText = $"[center][color=#00ffff]{MathBB.Build(GameState.Transient.Mana, _manaFontHeight)}[/color][/center]";
         MoneyLabel.BbcodeText = $" [color=yellow]${MathBB.Build(GameState.Persistent.Money)}[/color]";
         Hold(GameState.Persistent.MyWand);
     }

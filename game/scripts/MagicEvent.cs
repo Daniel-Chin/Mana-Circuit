@@ -256,15 +256,20 @@ public abstract class MagicEvent : Godot.Object
         }
 
         public void Bye() {
+            _step++;
+            string tip = Tip();
+            if (tip == null) {
+                NextStep();
+                return;
+            }
             Director.MainUI.MyLowPanel.SetFace(_npc);
             Director.MainUI.MyLowPanel.Display(Tip());
-            _step++;
         }
-        public void ByeUpgradeWand() {
-            if (GameState.Persistent.MyWand is Wand.Ricecooker) {
+        public void ByeUpgradeWand(bool didBuy) {
+            if (didBuy && GameState.Persistent.MyWand is Wand.Ricecooker) {
                 _step = 20;
                 NextStep();
-            } else if (GameState.Persistent.MyWand is Wand.Guitar) {
+            } else if (didBuy && GameState.Persistent.MyWand is Wand.Guitar) {
                 _step = 30;
                 NextStep();
             } else {
@@ -273,15 +278,19 @@ public abstract class MagicEvent : Godot.Object
         }
 
         private string Tip() {
-            GameState.Persistent.ShopTip ++;
-            GameState.Persistent.ShopTip %= 2;
             switch (GameState.Persistent.ShopTip) {
-                case 1:
-                    if (GameState.Persistent.Money <= Simplest.Finite(8))
-                        return "There are more shops ahead. Don't worry --- they appear quite frequently.";
-                    return "A good mage needs 1% grinding and 99% thinking.";
                 case 0:
+                    GameState.Persistent.ShopTip ++;
+                    return "There are more shops ahead. Don't worry --- they appear quite frequently.";
+                case 1:
+                    GameState.Persistent.ShopTip ++;
                     return "Remember: The further you go, the stronger the enemies!";
+                case 2:
+                    if (GameState.Persistent.Money >= Simplest.Finite(10)) {
+                        GameState.Persistent.ShopTip ++;
+                        return "A good mage needs 1% grinding and 99% thinking.";
+                    }
+                    return null;
                 default:
                     throw new Shared.ValueError();
             }
