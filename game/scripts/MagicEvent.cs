@@ -423,7 +423,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.PauseWorld();
                     Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
                     Director.MainUI.MyLowPanel.Display(
-                        "I.          \nAM.          \nBACK."
+                        "I.               \nAM.               \nBACK."
                     );
                     _step++;
                     break;
