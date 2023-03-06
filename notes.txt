@@ -1,6 +1,36 @@
 法力无边
 Your power knows no bounds
 
+Todo
+    make cyan rect flow less bright
+    don't hint 1.4 if has two +1 gems
+    点击屏幕跳对话
+    mana trails.
+        mana value displayed 
+        regular intervals
+    money scatter: lower
+        against NPC: non linear
+    re-order gem list.
+        mirror before focuser
+    ricecooker
+        bigger. at least 9 attack
+    seq
+        hint about loops
+        ask: what is your mean mana output?
+        only one x1.5 on the ground. "there is only one"
+        if player doesn't buy stochastic, drop one for free. "author dropped it here"
+    bug: "attack me" after respawn
+        revive should clear nowEvent?
+    clear circuit
+    click unavailable gem - "Do you want to unload?"
+    CG background: need Gem borders
+    mana rate / s
+    skareboard ownership GUI
+    hide the 2nd focuser gementry (price = w) if you can't afford
+    "stop and think" dialog.
+    spawn inf-HP enemy after 10 after "stop and think"
+    
+
 How to make the player come up with inf themselves? 
     roadblock w/ inf enemies? 
         what about the excitement "I made inf and I'm OP"?
