@@ -144,10 +144,10 @@ public class GemListScene : WindowDialog
         List<Gem> gems = new List<Gem> {
             new Gem.AddOne(),
             new Gem.WeakMult(),
-            new Gem.StrongMult(),
-            new Gem.Focus(new PointInt(0, 1)),
             new Gem.Mirror(true),
+            new Gem.Focus(new PointInt(0, 1)),
             new Gem.Stochastic(true),
+            new Gem.StrongMult(),
         };
         return gems;
     }
@@ -381,8 +381,18 @@ public class GemListScene : WindowDialog
             "[center][color=yellow]Price[/color][/center]"
         );
 
+        List<Gem> gems = AllBuyableGems();
+        foreach (Gem gem in new List<Gem>(gems)) {
+            if (
+                gem is Gem.Focus
+                && GameState.Persistent.HasGems[gem.Name()] == 1
+                && !(NPC.Shop.PriceOf(gem) <= GameState.Persistent.Money)
+            ) {
+                gems.Remove(gem);
+            }
+        }
         ListGems(AllBuyableCGs());
-        ListGems(AllBuyableGems());
+        ListGems(gems);
     }
 
     private void Finish()
