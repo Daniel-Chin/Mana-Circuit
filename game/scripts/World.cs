@@ -272,9 +272,12 @@ public class World : Node2D
                 if (m0 == repeller) continue;
                 Vector2 displace = m0.Position - repeller.Position;
                 float dist = Math.Max(3f, displace.Length());
-                force += displace.Normalized() / (float)Math.Pow(dist, 2) * (
-                    repeller is NPCUI ? 40 : 1
-                );
+                if (repeller is NPCUI) {
+                    if (dist < Params.NPC_COLLISION_RANGE - Params.MONEY_COLLISION_RANGE)
+                        force += displace.Normalized() * .1f;
+                } else {
+                    force += displace.Normalized() / (float)Math.Pow(dist, 2);
+                }
             }
             m0.Step(force, dt);
         }

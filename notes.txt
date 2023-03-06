@@ -2,8 +2,6 @@
 Your power knows no bounds
 
 Todo
-    money scatter: lower
-        against NPC: non linear
     re-order gem list.
         mirror before focuser
     ricecooker
