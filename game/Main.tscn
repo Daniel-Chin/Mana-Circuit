@@ -88,7 +88,6 @@ alignment = 2
 [node name="LowPanel" parent="Overlay/VBoxLowPanel" instance=ExtResource( 7 )]
 
 [node name="PauseScreen" parent="." instance=ExtResource( 12 )]
-visible = false
 
 [node name="MadeEpsilon0" parent="." instance=ExtResource( 11 )]
 visible = false

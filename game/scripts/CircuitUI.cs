@@ -46,7 +46,7 @@ public class CircuitUI : AspectRatioContainer
                 sourceLocation, source.Direction, Simplest.Ones(1)
             );
             Follower = sourceLocation.ToVector2();
-            MyTrail = new ManaTrail();
+            MyTrail = new ManaTrail(parent.RecursionDepth <= 0);
             parent._container.AddChild(MyTrail);
             MyTrail.LineWidth = (float)(3 * Math.Exp(-parent.RecursionDepth));
             MyTrail.Lifetime = .5f;
@@ -77,6 +77,7 @@ public class CircuitUI : AspectRatioContainer
             d *= ADVECT_LEN;
             Follower += d;
             MyTrail.ArriveAt(Parent.ToUICoords(Follower));
+            MyTrail.SetMana(MyParticle.Mana[0]);
         }
         public void Free()
         {

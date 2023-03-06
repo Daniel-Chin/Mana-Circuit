@@ -3,7 +3,6 @@ Your power knows no bounds
 
 Todo
     mana trails.
-        mana value displayed 
         regular intervals
     money scatter: lower
         against NPC: non linear

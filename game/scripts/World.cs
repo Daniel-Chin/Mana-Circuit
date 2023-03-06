@@ -97,11 +97,7 @@ public class World : Node2D
                 && !GameState.Transient.Mana.Equals(Simplest.Zero())
             )
             {
-                Attack attack = new Attack()
-                {
-                    Direction = direction,
-                    Mana = GameState.Transient.Mana,
-                };
+                Attack attack = new Attack(direction, GameState.Transient.Mana);
                 attack.Head = direction * Params.ENEMY_COLLISION_RANGE;
                 GameState.Transient.Mana = Simplest.Zero();
                 Main.Singleton.MySidePanel.Update(); // Ideally, a signal

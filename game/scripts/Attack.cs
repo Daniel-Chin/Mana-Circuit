@@ -9,12 +9,16 @@ public class Attack : ManaTrail, SpawnableUI
     public Simplest Mana { get; set; }
     private double _time_since_last_advance;
 
-    public Attack() : base()
+    public Attack(Vector2 direction, Simplest mana) : base(true)
     {
+        Direction = direction;
+        Mana = mana;
         Head = new Vector2(0, 0);
         _head = Head;
         _time_since_last_advance = 0;
         Lifetime = 1;
+        SetMana(Mana);
+        ArriveAt(Head);
     }
 
     public bool Advect(float dt)
