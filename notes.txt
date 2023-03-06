@@ -2,8 +2,6 @@
 Your power knows no bounds
 
 Todo
-    mana trails.
-        regular intervals
     money scatter: lower
         against NPC: non linear
     re-order gem list.

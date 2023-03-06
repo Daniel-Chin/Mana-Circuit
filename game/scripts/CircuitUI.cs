@@ -9,11 +9,11 @@ public class CircuitUI : AspectRatioContainer
     [Signal] public delegate void new_explain();
     [Signal] public delegate void modified();
     private static readonly int MAX_PARTICLES = 8;
-    private static readonly double EMIT_LAMBDA = 2;
+    private static readonly float EMIT_INTERVAL = .5f;
     private static readonly double ADVECT_LAMBDA = 8;
     // poisson distribution, prob / sec
     private static readonly float ADVECT_LEN = .3f;
-    private static readonly float NOISE_MULT = 1.5f;
+    private static readonly float NOISE_MULT = .5f;
     private static readonly Vector2 HALF = new Vector2(.5f, .5f);
     private static Shader _rainbow = GD.Load<Shader>("res://Rainbow.gdshader");
     public Circuit MyCircuit;
@@ -30,6 +30,7 @@ public class CircuitUI : AspectRatioContainer
     public Simplest MetaLevel;
     public bool DoMouseEvent;
     public bool SimParticles;
+    private float _emitAcc;
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -202,11 +203,13 @@ public class CircuitUI : AspectRatioContainer
             pT.Free();
             _pAndTs.Remove(pT);
         }
+        _emitAcc += delta;
         if (
             _pAndTs.Count < MAX_PARTICLES
-            && Shared.Rand.NextDouble() < EMIT_LAMBDA * delta
+            && _emitAcc >= EMIT_INTERVAL
         )
-        {
+        {   
+            _emitAcc -= EMIT_INTERVAL;
             // spawn new particle
             // Console.WriteLine("spawn new particle");
             List<(PointInt, Gem.Source)> sources = MyCircuit.FindAll<Gem.Source>();
