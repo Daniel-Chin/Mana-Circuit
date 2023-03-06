@@ -2,9 +2,6 @@
 Your power knows no bounds
 
 Todo
-    make cyan rect flow less bright
-    don't hint 1.4 if has two +1 gems
-    点击屏幕跳对话
     mana trails.
         mana value displayed 
         regular intervals

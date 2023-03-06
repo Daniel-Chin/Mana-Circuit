@@ -29,7 +29,10 @@ public class Director
             Console.WriteLine("hinting to buy +1");
             return;
         }
-        if (SpawnShopIf(Simplest.Finite(6), (new Gem.WeakMult(), 0))) {
+        if (
+            GameState.Persistent.HasGems[new Gem.AddOne().Name()] <= 1
+            && SpawnShopIf(Simplest.Finite(6), (new Gem.WeakMult(), 0))
+        ) {
             Console.WriteLine("hinting to buy x1.4");
             return;
         }

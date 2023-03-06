@@ -4,8 +4,8 @@ using Godot;
 
 public class WandSimulation
 {
-    private static readonly float BLING = .3f;
-    private static readonly float BLING_DECAY = 4f;
+    private static readonly float BLING = .2f;
+    private static readonly float BLING_DECAY = 5f;
 
     public SidePanel TheSidePanel { get; set; }
     public Wand MyWand { get; set; }

@@ -114,8 +114,11 @@ public class LowPanel : PanelContainer
         _timeElasped = Label.Text.Length / Params.TEXT_ROLL_SPEED;
     }
 
-    public void _on_Mask_pressed()
+    public void _on_Mask_pressed() { }
+    public void Clicked()
     {
+        if (!Main.Singleton.VBoxLowPanel.Visible) return;
+        if (!Mask.Visible) return;
         if (_timeElasped < Label.Text.Length / Params.TEXT_ROLL_SPEED)
         {
             SkipRoll();

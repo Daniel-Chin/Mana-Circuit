@@ -65,6 +65,12 @@ public class Main : Node2D
                     MyPauseScreen.PopupCentered();
                 }
             }
+        } else if (
+            @event is InputEventMouseButton emb
+            && emb.ButtonIndex == (int)ButtonList.Left
+            && emb.Pressed
+        ) {
+            MyLowPanel.Clicked();
         }
     }
 

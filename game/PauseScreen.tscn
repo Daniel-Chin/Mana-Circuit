@@ -12,7 +12,6 @@ font_data = ExtResource( 2 )
 bg_color = Color( 0, 0, 0, 1 )
 
 [node name="PauseScreen" type="WindowDialog"]
-visible = true
 margin_right = 48.0
 margin_bottom = 1.0
 rect_min_size = Vector2( 900, 500 )
@@ -61,6 +60,9 @@ text = "# Recommended
 - Patrick Traynor. \"Patrick's Parabox\". https://www.patricksparabox.com
   - An awesome puzzle game where infinity is also a necessary 
     consequence of the game mechanics. 
+
+# Beta Testers
+maguro. 
 
 # Attribution & Thanks
 - Pixel font \"m5x7\" by Daniel Linssen. https://managore.itch.io/m5x7
