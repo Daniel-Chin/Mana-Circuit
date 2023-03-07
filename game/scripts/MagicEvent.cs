@@ -97,13 +97,13 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 1:
                     Director.MainUI.MyLowPanel.Display(
-                        "On one end, a *radiator*. A rare ore that naturally emits weak mana."
+                        "On one end, a *radiator* [img=30]res://texture/gem/source.png[/img] . A rare ore that naturally emits weak mana."
                     );
                     _step++;
                     break;
                 case 2:
                     Director.MainUI.MyLowPanel.Display(
-                        "On the other end, a *crystalizer*. A crystal to store unlimited mana."
+                        "On the other end, a *crystalizer* [img=30]res://texture/gem/drain.png[/img] . A crystal to store unlimited mana."
                     );
                     _step++;
                     break;

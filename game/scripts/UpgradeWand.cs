@@ -16,8 +16,9 @@ public class UpgradeWand : WindowDialog
         RectMinSize = new Vector2(900, 500);
         Theme = Shared.THEME;
         VBoxContainer vBox = new VBoxContainer();
-        AddChild(vBox);
-        vBox.RectMinSize = RectMinSize;
+        HBoxContainer outerHBox = Pad.H(vBox, 20);
+        AddChild(outerHBox);
+        outerHBox.RectMinSize = RectMinSize;
         HBoxContainer hBox = new HBoxContainer();
         vBox.AddChild(hBox);
         hBox.Alignment = HBoxContainer.AlignMode.Center;
