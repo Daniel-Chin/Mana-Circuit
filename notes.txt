@@ -2,9 +2,8 @@
 Your power knows no bounds
 
 Todo
-    click unavailable gem - "Do you want to unload?"
+    shop: "Can't afford"
     skareboard ownership GUI
-    
 
 How to make the player come up with inf themselves? 
     roadblock w/ inf enemies? 

@@ -22,11 +22,13 @@ public class GemListScene : WindowDialog
         PLACE, EDIT, BUY,
     }
     private Mode _mode;
+    private MagicItem _allowUninstallFrom;
 
     public GemListScene() : base()
     {
         _gems = new List<Gem>();
         _header = null;
+        _allowUninstallFrom = null;
         Connect("popup_hide", this, "OnPopupHide");
 
         Theme = Shared.THEME;
@@ -52,11 +54,11 @@ public class GemListScene : WindowDialog
         int gemI = _gems.Count;
         _gems.Add(gem);
         GemEntry gemEntry = new GemEntry(gem);
-        ContainerButton maskButton = new ContainerButton(gemEntry);
-        VBox.AddChild(maskButton);
-        maskButton.MyButton.Connect(
+        ContainerButton cButton = new ContainerButton(gemEntry);
+        VBox.AddChild(cButton);
+        cButton.MyButton.Connect(
             "pressed", this, "GemClicked",
-            new Godot.Collections.Array() { gemI }
+            new Godot.Collections.Array() { gemI, cButton }
         );
         _lastEntry = gemEntry;
         return gemEntry;
@@ -240,10 +242,30 @@ public class GemListScene : WindowDialog
         return true;
     }
 
-    public void GemClicked(int gemI)
+    public void GemClicked(int gemI, ContainerButton cButton)
     {
         Gem gem = _gems[gemI];
         CustomGem cG = gem as CustomGem;
+        if (cButton.Confirming) {
+            if (_allowUninstallFrom == null)
+                return;
+            cButton.FreeText();
+            Circuit circuit;
+            switch (_allowUninstallFrom) {
+                case Wand w:
+                    circuit = w.MyCircuit;
+                    break;
+                case CustomGem cGem:
+                    circuit = cGem.MyCircuit;
+                    break;
+                default:
+                    throw new Shared.TypeError();
+            }
+            circuit.RemoveAny(gem);
+            _allowUninstallFrom = null;
+            GemClicked(gemI, cButton);
+            return;
+        }
         if (!(gem is Gem.RemoveGem))
         {
             if (_mode == Mode.PLACE)
@@ -251,7 +273,23 @@ public class GemListScene : WindowDialog
                 var (nInWand, nInCGs, nAvailable) = CountGems(gem);
                 if (nAvailable <= Simplest.Zero())
                 {
-                    Console.WriteLine("No gem available");
+                    RichTextLabel label = cButton.TextInstead();
+                    label.PushAlign(RichTextLabel.Align.Center);
+                    if (nInWand + nInCGs == 0) {
+                        label.PushColor(Colors.Red);
+                        label.AppendBbcode("You own zero copies. Shop some!");
+                        label.Pop();
+                        _allowUninstallFrom = null;
+                    } else {
+                        label.AppendBbcode("Already in use. Uninstall one from ");
+                        label.PushColor(Colors.Cyan);
+                        _allowUninstallFrom = AnyEmbedderOf(gem);
+                        label.AppendBbcode(_allowUninstallFrom.DisplayName());
+                        label.Pop();
+                        label.AppendBbcode("?\n");
+                        label.AppendBbcode("Click again to confirm.");
+                    }
+                    label.Pop();
                     return;
                 }
                 if (
@@ -260,7 +298,17 @@ public class GemListScene : WindowDialog
                     && cG.MetaLevel.MyRank == Rank.FINITE
                 )
                 {
-                    Console.WriteLine("Gem type illegal");
+                    RichTextLabel label = cButton.TextInstead();
+                    label.PushColor(Colors.Red);
+                    label.PushAlign(RichTextLabel.Align.Center);
+                    label.AppendBbcode("Type error: ");
+                    label.AppendBbcode(new CustomGem(MetaLevel).DisplayName());
+                    label.AppendBbcode(" cannot embed ");
+                    label.AppendBbcode(cG.DisplayName());
+                    label.AppendBbcode(". ");
+                    label.Pop();
+                    label.Pop();
+                    _allowUninstallFrom = null;
                     return;
                 }
             }
@@ -359,9 +407,9 @@ public class GemListScene : WindowDialog
         GemEntry wandEntry = new GemEntry(null);
         wandEntry.PresetOneBig();
         wandEntry.Pad();
-        ContainerButton maskButton = new ContainerButton(wandEntry);
-        VBox.AddChild(maskButton);
-        maskButton.MyButton.Connect(
+        ContainerButton cButton = new ContainerButton(wandEntry);
+        VBox.AddChild(cButton);
+        cButton.MyButton.Connect(
             "pressed", this, "OnClickWand"
         );
         wandEntry.MyGemUI.Button.TextureNormal = wand.Texture();
@@ -439,5 +487,30 @@ public class GemListScene : WindowDialog
             return true;
         }
         return false;
+    }
+
+    private MagicItem AnyEmbedderOf(Gem gem) {
+        int nInWand = CountGemsInWand(gem);
+        if (nInWand != 0)
+            return GameState.Persistent.MyWand;
+        CustomGem cG;
+        foreach (var entry in GameState.Persistent.HasCustomGems)
+        {
+            cG = entry.Value.Item2;
+            if (cG != null)
+            {
+                if (CountGemsInCircuit(gem, cG.MyCircuit) != 0) {
+                    return cG;
+                }
+            }
+        }
+        cG = GameState.Persistent.MyTypelessGem;
+        if (cG != null)
+        {
+            if (CountGemsInCircuit(gem, cG.MyCircuit) != 0) {
+                return cG;
+            }
+        }
+        throw new Shared.ObjectStateIllegal();
     }
 }

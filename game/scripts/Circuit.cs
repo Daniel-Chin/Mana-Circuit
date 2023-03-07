@@ -215,4 +215,26 @@ public class Circuit : JSONable
             }
         }
     }
+
+    public void RemoveAny(Gem gem) {
+        bool gotIt = false;
+        for (int i = 0; i < Size.IntX; i++) {
+            for (int j = 0; j < Size.IntY; j++) {
+                if (gem is CustomGem) {
+                    if (gem == Field[i, j]) {
+                        gotIt = true;
+                    }
+                } else {
+                    if (gem.GetType() == Field[i, j].GetType()) {
+                        gotIt = true;
+                    }
+                }
+                if (gotIt) {
+                    Remove(new PointInt(i, j));
+                    return;
+                }
+            }
+        }
+        throw new Shared.SupposedlyUnreachable();
+    }
 }

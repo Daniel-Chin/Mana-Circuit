@@ -11,6 +11,7 @@ public class Shared
     public class TypeError : Exception { }
     public class PlayerCreatedEpsilonNaught : Exception { }
     public class AssertionFailed : Exception { }
+    public class SupposedlyUnreachable : Exception { }
     public static Random Rand = new Random();
     public static readonly Theme THEME = GD.Load<Theme>("res://misc/theme.tres");
     public static readonly Font FONT = THEME.DefaultFont;
