@@ -203,7 +203,6 @@ public class World : Node2D
                 Console.WriteLine("Cannot spawn. ");
             } else {
                 if (TrySpawnNPCAsNonEvent(direction)) {
-                    Console.WriteLine("Spawned NPC. ");
                 } else {
                     SpawnEnemy(direction);
                 }
@@ -524,12 +523,14 @@ public class World : Node2D
             GameState.Persistent.Loneliness_WandSmith >= Params.NPC_LINELINESS_MAX
         ) {
             Spawn(new NPC.WandSmith(), direction);
+            Console.WriteLine("Spawned WandSmith. ");
             return true;
         }
         if (
             GameState.Persistent.Loneliness_Shop >= Params.NPC_LINELINESS_MAX
         ) {
             Spawn(new NPC.Shop(), direction);
+            Console.WriteLine("Spawned Shop. ");
             return true;
         }
         if (!GameState.Persistent.HasCustomGems.ContainsKey(0))
@@ -540,6 +541,7 @@ public class World : Node2D
             GameState.Persistent.Loneliness_GemExpert >= Params.NPC_LINELINESS_MAX
         ) {
             Spawn(new NPC.GemExpert(), direction);
+            Console.WriteLine("Spawned GemExpert. ");
             return true;
         }
         return false;
