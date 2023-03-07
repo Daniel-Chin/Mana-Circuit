@@ -9,7 +9,7 @@ public class CircuitUI : AspectRatioContainer
     [Signal] public delegate void new_explain();
     [Signal] public delegate void modified();
     private static readonly int MAX_PARTICLES = 8;
-    private static readonly float EMIT_INTERVAL = .5f;
+    private static readonly float EMIT_INTERVAL = 1f;
     private static readonly double ADVECT_LAMBDA = 8;
     // poisson distribution, prob / sec
     private static readonly float ADVECT_LEN = .3f;
@@ -49,6 +49,7 @@ public class CircuitUI : AspectRatioContainer
             Follower = sourceLocation.ToVector2();
             MyTrail = new ManaTrail(parent.RecursionDepth <= 0);
             parent._container.AddChild(MyTrail);
+            parent._container.MoveChild(MyTrail, 1);
             MyTrail.LineWidth = (float)(3 * Math.Exp(-parent.RecursionDepth));
             MyTrail.Lifetime = .5f;
         }

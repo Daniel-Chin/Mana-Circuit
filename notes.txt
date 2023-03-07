@@ -8,7 +8,6 @@ Todo
         ask: what is your mean mana output?
         only one x1.5 on the ground. "there is only one"
     hiding the gemEntry should display "out-of-stock" instead, otherwise buying the first one would be confusing
-    mana HUDs should be in the back, no blocking clicks.
     bug: "attack me" after respawn
         revive should clear nowEvent?
     clear circuit
