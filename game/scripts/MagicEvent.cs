@@ -134,8 +134,10 @@ public abstract class MagicEvent : Godot.Object
     }
 
     public class Shopping : MagicEvent {
+        public const int SHOP_TIP_TOP = 100;
         private int _step;
         private NPC _npc;
+        private Gem _strongMult;
         public Shopping(NPC npc)
         {
             _step = 0;
@@ -221,6 +223,36 @@ public abstract class MagicEvent : Godot.Object
                     );
                     _step = 22;
                     break;
+                case 40:
+                    Director.MainUI.MyLowPanel.SetFace(_npc);
+                    Director.MainUI.MyLowPanel.Display(
+                        "You can see Custom Gems now?"
+                    );
+                    _step++;
+                    break;
+                case 41:
+                    Director.MainUI.MyLowPanel.Display(
+                        "It's time. You will need this:"
+                    );
+                    _step++;
+                    break;
+                case 42:
+                    _strongMult = new Gem.StrongMult();
+                    Director.MainUI.MyLowPanel.SetFace(null);
+                    Director.MainUI.MyLowPanel.Display(
+                        $"+ *{_strongMult.DisplayName()}* obtained! +", 
+                        true
+                    );
+                    GameState.Persistent.HasGems[_strongMult.Name()] = 1;
+                    _step++;
+                    break;
+                case 43:
+                    Director.MainUI.MyLowPanel.SetFace(_npc);
+                    Director.MainUI.MyLowPanel.Display(
+                        $"There is only one {_strongMult.DisplayName()} in the world. Use it wisely."
+                    );
+                    _step = 2;
+                    break;
                 default:
                     Console.WriteLine("_step " + _step);
                     throw new Shared.ValueError();
@@ -256,6 +288,18 @@ public abstract class MagicEvent : Godot.Object
         }
 
         public void Bye() {
+            if (
+                GameState.Persistent.CountGemsOwned(
+                    new CustomGem(Simplest.Zero())
+                ) >= Simplest.One()
+                && GameState.Persistent.HasGems[
+                    new Gem.StrongMult().Name()
+                ] == 0
+            ) {
+                _step = 40;
+                NextStep();
+                return;
+            }
             _step++;
             string tip = Tip();
             if (tip == null) {
@@ -292,6 +336,35 @@ public abstract class MagicEvent : Godot.Object
                     }
                     return null;
                 case 3:
+                    if (GameState.Persistent.MadeInfMeanWand) {
+                        GameState.Persistent.ShopTip = 10;
+                        return Tip();
+                    }
+                    if (GameState.Persistent.KillsSinceStochastic >= 5) {
+                        GameState.Persistent.ShopTip ++;
+                        return "Stop playing. Give yourself one minute. Think: how do you create truely immense mana?";
+                    }
+                    return null;
+                case 4:
+                    if (GameState.Persistent.MadeInfMeanWand) {
+                        GameState.Persistent.ShopTip = 10;
+                        return Tip();
+                    }
+                    if (GameState.Persistent.KillsSinceStochastic >= 10) {
+                        GameState.Persistent.ShopTip ++;
+                        return "My friend once guided her mana into a loop. It produced strong mana, but the loop had no exit...";
+                    }
+                    return null;
+                case 5:
+                    if (GameState.Persistent.MadeInfMeanWand) {
+                        GameState.Persistent.ShopTip = 10;
+                        return Tip();
+                    }
+                    return null;
+                case 10:
+                    GameState.Persistent.ShopTip = SHOP_TIP_TOP;
+                    return "A quiz for you: what is the theoretical mean of your mana output rate?";
+                case SHOP_TIP_TOP:
                     // fixed point
                     return null;
                 default:

@@ -74,9 +74,9 @@ public class Director
                 };
             }
             if (
-                GameState.Persistent.Money >= Simplest.Finite(50)
-                && !GameState.Persistent.HasCustomGems.ContainsKey(0)
+                !GameState.Persistent.HasCustomGems.ContainsKey(0)
                 && GameState.Persistent.Event_JumperStage >= 1
+                && GameState.Persistent.ShopTip == MagicEvent.Shopping.SHOP_TIP_TOP
             ) {
                 SetNPCToSpawn(new NPC.GemExpert());
                 return;
@@ -259,6 +259,9 @@ public class Director
     public static void EnemyDied() {
         if (GameState.Persistent.HasGems[new Gem.StrongMult().Name()] != 0) {
             GameState.Persistent.KillsSinceStrongMult ++;
+        }
+        if (GameState.Persistent.HasGems[new Gem.Stochastic(false).Name()] != 0) {
+            GameState.Persistent.KillsSinceStochastic ++;
         }
         CheckEvent();
     }

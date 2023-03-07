@@ -34,6 +34,7 @@ public class GameState
         public int Loneliness_WandSmith { get; set; }
         public int ShopTip { get; set; }
         public int KillsSinceStrongMult { get; set; }
+        public int KillsSinceStochastic { get; set; }
         public bool MadeInf { get; set; }
         public bool MadeInfMeanWand { get; set; }
         public PersistentClass()
@@ -59,6 +60,7 @@ public class GameState
 
             ShopTip = 0;
             KillsSinceStrongMult = 0;
+            KillsSinceStochastic = 0;
             MadeInf = false;
             MadeInfMeanWand = false;
         }
@@ -120,7 +122,9 @@ public class GameState
             writer.WriteLine(',');
             writer.Write(ShopTip);
             writer.WriteLine(',');
-            writer.Write(ShopTip);
+            writer.Write(KillsSinceStrongMult);
+            writer.WriteLine(',');
+            writer.Write(KillsSinceStochastic);
             writer.WriteLine(',');
             JSON.Store(MadeInf, writer);
             JSON.Store(MadeInfMeanWand, writer);
@@ -163,6 +167,7 @@ public class GameState
             Loneliness_WandSmith = Int32.Parse(JSON.NoLast(reader));
             ShopTip = Int32.Parse(JSON.NoLast(reader));
             KillsSinceStrongMult = Int32.Parse(JSON.NoLast(reader));
+            KillsSinceStochastic = Int32.Parse(JSON.NoLast(reader));
             MadeInf = JSON.ParseBool(reader);
             MadeInfMeanWand = JSON.ParseBool(reader);
 

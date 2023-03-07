@@ -67,10 +67,7 @@ if hasn't made inf-mean wand,
 if hasn't made inf-mean wand, 
 hint about loops. 
 "My friend once tried to guide her mana into a loop."
-"But her mana simply looped on forever, never to reach the mana crystalizer!"
-
-if hasn't made inf-mean wand, 
-spawn inf-HP enemy after 10 kills
+"My friend once guided her mana into a loop. It produced strong mana, but the loop had no exit..."
 
 Once made inf-mean wand, ask: what is your mean mana output?
 
@@ -88,6 +85,7 @@ then, Gem Expert NPC spawns.
 $80 -> 1st copy of CG0. 
 
 one x1.5 gifted by the shop. "there is only one"
+    purpose: don't mistake the player into grinding for more x1.5 gems.
 
 Make w
 
