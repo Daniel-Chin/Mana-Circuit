@@ -235,6 +235,7 @@ public class World : Node2D
             case DroppedGem dGem:
                 ui = new DroppedItemUI(dGem);
                 ui.MySprite.Texture = GD.Load<Texture>($"res://texture/gem/{dGem.MyGem.Name()}.png");
+                ui.MySprite.Scale = new Vector2(2, 2);
                 break;
             default:
                 throw new Shared.TypeError();
