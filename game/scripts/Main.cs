@@ -73,7 +73,8 @@ public class Main : Node2D
             if (VBoxLowPanel.Visible) {
                 MyLowPanel.Clicked();
             } else {
-                MyWorld.DoAttack();
+                if (!GameState.Transient.WorldPaused)
+                    MyWorld.DoAttack();
             }
         }
     }
