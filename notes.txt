@@ -2,8 +2,6 @@
 Your power knows no bounds
 
 Todo
-    bug: "attack me" after respawn
-        revive should clear nowEvent?
     clear circuit
     click unavailable gem - "Do you want to unload?"
     CG background: need Gem borders

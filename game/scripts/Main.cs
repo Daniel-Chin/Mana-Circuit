@@ -70,7 +70,11 @@ public class Main : Node2D
             && emb.ButtonIndex == (int)ButtonList.Left
             && emb.Pressed
         ) {
-            MyLowPanel.Clicked();
+            if (VBoxLowPanel.Visible) {
+                MyLowPanel.Clicked();
+            } else {
+                MyWorld.DoAttack();
+            }
         }
     }
 

@@ -18,7 +18,7 @@ public class World : Node2D
     public float Time;
 
     private float _lastLeftUp;
-    private bool _isLeftDownLastFrame;
+    private Vector2 _mouseDirection;
 
     public override void _Ready()
     {
@@ -45,10 +45,13 @@ public class World : Node2D
         // foreach (var ui in SpawnedSpecialUIs) {
         //     ui.ZIndex = ZIndexOf(ui);
         // }
+        bool isLeftDown = Input.IsMouseButtonPressed(((int)ButtonList.Left));
+        if (!isLeftDown)
+            _lastLeftUp = Main.MainTime;
+        Vector2 drag = GetLocalMousePosition();
+        _mouseDirection = drag.Normalized();
         if (GameState.Transient.WorldPaused)
             return;
-        Vector2 drag = GetLocalMousePosition();
-        Vector2 direction = drag.Normalized();
         Time += delta;
         BackShader.SetShaderParam("worldTime", Time);
         bool walking = false;
@@ -56,12 +59,12 @@ public class World : Node2D
             if (Input.IsMouseButtonPressed(((int)ButtonList.Right)))
             {
                 walking = true;
+                Vector2 displace = (
+                    delta * Params.WALK_SPEED * _mouseDirection
+                );
                 float l = drag.Length() / SOFTZONE;
                 if (l < 1)
-                    direction *= l;
-                Vector2 displace = (
-                    delta * Params.WALK_SPEED * direction
-                );
+                    displace *= l;
                 GameState.Transient.LocationOffset += displace;
                 if (GameState.Persistent.Location_dist.MyRank == Rank.FINITE)
                 {
@@ -75,36 +78,19 @@ public class World : Node2D
                 UpdateBack();
                 MyMageUI.Walking();
                 ReverseMoveWorld(displace);
-                OnWalk(direction);
+                OnWalk();
             }
             else
             {
                 MyMageUI.Resting();
             }
             // attack
-            bool isLeftDown = Input.IsMouseButtonPressed(((int)ButtonList.Left));
-            bool risingEdge = (!_isLeftDownLastFrame) && isLeftDown;
-            _isLeftDownLastFrame = isLeftDown;
-            if (!isLeftDown)
-                _lastLeftUp = Main.MainTime;
             if (
-                (
-                    risingEdge || (
-                        isLeftDown 
-                        && Main.MainTime - _lastLeftUp >= Params.LMB_HOLD_DEADZONE
-                    )
-                )
-                && !GameState.Transient.Mana.Equals(Simplest.Zero())
+                isLeftDown 
+                && Main.MainTime - _lastLeftUp >= Params.LMB_HOLD_DEADZONE
             )
             {
-                Attack attack = new Attack(direction, GameState.Transient.Mana);
-                attack.Head = direction * Params.ENEMY_COLLISION_RANGE;
-                GameState.Transient.Mana = Simplest.Zero();
-                Main.Singleton.MySidePanel.Update(); // Ideally, a signal
-                attack.LineWidth = 3;
-                Attacks.Add(attack);
-                AddChild(attack);
-                Director.WandAttacked(attack);
+                DoAttack();
             }
         }
         UpdateMoneys(delta);
@@ -135,7 +121,7 @@ public class World : Node2D
             if (
                 walking 
                 && distance < Params.NPC_COLLISION_RANGE
-                && ui.Position.Normalized().Dot(direction) > .7
+                && ui.Position.Normalized().Dot(_mouseDirection) > .7
             ) {
                 switch (ui)
                 {
@@ -167,7 +153,7 @@ public class World : Node2D
         }
     }
 
-    private void OnWalk(Vector2 direction)
+    private void OnWalk()
     {
         // spawn event
         if (
@@ -188,7 +174,7 @@ public class World : Node2D
             if (!alreadyThere)
             {
                 Console.WriteLine("Spawning " + s + " as event");
-                Spawn(s, direction);
+                Spawn(s, _mouseDirection);
             }
         }
         // spawn non-event
@@ -202,16 +188,16 @@ public class World : Node2D
             if (!Director.CanSpawnNonevent()) {
                 Console.WriteLine("Cannot spawn. ");
             } else {
-                if (TrySpawnNPCAsNonEvent(direction)) {
+                if (TrySpawnNPCAsNonEvent(_mouseDirection)) {
                 } else {
                     if (GameState.Transient.Mana.Equals(Simplest.Zero())) {
                         if (Shared.Rand.NextDouble() < .2) {
-                            SpawnEnemy(direction);
+                            SpawnEnemy(_mouseDirection);
                         } else {
                             Console.WriteLine("No mana, probabilistically did not spawn enemy");
                         }
                     } else {
-                        SpawnEnemy(direction);
+                        SpawnEnemy(_mouseDirection);
                     }
                 }
             }
@@ -592,5 +578,18 @@ public class World : Node2D
         if (GameState.Transient.EnemiesTillNextSpawn > 0)
             GameState.Transient.EnemiesTillNextSpawn--;
         Console.WriteLine("Spawned enemy. ");
+    }
+
+    public void DoAttack() {
+        if (GameState.Transient.Mana.Equals(Simplest.Zero()))
+            return;
+        Attack attack = new Attack(_mouseDirection, GameState.Transient.Mana);
+        attack.Head = _mouseDirection * Params.ENEMY_COLLISION_RANGE;
+        GameState.Transient.Mana = Simplest.Zero();
+        Main.Singleton.MySidePanel.Update(); // Ideally, a signal
+        attack.LineWidth = 3;
+        Attacks.Add(attack);
+        AddChild(attack);
+        Director.WandAttacked(attack);
     }
 }

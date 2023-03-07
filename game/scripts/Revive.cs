@@ -32,7 +32,10 @@ public class Revive : PanelContainer
         Button3.Disabled = true;
         Visible = true;
         GameState.Transient.Mana = Simplest.Zero();
+        GameState.Transient.NextSpawn = null;
+        Director.NowEvent = null;
         Director.PauseWorld();
+        Main.Singleton.VBoxLowPanel.Visible = false;
         Update();
         Main.Singleton.MySidePanel.Update();
     }
