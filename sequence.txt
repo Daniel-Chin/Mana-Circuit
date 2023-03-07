@@ -57,10 +57,9 @@ $25 -> upgrade wand
 $9 -> 3rd x1.4 gem
 $20 -> stochastic gem
 
-NPC:
-    "A good mage needs 1% grinding and 99% thinking. "
-
 if player doesn't buy stochastic, drop one for free. "author dropped it here"
+
+"A good mage needs 1% grinding and 99% thinking. "
 
 if hasn't made inf-mean wand, hint about loops
 

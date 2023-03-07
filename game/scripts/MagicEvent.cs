@@ -286,12 +286,13 @@ public abstract class MagicEvent : Godot.Object
                     GameState.Persistent.ShopTip ++;
                     return "Remember: The further you go, the stronger the enemies!";
                 case 2:
-                    if (GameState.Persistent.Money >= Simplest.Finite(10)) {
+                    if (GameState.Persistent.HasGems[new Gem.Stochastic(false).Name()] != 0) {
                         GameState.Persistent.ShopTip ++;
                         return "A good mage needs 1% grinding and 99% thinking.";
                     }
                     return null;
                 case 3:
+                    // fixed point
                     return null;
                 default:
                     throw new Shared.ValueError();
@@ -873,6 +874,8 @@ public abstract class MagicEvent : Godot.Object
                     Director.UnpauseWorld();
                     GameState.Transient.NextSpawn = new NPC.Shop();
                     break;
+                default:
+                    throw new Shared.ValueError();
             }
         }
 
@@ -930,6 +933,50 @@ public abstract class MagicEvent : Godot.Object
                 );
             }
             return $"*class-{x} attack*";
+        }
+    }
+
+    public class PickUpGem : MagicEvent {
+        private int _step;
+        private Gem _gem;
+        public PickUpGem(DroppedGem dGem)
+        {
+            _gem = dGem.MyGem;
+            Shared.Assert(_gem is Gem.Stochastic);
+            _step = 0;
+        }
+        public override void NextStep()
+        {
+            switch (_step) {
+                case 0:
+                    Director.PauseWorld();
+                    Director.MainUI.MyLowPanel.SetFace(null);
+                    Director.MainUI.MyLowPanel.Display(
+                        "You pick up the *" + _gem.DisplayName() + "*."
+                    );
+                    _step++;
+                    break;
+                case 1:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Rumour has it that Author dropped the gem here becuase you still haven't bought any "
+                        + _gem.DisplayName() + "s from the shop."
+                    );
+                    _step++;
+                    break;
+                case 2:
+                    Director.MainUI.MyLowPanel.Display(
+                        "However, you should NOT expect any more gems lying on the ground."
+                    );
+                    _step++;
+                    break;
+                case 3:
+                    Director.UnpauseWorld();
+                    Director.EventFinished();
+                    SaveLoad.Save();
+                    break;
+                default:
+                    throw new Shared.ValueError();
+            }
         }
     }
 }

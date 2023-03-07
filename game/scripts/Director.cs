@@ -25,7 +25,7 @@ public class Director
             GameState.Transient.EnemiesTillNextSpawn = 0;
             return;
         }
-        if (SpawnShopIf(Simplest.Finite(3), (new Gem.AddOne(), 0))) {
+        if (SpawnShopIf(Simplest.Finite(2), (new Gem.AddOne(), 0))) {
             Console.WriteLine("hinting to buy +1");
             return;
         }
@@ -61,6 +61,18 @@ public class Director
         if (
             GameState.Persistent.MyWand is Wand.Ricecooker
         ) {
+            if (
+                GameState.Persistent.HasGems[new Gem.Stochastic(false).Name()] == 0
+                && GameState.Persistent.Money >= Simplest.Eval(
+                    NPC.Shop.PriceOf(new Gem.Stochastic(false)), 
+                    Operator.TIMES, Simplest.Finite(2.5)
+                )
+            ) {
+                Console.WriteLine("drop stochastic");
+                GameState.Transient.NextSpawn = new DroppedGem(){
+                    MyGem = new Gem.Stochastic(false), 
+                };
+            }
             if (
                 GameState.Persistent.Money >= Simplest.Finite(50)
                 && !GameState.Persistent.HasCustomGems.ContainsKey(0)

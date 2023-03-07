@@ -233,6 +233,10 @@ public class World : Node2D
                 }
                 ui = new NPCUI(npc);
                 break;
+            case DroppedGem dGem:
+                ui = new DroppedItemUI(dGem);
+                ui.MySprite.Texture = GD.Load<Texture>($"res://texture/gem/{dGem.MyGem.Name()}.png");
+                break;
             default:
                 throw new Shared.TypeError();
         }
@@ -359,14 +363,26 @@ public class World : Node2D
     }
     private void CollidedWithDroppedItem(DroppedItemUI dUI)
     {
-        Shared.Assert(dUI.MySpawnable is Wand.Staff);
-        Shared.Assert(GameState.Persistent.MyWand == null);
-        GameState.Persistent.MyWand = (Wand)dUI.MySpawnable;
-        SpawnedSpecialUIs.Remove(dUI);
-        dUI.QueueFree();
-        EmitSignal("wand_replaced");
-        GameState.Transient.NextSpawn = null;
-        Director.StartEvent(new MagicEvent.Staff());
+        switch (dUI.MySpawnable) {
+            case Wand.Staff staff:
+                Shared.Assert(GameState.Persistent.MyWand == null);
+                GameState.Persistent.MyWand = staff;
+                SpawnedSpecialUIs.Remove(dUI);
+                dUI.QueueFree();
+                EmitSignal("wand_replaced");
+                GameState.Transient.NextSpawn = null;
+                Director.StartEvent(new MagicEvent.Staff());
+                break;
+            case DroppedGem dGem:
+                GameState.Persistent.HasGems[dGem.MyGem.Name()] ++;
+                SpawnedSpecialUIs.Remove(dUI);
+                dUI.QueueFree();
+                GameState.Transient.NextSpawn = null;
+                Director.StartEvent(new MagicEvent.PickUpGem(dGem));
+                break;
+            default:
+                throw new Shared.TypeError();
+        }
     }
 
     private float SpawnRadius()
