@@ -529,13 +529,20 @@ public class World : Node2D
         if (!GameState.Persistent.HasAnyNonCGem())
             return false;
         Console.Write("Loneliness: ");
-        Console.Write("WandSmith ");
-        Console.Write(GameState.Persistent.Loneliness_WandSmith);
-        Console.Write(". Shop ");
+        Console.Write("Shop ");
         Console.Write(GameState.Persistent.Loneliness_Shop);
+        Console.Write(". WandSmith ");
+        Console.Write(GameState.Persistent.Loneliness_WandSmith);
         Console.Write(". GemExpert ");
         Console.Write(GameState.Persistent.Loneliness_GemExpert);
         Console.Write(". ");
+        if (
+            GameState.Persistent.Loneliness_Shop >= Params.NPC_LINELINESS_MAX - 1
+        ) {
+            Spawn(new NPC.Shop(), direction);
+            Console.WriteLine("Spawned Shop. ");
+            return true;
+        }
         if (
             GameState.Persistent.Loneliness_WandSmith >= Params.NPC_LINELINESS_MAX
         ) {
@@ -543,19 +550,12 @@ public class World : Node2D
             Console.WriteLine("Spawned WandSmith. ");
             return true;
         }
-        if (
-            GameState.Persistent.Loneliness_Shop >= Params.NPC_LINELINESS_MAX
-        ) {
-            Spawn(new NPC.Shop(), direction);
-            Console.WriteLine("Spawned Shop. ");
-            return true;
-        }
         if (!GameState.Persistent.HasCustomGems.ContainsKey(0))
             return false;
         if (GameState.Persistent.MyTypelessGem != null)
             return false;
         if (
-            GameState.Persistent.Loneliness_GemExpert >= Params.NPC_LINELINESS_MAX
+            GameState.Persistent.Loneliness_GemExpert >= Params.NPC_LINELINESS_MAX + 1
         ) {
             Spawn(new NPC.GemExpert(), direction);
             Console.WriteLine("Spawned GemExpert. ");

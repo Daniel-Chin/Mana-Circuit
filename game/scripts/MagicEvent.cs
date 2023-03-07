@@ -166,6 +166,8 @@ public abstract class MagicEvent : Godot.Object
                         // maybe: reject only when shop despawns? to do that, comment out the line above.
                     } else {
                         GameState.Persistent.Loneliness_WandSmith = Params.NPC_LINELINESS_MAX;
+                        if (GameState.Transient.NextSpawn is NPC.Shop)
+                            GameState.Transient.NextSpawn = null;
                     }
                     Director.EventFinished();
                     break;
@@ -214,6 +216,8 @@ public abstract class MagicEvent : Godot.Object
                     SaveLoad.Save();
                     Director.UnpauseWorld();
                     GameState.Persistent.Loneliness_WandSmith = Params.NPC_LINELINESS_MAX;
+                    if (GameState.Transient.NextSpawn is NPC.Shop)
+                        GameState.Transient.NextSpawn = null;
                     Director.EventFinished();
                     break;
                 case 30:

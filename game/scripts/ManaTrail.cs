@@ -52,9 +52,12 @@ public class ManaTrail : Node2D
             line.Width = LineWidth;
         }
         _head = location;
-        _label.RectPosition = location + OFFSET;
+        if (_label != null)
+            _label.RectPosition = location + OFFSET;
     }
     public void SetMana(Simplest s) {
+        if (_label == null)
+            return;
         _label.Clear();
         _label.PushAlign(RichTextLabel.Align.Center);
         _label.PushColor(Colors.Cyan);
