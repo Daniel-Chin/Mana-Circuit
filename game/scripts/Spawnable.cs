@@ -27,10 +27,19 @@ public class SpawnableSpecialUI : Node2D, SpawnableUI
     public void Moved(Vector2 viewRadius) {
         if (Exposed) {
             switch (MySpawnable) {
+                case NPC.Shop _:
+                    GameState.Persistent.Loneliness_Shop = 0;
+                    break;
                 case NPC.WandSmith _:
+                    GameState.Persistent.Loneliness_WandSmith = 0;
                     if (GameState.Transient.NextSpawn is NPC.WandSmith) {
                         GameState.Transient.NextSpawn = null;
                     }
+                    break;
+                case NPC.GemExpert _:
+                    GameState.Persistent.Loneliness_GemExpert = 0;
+                    break;
+                default:
                     break;
             }
             return;
@@ -39,22 +48,5 @@ public class SpawnableSpecialUI : Node2D, SpawnableUI
         if (Math.Abs(Position.y) > viewRadius.y) return;
 
         Exposed = true;
-
-        switch (MySpawnable) {
-            case NPC.Shop _:
-                GameState.Persistent.Loneliness_Shop = 0;
-                break;
-            case NPC.WandSmith _:
-                GameState.Persistent.Loneliness_WandSmith = 0;
-                if (GameState.Transient.NextSpawn is NPC.WandSmith) {
-                    GameState.Transient.NextSpawn = null;
-                }
-                break;
-            case NPC.GemExpert _:
-                GameState.Persistent.Loneliness_GemExpert = 0;
-                break;
-            default:
-                break;
-        }
     }
 }
