@@ -133,12 +133,11 @@ public class CircuitEditor : WindowDialog
 
     public void UninstallAllClicked() {
         if (_confirmingUninstallAll) {
-            if (Main.MainTime >= _confirmingUninstallAllTime + Params.CONFIRM_DEADZONE) {
-                _confirmingUninstallAll = false;
-                MyCircuitUI.MyCircuit.ClearPlacables();
-                CircuitModified();
-                MyCircuitUI.Rebuild();
-            }
+            Shared.Assert(Main.MainTime >= _confirmingUninstallAllTime + Params.CONFIRM_DEADZONE);
+            _confirmingUninstallAll = false;
+            MyCircuitUI.MyCircuit.ClearPlacables();
+            CircuitModified();
+            MyCircuitUI.Rebuild();
         } else {
             _confirmingUninstallAll = true;
             _confirmingUninstallAllTime = Main.MainTime;
