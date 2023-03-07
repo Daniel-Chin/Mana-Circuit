@@ -148,6 +148,7 @@ public class GemListScene : WindowDialog
         FillEntryRemove(_header, gem);
 
         ListGems(AllBuyableGems());
+        ListGems(new List<Gem>(){new Gem.StrongMult()});
         ListGems(AllBuyableCGs());
     }
     public List<Gem> AllBuyableGems()
@@ -158,7 +159,6 @@ public class GemListScene : WindowDialog
             new Gem.Mirror(true),
             new Gem.Focus(new PointInt(0, 1)),
             new Gem.Stochastic(true),
-            new Gem.StrongMult(),
         };
         return gems;
     }

@@ -204,7 +204,15 @@ public class World : Node2D
             } else {
                 if (TrySpawnNPCAsNonEvent(direction)) {
                 } else {
-                    SpawnEnemy(direction);
+                    if (GameState.Transient.Mana.Equals(Simplest.Zero())) {
+                        if (Shared.Rand.NextDouble() < .2) {
+                            SpawnEnemy(direction);
+                        } else {
+                            Console.WriteLine("No mana, probabilistically did not spawn enemy");
+                        }
+                    } else {
+                        SpawnEnemy(direction);
+                    }
                 }
             }
         // } else {
@@ -520,6 +528,14 @@ public class World : Node2D
             return false;
         if (!GameState.Persistent.HasAnyNonCGem())
             return false;
+        Console.Write("Loneliness: ");
+        Console.Write("WandSmith ");
+        Console.Write(GameState.Persistent.Loneliness_WandSmith);
+        Console.Write(". Shop ");
+        Console.Write(GameState.Persistent.Loneliness_Shop);
+        Console.Write(". GemExpert ");
+        Console.Write(GameState.Persistent.Loneliness_GemExpert);
+        Console.Write(". ");
         if (
             GameState.Persistent.Loneliness_WandSmith >= Params.NPC_LINELINESS_MAX
         ) {

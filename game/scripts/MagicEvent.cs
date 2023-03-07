@@ -165,7 +165,7 @@ public abstract class MagicEvent : Godot.Object
                         GameState.Transient.EventRejected();
                         // maybe: reject only when shop despawns? to do that, comment out the line above.
                     } else {
-                        GameState.Transient.NextSpawn = new NPC.WandSmith();
+                        GameState.Persistent.Loneliness_WandSmith = Params.NPC_LINELINESS_MAX;
                     }
                     Director.EventFinished();
                     break;
@@ -213,7 +213,7 @@ public abstract class MagicEvent : Godot.Object
                 case 22:
                     SaveLoad.Save();
                     Director.UnpauseWorld();
-                    GameState.Transient.NextSpawn = new NPC.WandSmith();
+                    GameState.Persistent.Loneliness_WandSmith = Params.NPC_LINELINESS_MAX;
                     Director.EventFinished();
                     break;
                 case 30:
@@ -340,7 +340,7 @@ public abstract class MagicEvent : Godot.Object
                         GameState.Persistent.ShopTip = 10;
                         return Tip();
                     }
-                    if (GameState.Persistent.KillsSinceStochastic >= 5) {
+                    if (GameState.Persistent.KillsSinceStochastic >= 10) {
                         GameState.Persistent.ShopTip ++;
                         return "Stop playing. Give yourself one minute. Think: how do you create truely immense mana?";
                     }
@@ -350,7 +350,7 @@ public abstract class MagicEvent : Godot.Object
                         GameState.Persistent.ShopTip = 10;
                         return Tip();
                     }
-                    if (GameState.Persistent.KillsSinceStochastic >= 10) {
+                    if (GameState.Persistent.KillsSinceStochastic >= 20) {
                         GameState.Persistent.ShopTip ++;
                         return "My friend once guided her mana into a loop. It produced strong mana, but the loop had no exit...";
                     }
