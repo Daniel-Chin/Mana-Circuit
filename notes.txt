@@ -2,8 +2,6 @@
 Your power knows no bounds
 
 Todo
-    ricecooker
-        bigger. at least 9 attack
     seq
         hint about loops
         ask: what is your mean mana output?

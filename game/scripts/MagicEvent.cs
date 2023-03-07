@@ -149,7 +149,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.PauseWorld();
                     Director.MainUI.MyLowPanel.SetFace(_npc);
                     Director.MainUI.MyLowPanel.Display(
-                        "I sell, you buy! Welcome~"
+                        "Wanna spend some [color=yellow]$[/color]?"
                     );
                     Director.MainUI.MyLowPanel.SetButtons(
                         "Buy gems", "Upgrade wand"

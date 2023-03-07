@@ -234,20 +234,19 @@ public abstract class Wand : MagicItem, JSONable
         public override void Init()
         {
             Circuit c = new Circuit(new PointInt(5, 5));
-            for (int i = 0; i < c.Size.IntX; i++)
-            {
-                c.Add(new Gem.Wall(), new PointInt(i, 0), false);
-                c.Add(new Gem.Wall(), new PointInt(i, c.Size.IntY - 1), false);
-            }
-            c.Add(new Gem.Wall(), new PointInt(4, 2), false);
-            c.Add(new Gem.Wall(), new PointInt(4, 3), false);
-            c.Add(new Gem.Wall(), new PointInt(0, 2), false);
-            c.Add(new Gem.Wall(), new PointInt(0, 3), false);
 
             c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 1));
 
             Gem drain = new Gem.Drain();
-            c.Add(drain, new PointInt(4, 1));
+            c.Add(drain, new PointInt(3, 4));
+
+            for (int i = 0; i < c.Size.IntX; i++)
+            {
+                c.Add(new Gem.Wall(), new PointInt(i, 0), true);
+                c.Add(new Gem.Wall(), new PointInt(i, 4), true);
+                c.Add(new Gem.Wall(), new PointInt(0, i), true);
+                c.Add(new Gem.Wall(), new PointInt(4, i), true);
+            }
 
             MyCircuit = c;
         }
