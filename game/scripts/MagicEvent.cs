@@ -180,9 +180,15 @@ public abstract class MagicEvent : Godot.Object
                 case 11:
                     if (GameState.Transient.Mana >= Simplest.Finite(4000)) {
                         if (GameState.Transient.Mana.MyRank == Rank.FINITE) {
-                            Director.MainUI.MyLowPanel.Display(
-                                "You should focus on customizing gems."
-                            );
+                            if (GameState.Persistent.HasCustomGems.ContainsKey(0)) {
+                                Director.MainUI.MyLowPanel.Display(
+                                    "You should focus on customizing gems."
+                                );
+                            } else {
+                                Director.MainUI.MyLowPanel.Display(
+                                    "Buy some better gems, I guess?"
+                                );
+                            }
                         } else {
                             Director.MainUI.MyLowPanel.Display(
                                 "Only the Gem Expert can help you now."
@@ -432,14 +438,12 @@ public abstract class MagicEvent : Godot.Object
                         "Try it! Hold J to jump."
                     );
                     Director.UnpauseWorld();
-                    JumpDemo = true;
                     _step++;
                     break;
                 case 7:
                     break;
                 case 8:
                     Director.PauseWorld();
-                    JumpDemo = false;
                     Director.MainUI.MyLowPanel.Display(
                         "What do you think?"
                     );
@@ -486,6 +490,8 @@ public abstract class MagicEvent : Godot.Object
                     Main.Singleton.MyWorld.AddChild(_sprite);
                     _step++;
                     animationTime = 0;
+                    JumpDemo = false;
+                    Main.Singleton.MySidePanel.Update();
                     Process(0);
                     break;
                 case 43:
@@ -552,7 +558,6 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 109:
                     Director.UnpauseWorld();
-                    JumpDemo = true;
                     _step++;
                     break;
                 case 110:
@@ -600,6 +605,8 @@ public abstract class MagicEvent : Godot.Object
                     _sprite.QueueFree();
                     if (_step == 109)
                         NextStep();
+                    JumpDemo = true;
+                    Main.Singleton.MySidePanel.Update();
                     return;
                 }
                 _sprite.Position = _npcUI.Position * (1f - ratio);

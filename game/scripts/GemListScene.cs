@@ -176,9 +176,9 @@ public class GemListScene : WindowDialog
     }
     public static List<Gem> AllPlacables() {
         List<Gem> gems = new List<Gem>();
+        gems.AddRange(AllBuyableCGs());
         gems.AddRange(AllBuyableGems());
         gems.Add(new Gem.StrongMult());
-        gems.AddRange(AllBuyableCGs());
         return gems;
     }
 

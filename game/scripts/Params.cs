@@ -14,7 +14,7 @@ public class Params
     public static readonly float WAND_ADVECT_INTERVAL = .03f;
     public static readonly float ATTACK_PROXIMITY = 40;
     public static readonly double ATTACK_FLY_BASE_SPEED = 4;
-    public static readonly double BASE_ENEMY_HP = 3;
+    public static readonly double BASE_ENEMY_HP = 5;
     public static readonly double MONEY_DROP_MULT = .1;
     public static readonly int N_ENEMIES_AFTER_REJECT_EVENT = 2;
     public static readonly float LMB_HOLD_DEADZONE = .3f;

@@ -8,6 +8,7 @@ public class SidePanel : PanelContainer
     public RichTextLabel ManaLabel;
     public RichTextLabel MoneyLabel;
     public RichTextLabel ManaRateLabel;
+    public HBoxContainer JumperHBox;
     public WandSimulation MyWandSim;
     private float _manaFontHeight;
     private Simplest _manaAcc { get; set; }
@@ -18,9 +19,10 @@ public class SidePanel : PanelContainer
         _timeAcc = 0f;
         
         VBox = GetNode<VBoxContainer>("VBox");
-        MoneyLabel = GetNode<RichTextLabel>("VBox/Money");
+        MoneyLabel = GetNode<RichTextLabel>("VBox/HBox/Money");
         ManaRateLabel = GetNode<RichTextLabel>("VBox/ManaRate");
         ManaLabel = GetNode<RichTextLabel>("VBox/Crystal/Centerer/Mana");
+        JumperHBox = GetNode<HBoxContainer>("VBox/HBox/JumperHBox");
         VBox.Visible = false;
         MyWandSim = new WandSimulation(this);
         DynamicFont font = Shared.NewFont(60);
@@ -78,6 +80,7 @@ public class SidePanel : PanelContainer
         ManaLabel.BbcodeText = $"[center][color=#00ffff]{MathBB.Build(GameState.Transient.Mana, _manaFontHeight)}[/color][/center]";
         MoneyLabel.BbcodeText = $" [color=yellow]${MathBB.Build(GameState.Persistent.Money)}[/color]";
         Hold(GameState.Persistent.MyWand);
+        JumperHBox.Visible = Jumper.HasJumper();
     }
 
     public void SetManaRate(Simplest s) {

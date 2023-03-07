@@ -74,13 +74,7 @@ public class Jumper {
             jumpedTime += dt;
         } else {
             Charging = Input.IsActionPressed("jump");
-            if (Charging && !GameState.Transient.WorldPaused && (
-                GameState.Persistent.Event_JumperStage == 2
-                || (
-                    Director.NowEvent is MagicEvent.Jumping e
-                    && e.JumpDemo
-                )
-            )) {
+            if (Charging && !GameState.Transient.WorldPaused && HasJumper()) {
                 charged += dt;
                 Main.Singleton.MyMageUI.Charging();
                 if (charged >= CHARGE_TIME) {
@@ -106,5 +100,15 @@ public class Jumper {
                 charged = 0;
             }
         }
+    }
+
+    public static bool HasJumper() {
+        return (
+            GameState.Persistent.Event_JumperStage == 2
+            || (
+                Director.NowEvent is MagicEvent.Jumping e
+                && e.JumpDemo
+            )
+        );
     }
 }

@@ -2,7 +2,6 @@
 Your power knows no bounds
 
 Todo
-    skareboard ownership GUI
     J aimer
 
 How to make the player come up with inf themselves? 
