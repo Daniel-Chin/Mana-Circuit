@@ -50,7 +50,35 @@ margin_bottom = 100.0
 rect_min_size = Vector2( 15, 0 )
 size_flags_vertical = 3
 
-[node name="CircuitUI" parent="VBox" instance=ExtResource( 3 )]
+[node name="MarginContainer" type="MarginContainer" parent="VBox"]
 margin_top = 138.0
 margin_right = 700.0
+margin_bottom = 483.0
+size_flags_vertical = 3
+
+[node name="CircuitUI" parent="VBox/MarginContainer" instance=ExtResource( 3 )]
+margin_right = 700.0
+margin_bottom = 345.0
+
+[node name="Padder" type="MarginContainer" parent="VBox"]
+margin_top = 487.0
+margin_right = 700.0
+margin_bottom = 497.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="CenterContainer" type="CenterContainer" parent="VBox"]
+margin_top = 501.0
+margin_right = 700.0
+margin_bottom = 536.0
+
+[node name="Button" type="Button" parent="VBox/CenterContainer"]
+margin_left = 227.0
+margin_right = 473.0
+margin_bottom = 35.0
+text = " Uninstall all gems "
+
+[node name="Padder2" type="MarginContainer" parent="VBox"]
+margin_top = 540.0
+margin_right = 700.0
 margin_bottom = 550.0
+rect_min_size = Vector2( 0, 10 )

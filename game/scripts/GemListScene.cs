@@ -147,11 +147,9 @@ public class GemListScene : WindowDialog
         _header = Add(gem);
         FillEntryRemove(_header, gem);
 
-        ListGems(AllBuyableGems());
-        ListGems(new List<Gem>(){new Gem.StrongMult()});
-        ListGems(AllBuyableCGs());
+        ListGems(AllPlacables());
     }
-    public List<Gem> AllBuyableGems()
+    public static List<Gem> AllBuyableGems()
     {
         List<Gem> gems = new List<Gem> {
             new Gem.AddOne(),
@@ -162,7 +160,7 @@ public class GemListScene : WindowDialog
         };
         return gems;
     }
-    public List<Gem> AllBuyableCGs()
+    public static List<Gem> AllBuyableCGs()
     {
         List<Gem> gems = new List<Gem>();
         if (GameState.Persistent.MyTypelessGem is CustomGem typeless)
@@ -173,6 +171,13 @@ public class GemListScene : WindowDialog
         {
             gems.Add(entry.Value.Item2);
         }
+        return gems;
+    }
+    public static List<Gem> AllPlacables() {
+        List<Gem> gems = new List<Gem>();
+        gems.AddRange(AllBuyableGems());
+        gems.Add(new Gem.StrongMult());
+        gems.AddRange(AllBuyableCGs());
         return gems;
     }
 

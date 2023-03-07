@@ -13,8 +13,13 @@ public class CircuitEditor : WindowDialog
     public RichTextLabel ExplainLabel;
     public MagicItem Editee;
     public CircuitUI MyCircuitUI;
+    public MarginContainer CircuitUIContainer;
+    public Button UninstallButton;
+    private bool _confirmingUninstallAll;
     public CircuitEditor() : base()
     {
+        _confirmingUninstallAll = false;
+
         RectMinSize = new Vector2(700, 550);
         Theme = Shared.THEME;
         VBox = new VBoxContainer();
@@ -23,11 +28,26 @@ public class CircuitEditor : WindowDialog
         HeadingLabel = new RichTextLabel();
         ExplainLabel = new RichTextLabel();
         VBox.AddChild(HeadingLabel);
-        VBox.AddChild(new HPad(ExplainLabel));
+        VBox.AddChild(Pad.H(ExplainLabel, 10));
         HeadingLabel.BbcodeEnabled = true;
         HeadingLabel.FitContentHeight = true;
         ExplainLabel.BbcodeEnabled = true;
         ExplainLabel.RectMinSize = new Vector2(0, 100);
+        CircuitUIContainer = new MarginContainer();
+        VBox.AddChild(CircuitUIContainer);
+        CircuitUIContainer.SizeFlagsVertical = (int)SizeFlags.ExpandFill;
+        CenterContainer centerer = new CenterContainer();
+        VBox.AddChild(Pad.V(centerer, 10));
+        UninstallButton = new Button();
+        centerer.AddChild(UninstallButton);
+        UpdateUninstallButton();
+        UninstallButton.Connect(
+            "pressed", this, "UninstallAllClicked"
+        );
+        UninstallButton.Connect(
+            "mouse_exited", this, "UninstallAllMouseExited"
+        );
+
         _gemList = new GemListScene();
         Connect("popup_hide", this, "OnPopupHide");
     }
@@ -51,7 +71,7 @@ public class CircuitEditor : WindowDialog
         }
         Editee = _gemList.Selected;
         MyCircuitUI = new CircuitUI(Editee, 0, true, true);
-        VBox.AddChild(MyCircuitUI);
+        CircuitUIContainer.AddChild(MyCircuitUI);
         MyCircuitUI.Connect(
             "modified", this, "CircuitModified"
         );
@@ -104,6 +124,30 @@ public class CircuitEditor : WindowDialog
             } else {
                 VBox.Hide();
             }
+        }
+    }
+
+    public void UninstallAllClicked() {
+        if (_confirmingUninstallAll) {
+            _confirmingUninstallAll = false;
+            MyCircuitUI.MyCircuit.ClearPlacables();
+            CircuitModified();
+            MyCircuitUI.Rebuild();
+        } else {
+            _confirmingUninstallAll = true;
+        }
+        UpdateUninstallButton();
+    }
+    public void UninstallAllMouseExited() {
+        _confirmingUninstallAll = false;
+        UpdateUninstallButton();
+    }
+
+    private void UpdateUninstallButton() {
+        if (_confirmingUninstallAll) {
+            UninstallButton.Text = " Click again to confirm ";
+        } else {
+            UninstallButton.Text = " Uninstall all gems ";
         }
     }
 }
