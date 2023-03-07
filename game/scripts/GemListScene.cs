@@ -90,6 +90,17 @@ public class GemListScene : WindowDialog
     }
     private void FillEntryShop(GemEntry gemEntry, Gem gem)
     {
+        if (
+            gem is Gem.Focus
+            && GameState.Persistent.HasGems[gem.Name()] == 1
+            && !(NPC.Shop.PriceOf(gem) <= GameState.Persistent.Money)
+        ) {
+            gemEntry.PresetOneBig();
+            gemEntry.Pad();
+            gemEntry.Labels[0].BbcodeText = "--- Out of stock ---";
+            return;
+        }
+        
         gemEntry.PresetBigMidMoney();
         gemEntry.Pad();
         Simplest nOwned = GameState.Persistent.CountGemsOwned(gem);
@@ -381,18 +392,8 @@ public class GemListScene : WindowDialog
             "[center][color=yellow]Price[/color][/center]"
         );
 
-        List<Gem> gems = AllBuyableGems();
-        foreach (Gem gem in new List<Gem>(gems)) {
-            if (
-                gem is Gem.Focus
-                && GameState.Persistent.HasGems[gem.Name()] == 1
-                && !(NPC.Shop.PriceOf(gem) <= GameState.Persistent.Money)
-            ) {
-                gems.Remove(gem);
-            }
-        }
         ListGems(AllBuyableCGs());
-        ListGems(gems);
+        ListGems(AllBuyableGems());
     }
 
     private void Finish()
