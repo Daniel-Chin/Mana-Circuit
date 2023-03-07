@@ -9,7 +9,6 @@ public class Main : Node2D
     public LowPanel MyLowPanel;
     public SidePanel MySidePanel;
     public World MyWorld;
-    public MageUI MyMageUI;
     public Revive MyRevive;
     public PauseScreen MyPauseScreen;
     public WindowDialog MadeEpsilon0;
@@ -24,7 +23,6 @@ public class Main : Node2D
         MainTime = 0f;
         Director.MainUI = this;
         MyWorld = GetNode<World>("HBox/World");
-        MyMageUI = GetNode<MageUI>("HBox/World/MageUI");
         VBoxLowPanel = GetNode<VBoxContainer>("Overlay/VBoxLowPanel");
         MySidePanel = GetNode<SidePanel>("HBox/SidePanel");
         MyLowPanel = GetNode<LowPanel>("Overlay/VBoxLowPanel/LowPanel");
@@ -82,7 +80,7 @@ public class Main : Node2D
     public void WandReplaced()
     {
         MySidePanel.Update();
-        MyMageUI.Hold(GameState.Persistent.MyWand);
+        MyWorld.MyMageUI.Hold(GameState.Persistent.MyWand);
     }
 
     public void PlayerDied()

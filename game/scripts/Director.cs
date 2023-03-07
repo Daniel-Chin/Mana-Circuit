@@ -170,7 +170,7 @@ public class Director
     }
 
     public static void PauseWorld() {
-        MainUI.MyMageUI.Resting();
+        MainUI.MyWorld.MyMageUI.Resting();
         GameState.Transient.WorldPaused = true;
     }
     public static void UnpauseWorld() {

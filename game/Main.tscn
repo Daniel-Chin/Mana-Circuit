@@ -42,6 +42,10 @@ expand = true
 
 [node name="MageUI" parent="HBox/World" instance=ExtResource( 2 )]
 
+[node name="JumperAimLine" type="Line2D" parent="HBox/World"]
+points = PoolVector2Array( 0, 0, 200, 38 )
+default_color = Color( 1, 1, 1, 0.258824 )
+
 [node name="SidePanel" parent="HBox" instance=ExtResource( 6 )]
 margin_right = 308.0
 

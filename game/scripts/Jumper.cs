@@ -23,7 +23,7 @@ public class Jumper {
         if (GameState.Transient.Jumping) {
             float ratio = jumpedTime / JUMP_TIME;
             if (ratio >= 1) {
-                Main.Singleton.MyMageUI.Position = new Vector2(0, 0);
+                Main.Singleton.MyWorld.MyMageUI.Position = new Vector2(0, 0);
                 if (
                     isFinite && 
                     GameState.Persistent.Location_dist.MyRank == Rank.FINITE
@@ -38,7 +38,7 @@ public class Jumper {
                 Director.JumpFinished(jumpMana);
                 return;
             }
-            Main.Singleton.MyMageUI.Position = new Vector2(
+            Main.Singleton.MyWorld.MyMageUI.Position = new Vector2(
                 0, (isFinite ? 100 : 600) * (float)(
                     Math.Pow(ratio - .5, 2)
                     - Math.Pow(.5, 2) 
@@ -73,16 +73,20 @@ public class Jumper {
 
             jumpedTime += dt;
         } else {
-            Charging = Input.IsActionPressed("jump");
-            if (Charging && !GameState.Transient.WorldPaused && HasJumper()) {
+            Charging = (
+                Input.IsActionPressed("jump") 
+                && !GameState.Transient.WorldPaused 
+                && HasJumper()
+            );
+            if (Charging) {
                 charged += dt;
-                Main.Singleton.MyMageUI.Charging();
+                Main.Singleton.MyWorld.MyMageUI.Charging();
                 if (charged >= CHARGE_TIME) {
                     GameState.Transient.Jumping = true;
                     charged = 0;
                     jumpedTime = 0;
                     Director.PauseWorld();
-                    Main.Singleton.MyMageUI.Spinning();
+                    Main.Singleton.MyWorld.MyMageUI.Spinning();
                     jumpDirection = mouseDirection;
                     jumpMana = GameState.Transient.Mana;
                     GameState.Transient.Mana = Simplest.Zero();
@@ -94,6 +98,7 @@ public class Jumper {
                             GameState.Persistent.Location_theta = jumpDirection.Angle();
                         }
                     }
+                    Charging = false;
                     Director.JumpBegan();
                 }
             } else {

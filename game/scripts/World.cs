@@ -10,6 +10,7 @@ public class World : Node2D
     private static readonly int Z_INDEX_RANGE = 512;
     public TextureRect BackRect;
     public MageUI MyMageUI;
+    public Line2D JumperAimLine;
     ShaderMaterial BackShader;
     public float AspectRatio;
     public List<SpawnableSpecialUI> SpawnedSpecialUIs;
@@ -24,6 +25,7 @@ public class World : Node2D
     {
         BackRect = GetNode<TextureRect>("Background");
         MyMageUI = GetNode<MageUI>("MageUI");
+        JumperAimLine = GetNode<Line2D>("JumperAimLine");
         // MyMageUI.ZIndex = ZIndexOf(MyMageUI);
         BackShader = (ShaderMaterial)BackRect.Material;
         AspectRatio = BackRect.RectMinSize.y / BackRect.RectMinSize.x;
@@ -55,7 +57,10 @@ public class World : Node2D
         Time += delta;
         BackShader.SetShaderParam("worldTime", Time);
         bool walking = false;
-        if (! Jumper.Charging) {
+        JumperAimLine.Visible = Jumper.Charging;
+        if (Jumper.Charging) {
+            JumperAimLine.SetPointPosition(1, drag);
+        } else {
             if (Input.IsMouseButtonPressed(((int)ButtonList.Right)))
             {
                 walking = true;
