@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Linq;
 
 public class GemEntry : HBoxContainer
 {
@@ -29,6 +28,7 @@ public class GemEntry : HBoxContainer
         Labels[i].ScrollActive = false;
         Labels[i].SizeFlagsVertical = (int)Container.SizeFlags.ShrinkCenter;
         Labels[i].FitContentHeight = true;
+        Labels[i].MouseFilter = MouseFilterEnum.Ignore;
         return Labels[i];
     }
 

@@ -77,6 +77,13 @@ public class Shared
         font.Size = fontSize;
         return font;
     }
+
+    public static void PropogateMouseFilter(Control c, Control.MouseFilterEnum e) {
+        c.MouseFilter = e;
+        foreach (Node n in c.GetChildren()) {
+            PropogateMouseFilter(n as Control, e);
+        }
+    }
 }
 
 public abstract class MagicItem

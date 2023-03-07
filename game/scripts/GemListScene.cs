@@ -52,9 +52,9 @@ public class GemListScene : WindowDialog
         int gemI = _gems.Count;
         _gems.Add(gem);
         GemEntry gemEntry = new GemEntry(gem);
-        MaskButton maskButton = new MaskButton(gemEntry);
+        ContainerButton maskButton = new ContainerButton(gemEntry);
         VBox.AddChild(maskButton);
-        maskButton.Mask.Connect(
+        maskButton.MyButton.Connect(
             "pressed", this, "GemClicked",
             new Godot.Collections.Array() { gemI }
         );
@@ -144,8 +144,7 @@ public class GemListScene : WindowDialog
         );
 
         Gem gem = new Gem.RemoveGem();
-        _header = Add(gem);
-        FillEntryRemove(_header, gem);
+        FillEntryRemove(Add(gem), gem);
 
         ListGems(AllPlacables());
     }
@@ -360,9 +359,9 @@ public class GemListScene : WindowDialog
         GemEntry wandEntry = new GemEntry(null);
         wandEntry.PresetOneBig();
         wandEntry.Pad();
-        MaskButton maskButton = new MaskButton(wandEntry);
+        ContainerButton maskButton = new ContainerButton(wandEntry);
         VBox.AddChild(maskButton);
-        maskButton.Mask.Connect(
+        maskButton.MyButton.Connect(
             "pressed", this, "OnClickWand"
         );
         wandEntry.MyGemUI.Button.TextureNormal = wand.Texture();
