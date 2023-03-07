@@ -60,7 +60,13 @@ $20 -> stochastic gem
 NPC:
     "A good mage needs 1% grinding and 99% thinking. "
 
-Once $60, Gem Expert NPC spawns.
+if player doesn't buy stochastic, drop one for free. "author dropped it here"
+
+if hasn't made inf-mean wand, hint about loops
+
+Once made inf-mean wand, ask: what is your mean mana output?
+
+then, Gem Expert NPC spawns.
     "Every one is so weak! I am so bored!!!"
     "Now! Show me your strongest attack!"
     If player doesn't attack, 
@@ -71,9 +77,9 @@ Once $60, Gem Expert NPC spawns.
     "Custom Gems take the theoretical mean of anything stochastic inside them."
     "Still, a *class-1* attack is nothing I'd call exciting. Come back when you are not this weak."
 
-$10 -> 1st copy of CG0. 
+$80 -> 1st copy of CG0. 
 
-$100 -> 1st x1.5 gem
+only one x1.5 on the ground. "there is only one"
 
 Make w
 

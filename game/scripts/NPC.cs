@@ -57,7 +57,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
                     if (cG.MetaLevel.MyRank != Rank.FINITE)
                         return Simplest.W();
                     return new Simplest(Rank.FINITE, Math.Round(
-                        9 * Math.Exp(k * 6 + cG.MetaLevel.K)
+                        80 * Math.Exp(k * 6 + cG.MetaLevel.K)
                     ));
                 default:
                     throw new Shared.TypeError();
@@ -83,6 +83,18 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
             );
         }
         public void Bye() {
+            if (!GameState.Persistent.MadeInfMeanWand) {
+                Circuit c = GameState.Persistent.MyWand.MyCircuit;
+                CustomGem cG = new CustomGem(Simplest.Zero());
+                cG.MyCircuit = c;
+                cG.Eval();
+                if (cG.CachedMultiplier.MyRank != Rank.FINITE) {
+                    GameState.Persistent.MadeInfMeanWand = true;
+                    Console.WriteLine("player made inf-mean wand");
+                }
+            }
+
+
             SaveLoad.Save();
             Director.UnpauseWorld();
             Main.Singleton.MySidePanel.MyCircuitUI.Rebuild();
