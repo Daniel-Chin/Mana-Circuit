@@ -33,6 +33,7 @@ public class ManaTrail : Node2D
             _label.RectMinSize = new Vector2(RADIUS * 4, RADIUS * 2);
             _label.ScrollActive = false;
             _label.Theme = Shared.THEME;
+            _label.MouseFilter = Control.MouseFilterEnum.Ignore;
         }
         _head = null;
         _freed = false;
