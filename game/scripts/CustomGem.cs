@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 
-
 public class CustomGem : Gem
 {
     public Simplest MetaLevel { get; set; }

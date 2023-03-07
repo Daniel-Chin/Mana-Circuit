@@ -23,4 +23,5 @@ public class Params
     public static readonly int NPC_LINELINESS_MAX = 7;
     public static readonly double PROB_ENEMY_INF = .2;
     public static readonly int INF_AFTER_KILLS_AFTER_STRONG_MULT = 10;
+    public static readonly float CONFIRM_DEADZONE = .7f;
 }

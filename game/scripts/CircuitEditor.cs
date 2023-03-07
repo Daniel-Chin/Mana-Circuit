@@ -16,6 +16,7 @@ public class CircuitEditor : WindowDialog
     public MarginContainer CircuitUIContainer;
     public Button UninstallButton;
     private bool _confirmingUninstallAll;
+    private float _confirmingUninstallAllTime;
     public CircuitEditor() : base()
     {
         _confirmingUninstallAll = false;
@@ -125,16 +126,22 @@ public class CircuitEditor : WindowDialog
                 VBox.Hide();
             }
         }
+        if (_confirmingUninstallAll) {
+            UninstallButton.Disabled = Main.MainTime < _confirmingUninstallAllTime + Params.CONFIRM_DEADZONE;
+        }
     }
 
     public void UninstallAllClicked() {
         if (_confirmingUninstallAll) {
-            _confirmingUninstallAll = false;
-            MyCircuitUI.MyCircuit.ClearPlacables();
-            CircuitModified();
-            MyCircuitUI.Rebuild();
+            if (Main.MainTime >= _confirmingUninstallAllTime + Params.CONFIRM_DEADZONE) {
+                _confirmingUninstallAll = false;
+                MyCircuitUI.MyCircuit.ClearPlacables();
+                CircuitModified();
+                MyCircuitUI.Rebuild();
+            }
         } else {
             _confirmingUninstallAll = true;
+            _confirmingUninstallAllTime = Main.MainTime;
         }
         UpdateUninstallButton();
     }
@@ -148,6 +155,7 @@ public class CircuitEditor : WindowDialog
             UninstallButton.Text = " Click again to confirm ";
         } else {
             UninstallButton.Text = " Uninstall all gems ";
+            UninstallButton.Disabled = false;
         }
     }
 }
