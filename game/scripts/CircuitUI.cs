@@ -202,17 +202,20 @@ public class CircuitUI : AspectRatioContainer
         )
             return;
         // Console.WriteLine("Process begin");
+        // advect
         foreach (ParticleAndTrail pT in _pAndTs)
         {
             if (Shared.Rand.NextDouble() < ADVECT_LAMBDA * delta)
                 pT.Follow();
         }
+        // free
         while (_pAndTsToFree.Count != 0)
         {
             ParticleAndTrail pT = _pAndTsToFree.Dequeue();
             pT.Free();
             _pAndTs.Remove(pT);
         }
+        // emit
         _emitAcc += delta;
         if (
             _pAndTs.Count < MAX_PARTICLES
@@ -223,9 +226,12 @@ public class CircuitUI : AspectRatioContainer
             // spawn new particle
             // Console.WriteLine("spawn new particle");
             List<(PointInt, Gem.Source)> sources = MyCircuit.FindAll<Gem.Source>();
-            var (sourceLocation, source) = sources[Shared.Rand.Next(sources.Count)];
-            ParticleAndTrail pT = new ParticleAndTrail(this, sourceLocation, source);
-            _pAndTs.Add(pT);
+            foreach (var (sourceLocation, source) in sources)
+            {
+                _pAndTs.Add(new ParticleAndTrail(
+                    this, sourceLocation, source
+                ));
+            }
         }
         // Console.WriteLine("Process end");
     }

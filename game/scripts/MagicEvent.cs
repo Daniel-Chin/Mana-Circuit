@@ -362,7 +362,7 @@ public abstract class MagicEvent : Godot.Object
                         GameState.Persistent.ShopTip = 10;
                         return Tip();
                     }
-                    if (GameState.Persistent.KillsSinceStochastic >= 10) {
+                    if (GameState.Persistent.KillsSinceStochastic >= 15) {
                         GameState.Persistent.ShopTip ++;
                         return "Stop playing. Give yourself one minute. Think: how do you create truely immense mana?";
                     }
@@ -372,7 +372,7 @@ public abstract class MagicEvent : Godot.Object
                         GameState.Persistent.ShopTip = 10;
                         return Tip();
                     }
-                    if (GameState.Persistent.KillsSinceStochastic >= 20) {
+                    if (GameState.Persistent.KillsSinceStochastic >= 28) {
                         GameState.Persistent.ShopTip ++;
                         return "My friend once guided her mana into a loop. It produced strong mana, but the loop had no exit...";
                     }
@@ -978,7 +978,11 @@ public abstract class MagicEvent : Godot.Object
                     Director.EventFinished();
                     SaveLoad.SaveAsync();
                     Director.UnpauseWorld();
-                    GameState.Transient.NextSpawn = new NPC.Shop();
+                    GameState.Persistent.Sema.WaitOne();
+                    GameState.Persistent.Loneliness_Shop = Params.NPC_LINELINESS_MAX;
+                    GameState.Persistent.Sema.Release();
+                    if (GameState.Transient.NextSpawn is NPC.GemExpert)
+                        GameState.Transient.NextSpawn = null;
                     break;
                 default:
                     throw new Shared.ValueError();
@@ -1006,7 +1010,12 @@ public abstract class MagicEvent : Godot.Object
             } else if (attack.Mana.MyRank == Rank.W_TO_THE_K) {
                 _metaLevel = Simplest.Finite(attack.Mana.K);
             } else {
-                _metaLevel = Simplest.W();
+                if (attack.Mana.MyRank == Rank.TWO_TO_THE_W) {
+                    _metaLevel = Simplest.W();
+                } else {
+                    // stack w
+                    _metaLevel = new Simplest(Rank.STACK_W, attack.Mana.K - 1);
+                }
                 _step = 100;
                 NextStep();
                 return;
@@ -1033,8 +1042,15 @@ public abstract class MagicEvent : Godot.Object
                     Main.Singleton.MyLowPanel.FontHeight
                 );
             } else {
+                int k;
+                if (_metaLevel.Equals(Simplest.W())) {
+                    k = 1;
+                } else {
+                    // stack w
+                    k = (int)_metaLevel.K;
+                }
                 x = MathBB.Build(
-                    new Simplest(Rank.STACK_W, 2), 
+                    new Simplest(Rank.STACK_W, k + 1), 
                     Main.Singleton.MyLowPanel.FontHeight
                 );
             }

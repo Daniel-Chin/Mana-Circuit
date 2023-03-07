@@ -270,6 +270,26 @@ public class GemListScene : WindowDialog
         {
             if (_mode == Mode.PLACE)
             {
+                if (
+                    cG != null
+                    && cG.MetaLevel >= MetaLevel
+                    && cG.MetaLevel.MyRank == Rank.FINITE
+                )
+                {
+                    RichTextLabel label = cButton.TextInstead();
+                    cButton.RectMinSize = new Vector2(0, GemEntry.SIZE);
+                    label.PushColor(Colors.Red);
+                    label.PushAlign(RichTextLabel.Align.Center);
+                    label.AppendBbcode("Type error: ");
+                    label.AppendBbcode(new CustomGem(MetaLevel).DisplayName());
+                    label.AppendBbcode(" cannot embed ");
+                    label.AppendBbcode(cG.DisplayName());
+                    label.AppendBbcode(". ");
+                    label.Pop();
+                    label.Pop();
+                    _allowUninstallFrom = null;
+                    return;
+                }
                 var (nInWand, nInCGs, nAvailable) = CountGems(gem);
                 if (nAvailable <= Simplest.Zero())
                 {
@@ -291,26 +311,6 @@ public class GemListScene : WindowDialog
                         label.AppendBbcode("Click again to confirm.");
                     }
                     label.Pop();
-                    return;
-                }
-                if (
-                    cG != null
-                    && cG.MetaLevel >= MetaLevel
-                    && cG.MetaLevel.MyRank == Rank.FINITE
-                )
-                {
-                    RichTextLabel label = cButton.TextInstead();
-                    cButton.RectMinSize = new Vector2(0, GemEntry.SIZE);
-                    label.PushColor(Colors.Red);
-                    label.PushAlign(RichTextLabel.Align.Center);
-                    label.AppendBbcode("Type error: ");
-                    label.AppendBbcode(new CustomGem(MetaLevel).DisplayName());
-                    label.AppendBbcode(" cannot embed ");
-                    label.AppendBbcode(cG.DisplayName());
-                    label.AppendBbcode(". ");
-                    label.Pop();
-                    label.Pop();
-                    _allowUninstallFrom = null;
                     return;
                 }
             }

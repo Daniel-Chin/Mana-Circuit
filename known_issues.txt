@@ -1,0 +1,3 @@
+If you put 4 typeless gems in the typeless gem, out-of-mem. 
+    - maybe, adaptive recusive depth?
+    - baked texture?
