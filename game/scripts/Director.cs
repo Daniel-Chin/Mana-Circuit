@@ -107,9 +107,11 @@ public class Director
         if (s is NPC.WandSmith) {
             GameState.Transient.NextSpawn = null;
         }
+        GameState.Persistent.Sema.WaitOne();
         GameState.Persistent.Loneliness_GemExpert ++;
         GameState.Persistent.Loneliness_Shop ++;
         GameState.Persistent.Loneliness_WandSmith ++;
+        GameState.Persistent.Sema.Release();
     }
     public static void SpecialDespawned(
         SpawnableSpecial s, bool exposed
@@ -165,7 +167,9 @@ public class Director
             e.NextStep();
         }
         if (attack.Mana.MyRank != Rank.FINITE) {
+            GameState.Persistent.Sema.WaitOne();
             GameState.Persistent.MadeInf = true;
+            GameState.Persistent.Sema.Release();
         }
     }
 
@@ -258,10 +262,14 @@ public class Director
 
     public static void EnemyDied() {
         if (GameState.Persistent.HasGems[new Gem.StrongMult().Name()] != 0) {
+            GameState.Persistent.Sema.WaitOne();
             GameState.Persistent.KillsSinceStrongMult ++;
+            GameState.Persistent.Sema.Release();
         }
         if (GameState.Persistent.HasGems[new Gem.Stochastic(false).Name()] != 0) {
+            GameState.Persistent.Sema.WaitOne();
             GameState.Persistent.KillsSinceStochastic ++;
+            GameState.Persistent.Sema.Release();
         }
         CheckEvent();
     }

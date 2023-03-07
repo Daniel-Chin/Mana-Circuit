@@ -73,11 +73,13 @@ public class UpgradeWand : WindowDialog
 
     public void Buy()
     {
+        GameState.Persistent.Sema.WaitOne();
         GameState.Persistent.Money = Simplest.Eval(
             GameState.Persistent.Money, Operator.MINUS,
             PriceOf(NewWand)
         );
         GameState.Persistent.MyWand = NewWand;
+        GameState.Persistent.Sema.Release();
         Main.Singleton.WandReplaced();
         _didBuy = true;
         Leave();

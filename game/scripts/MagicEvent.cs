@@ -67,7 +67,9 @@ public abstract class MagicEvent : Godot.Object
         }
         private void EventFinished()
         {
+            GameState.Persistent.Sema.WaitOne();
             GameState.Persistent.Event_Intro = true;
+            GameState.Persistent.Sema.Release();
             Director.EventFinished();
         }
     }
@@ -121,8 +123,10 @@ public abstract class MagicEvent : Godot.Object
                 case 5:
                     if (Attacked)
                     {
+                        GameState.Persistent.Sema.WaitOne();
                         GameState.Persistent.Event_Staff = true;
-                        SaveLoad.Save();
+                        GameState.Persistent.Sema.Release();
+                        SaveLoad.SaveAsync();
                         Director.MainUI.VBoxLowPanel.Visible = false;
                         Director.EventFinished();
                     }
@@ -159,13 +163,15 @@ public abstract class MagicEvent : Godot.Object
                     _step++;
                     break;
                 case 2:
-                    SaveLoad.Save();
+                    SaveLoad.SaveAsync();
                     Director.UnpauseWorld();
                     if (GameState.Persistent.HasGems["addOne"] == 0) {
                         GameState.Transient.EventRejected();
                         // maybe: reject only when shop despawns? to do that, comment out the line above.
                     } else {
+                        GameState.Persistent.Sema.WaitOne();
                         GameState.Persistent.Loneliness_WandSmith = Params.NPC_LINELINESS_MAX;
+                        GameState.Persistent.Sema.Release();
                         if (GameState.Transient.NextSpawn is NPC.Shop)
                             GameState.Transient.NextSpawn = null;
                     }
@@ -219,9 +225,11 @@ public abstract class MagicEvent : Godot.Object
                     _step++;
                     break;
                 case 22:
-                    SaveLoad.Save();
+                    SaveLoad.SaveAsync();
                     Director.UnpauseWorld();
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.Loneliness_WandSmith = Params.NPC_LINELINESS_MAX;
+                    GameState.Persistent.Sema.Release();
                     if (GameState.Transient.NextSpawn is NPC.Shop)
                         GameState.Transient.NextSpawn = null;
                     Director.EventFinished();
@@ -253,7 +261,9 @@ public abstract class MagicEvent : Godot.Object
                         $"+ *{_strongMult.DisplayName()}* obtained! +", 
                         true
                     );
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.HasGems[_strongMult.Name()] = 1;
+                    GameState.Persistent.Sema.Release();
                     _step++;
                     break;
                 case 43:
@@ -311,7 +321,9 @@ public abstract class MagicEvent : Godot.Object
                 return;
             }
             _step++;
+            GameState.Persistent.Sema.WaitOne();
             string tip = Tip();
+            GameState.Persistent.Sema.Release();
             if (tip == null) {
                 NextStep();
                 return;
@@ -495,8 +507,10 @@ public abstract class MagicEvent : Godot.Object
                     Process(0);
                     break;
                 case 43:
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.Event_JumperStage = 1;
-                    SaveLoad.Save();
+                    GameState.Persistent.Sema.Release();
+                    SaveLoad.SaveAsync();
                     Director.UnpauseWorld();
                     Main.Singleton.MyWorld.DespawnSpecial(_npcUI);
                     GameState.Transient.NextSpawn = null;
@@ -583,8 +597,10 @@ public abstract class MagicEvent : Godot.Object
                     _step = 110;
                     break;
                 case 130:
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.Event_JumperStage = 2;
-                    SaveLoad.Save();
+                    GameState.Persistent.Sema.Release();
+                    SaveLoad.SaveAsync();
                     Director.UnpauseWorld();
                     GameState.Transient.NextSpawn = null;
                     Director.EventFinished();
@@ -764,9 +780,11 @@ public abstract class MagicEvent : Godot.Object
                         $"+ *{_cG.DisplayName()}* unlocked! +", 
                         true
                     );
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.HasCustomGems[(int)_metaLevel.K] = (
                         0, _cG
                     );
+                    GameState.Persistent.Sema.Release();
                     _step++;
                     break;
                 case 13:
@@ -892,7 +910,9 @@ public abstract class MagicEvent : Godot.Object
                         $"+ *{_cG.DisplayName()}* unlocked! +", 
                         true
                     );
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.MyTypelessGem = _cG;
+                    GameState.Persistent.Sema.Release();
                     _step++;
                     break;
                 case 107:
@@ -939,9 +959,11 @@ public abstract class MagicEvent : Godot.Object
                     for (int i = 0; i < 10; i++)
                     {
                         if (!GameState.Persistent.HasCustomGems.ContainsKey(i)) {
+                            GameState.Persistent.Sema.WaitOne();
                             GameState.Persistent.HasCustomGems[i] = (
                                 0, new CustomGem(Simplest.Finite(i))
                             );
+                            GameState.Persistent.Sema.Release();
                         }
                     }
                     _step++;
@@ -954,7 +976,7 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 200:
                     Director.EventFinished();
-                    SaveLoad.Save();
+                    SaveLoad.SaveAsync();
                     Director.UnpauseWorld();
                     GameState.Transient.NextSpawn = new NPC.Shop();
                     break;
@@ -1056,7 +1078,7 @@ public abstract class MagicEvent : Godot.Object
                 case 3:
                     Director.UnpauseWorld();
                     Director.EventFinished();
-                    SaveLoad.Save();
+                    SaveLoad.SaveAsync();
                     break;
                 default:
                     throw new Shared.ValueError();

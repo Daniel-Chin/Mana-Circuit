@@ -28,10 +28,12 @@ public class Jumper {
                     isFinite && 
                     GameState.Persistent.Location_dist.MyRank == Rank.FINITE
                 ) {
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.Location_dist = Simplest.Finite(
                         GameState.Transient.LocationOffset.Length()
                     );
                     GameState.Persistent.Location_theta = GameState.Transient.LocationOffset.Angle();
+                    GameState.Persistent.Sema.Release();
                 }
                 GameState.Transient.Jumping = false;
                 Director.UnpauseWorld();
@@ -94,8 +96,10 @@ public class Jumper {
                     isFinite = jumpMana.MyRank == Rank.FINITE;
                     if (!isFinite) {
                         if (jumpMana >= GameState.Persistent.Location_dist) {
+                            GameState.Persistent.Sema.WaitOne();
                             GameState.Persistent.Location_dist = jumpMana;
                             GameState.Persistent.Location_theta = jumpDirection.Angle();
+                            GameState.Persistent.Sema.Release();
                         }
                     }
                     Charging = false;

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 
 using System.Collections.Generic;
 using Godot;
@@ -16,6 +17,7 @@ public class GameState
 
     public class PersistentClass : JSONable
     {
+        public System.Threading.Semaphore Sema;
         public Simplest Money { get; set; }
         public double Location_theta { get; set; }
         public Simplest Location_dist { get; set; }
@@ -39,6 +41,7 @@ public class GameState
         public bool MadeInfMeanWand { get; set; }
         public PersistentClass()
         {
+            Sema = new System.Threading.Semaphore(1, 1);
             Money = Simplest.Zero();
             Location_theta = 0;
             Location_dist = Simplest.Zero();

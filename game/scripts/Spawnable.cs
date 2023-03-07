@@ -26,6 +26,7 @@ public class SpawnableSpecialUI : Node2D, SpawnableUI
     }
     public void Moved(Vector2 viewRadius) {
         if (Exposed) {
+            GameState.Persistent.Sema.WaitOne();
             switch (MySpawnable) {
                 case NPC.Shop _:
                     GameState.Persistent.Loneliness_Shop = 0;
@@ -42,6 +43,7 @@ public class SpawnableSpecialUI : Node2D, SpawnableUI
                 default:
                     break;
             }
+            GameState.Persistent.Sema.Release();
             return;
         }
         if (Math.Abs(Position.x) > viewRadius.x) return;

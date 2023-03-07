@@ -483,21 +483,27 @@ public class GemListScene : WindowDialog
     private bool BuyGem(Gem gem) {
         Simplest price = NPC.Shop.PriceOf(gem);
         if (price <= GameState.Persistent.Money) {
+            GameState.Persistent.Sema.WaitOne();
             GameState.Persistent.Money = Simplest.Eval(
                 GameState.Persistent.Money, 
                 Operator.MINUS, price
             );
+            GameState.Persistent.Sema.Release();
             if (gem is CustomGem cG) {
                 if (cG.MetaLevel.MyRank == Rank.FINITE) {
                     int metaLevel = (int)cG.MetaLevel.K;
                     var (nOwned, _cG) = GameState.Persistent.HasCustomGems[metaLevel];
                     Shared.Assert(cG == _cG);
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.HasCustomGems[metaLevel] = (
                         nOwned + 1, cG
                     );
+                    GameState.Persistent.Sema.Release();
                 }
             } else {
+                GameState.Persistent.Sema.WaitOne();
                 GameState.Persistent.HasGems[gem.Name()] ++;
+                GameState.Persistent.Sema.Release();
             }
             return true;
         }

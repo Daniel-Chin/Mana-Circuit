@@ -1,12 +1,12 @@
 using System;
 using System.IO;
-using Godot;
+using System.Threading;
 
 public class SaveLoad
-{   // todo: async
+{
     public static string Filename(int x)
     {
-        return System.IO.Path.Combine(OS.GetUserDataDir(), $"file{x}");
+        return System.IO.Path.Combine(Godot.OS.GetUserDataDir(), $"file{x}");
     }
     public static void Load()
     {
@@ -36,6 +36,9 @@ public class SaveLoad
     }
     public static void Save()
     {
+        Console.WriteLine("Save begin");
+        GameState.Persistent.Sema.WaitOne();
+
         StreamWriter writer1 = new StreamWriter(Filename(1));
         GameState.Persistent.ToJSON(writer1);
         writer1.Flush();
@@ -56,5 +59,13 @@ public class SaveLoad
         writer9.WriteLine("0");
         writer9.Flush();
         writer9.Close();
+
+        GameState.Persistent.Sema.Release();
+        Console.WriteLine("Save end");
+    }
+
+    public static void SaveAsync() {
+        Thread t = new Thread(new ThreadStart(Save));
+        t.Start();
     }
 }

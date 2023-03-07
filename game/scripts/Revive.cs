@@ -58,11 +58,13 @@ public class Revive : PanelContainer
     public void Button1Pressed()
     {
         Simplest money = GameState.Persistent.Money;
+        GameState.Persistent.Sema.WaitOne();
         if (money.MyRank == Rank.FINITE) {
             GameState.Persistent.Money = Simplest.Finite(Math.Ceiling(money.K * .1));
         } else {
             GameState.Persistent.Money = Downgrade(money);
         }
+        GameState.Persistent.Sema.Release();
         Update();
         Button2.Disabled = false;
 
@@ -71,6 +73,7 @@ public class Revive : PanelContainer
     public void Button2Pressed()
     {
         Simplest dist = GameState.Persistent.Location_dist;
+        GameState.Persistent.Sema.WaitOne();
         if (dist.MyRank == Rank.FINITE)
         {
             GameState.Persistent.Location_dist = new Simplest(
@@ -83,6 +86,7 @@ public class Revive : PanelContainer
         {
             GameState.Persistent.Location_dist = Downgrade(dist);
         }
+        GameState.Persistent.Sema.Release();
         Update();
         Button3.Disabled = false;
 

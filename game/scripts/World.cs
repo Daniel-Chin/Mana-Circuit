@@ -73,11 +73,13 @@ public class World : Node2D
                 GameState.Transient.LocationOffset += displace;
                 if (GameState.Persistent.Location_dist.MyRank == Rank.FINITE)
                 {
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.Location_dist = new Simplest(
                         Rank.FINITE,
                         GameState.Transient.LocationOffset.Length()
                     );
                     GameState.Persistent.Location_theta = GameState.Transient.LocationOffset.Angle();
+                    GameState.Persistent.Sema.Release();
                     GameState.Transient.Update();
                 }
                 UpdateBack();
@@ -149,10 +151,12 @@ public class World : Node2D
             {
                 Moneys.Remove(money);
                 money.QueueFree();
+                GameState.Persistent.Sema.WaitOne();
                 GameState.Persistent.Money = Simplest.Eval(
                     GameState.Persistent.Money, Operator.PLUS,
                     money.Amount
                 );
+                GameState.Persistent.Sema.Release();
                 Main.Singleton.MySidePanel.Update(); // Ideally, a signal
             }
         }
@@ -365,7 +369,9 @@ public class World : Node2D
         switch (dUI.MySpawnable) {
             case Wand.Staff staff:
                 Shared.Assert(GameState.Persistent.MyWand == null);
+                GameState.Persistent.Sema.WaitOne();
                 GameState.Persistent.MyWand = staff;
+                GameState.Persistent.Sema.Release();
                 SpawnedSpecialUIs.Remove(dUI);
                 dUI.QueueFree();
                 EmitSignal("wand_replaced");
@@ -373,7 +379,9 @@ public class World : Node2D
                 Director.StartEvent(new MagicEvent.Staff());
                 break;
             case DroppedGem dGem:
+                GameState.Persistent.Sema.WaitOne();
                 GameState.Persistent.HasGems[dGem.MyGem.Name()] ++;
+                GameState.Persistent.Sema.Release();
                 SpawnedSpecialUIs.Remove(dUI);
                 dUI.QueueFree();
                 GameState.Transient.NextSpawn = null;

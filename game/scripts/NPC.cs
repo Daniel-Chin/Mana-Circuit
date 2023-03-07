@@ -89,13 +89,15 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
                 cG.MyCircuit = c;
                 cG.Eval();
                 if (cG.CachedMultiplier.MyRank != Rank.FINITE) {
+                    GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.MadeInfMeanWand = true;
+                    GameState.Persistent.Sema.Release();
                     Console.WriteLine("player made inf-mean wand");
                 }
             }
 
 
-            SaveLoad.Save();
+            SaveLoad.SaveAsync();
             Director.UnpauseWorld();
             Main.Singleton.MySidePanel.MyCircuitUI.Rebuild();
         }
