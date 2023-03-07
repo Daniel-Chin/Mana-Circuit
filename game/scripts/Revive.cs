@@ -37,9 +37,29 @@ public class Revive : PanelContainer
         Main.Singleton.MySidePanel.Update();
     }
 
+    public Simplest Downgrade(Simplest s) {
+        if (s.Equals(Simplest.Bottom(s.MyRank)))
+        {
+            return new Simplest(
+                s.MyRank - 1, 2
+            );
+        }
+        else
+        {
+            return new Simplest(
+                s.MyRank, s.K - 1
+            );
+        }
+    }
+
     public void Button1Pressed()
     {
-        GameState.Persistent.Money = Simplest.Zero();
+        Simplest money = GameState.Persistent.Money;
+        if (money.MyRank == Rank.FINITE) {
+            GameState.Persistent.Money = Simplest.Finite(Math.Ceiling(money.K * .1));
+        } else {
+            GameState.Persistent.Money = Downgrade(money);
+        }
         Update();
         Button2.Disabled = false;
 
@@ -58,18 +78,7 @@ public class Revive : PanelContainer
         }
         else
         {
-            if (dist.Equals(Simplest.Bottom(dist.MyRank)))
-            {
-                GameState.Persistent.Location_dist = new Simplest(
-                    dist.MyRank - 1, 2
-                );
-            }
-            else
-            {
-                GameState.Persistent.Location_dist = new Simplest(
-                    dist.MyRank, dist.K - 1
-                );
-            }
+            GameState.Persistent.Location_dist = Downgrade(dist);
         }
         Update();
         Button3.Disabled = false;

@@ -2,7 +2,7 @@ using System;
 using Godot;
 
 public class Jumper {
-    private static readonly float CHARGE_TIME = 1.5f;
+    private static readonly float CHARGE_TIME = 1f;
     private static readonly float JUMP_TIME = 3f;
     private static readonly float ACC_STAGE = .3f;
     private static readonly float FINITE_SPEED = .01f;
