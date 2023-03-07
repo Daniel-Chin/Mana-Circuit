@@ -274,6 +274,7 @@ public class GemListScene : WindowDialog
                 if (nAvailable <= Simplest.Zero())
                 {
                     RichTextLabel label = cButton.TextInstead();
+                    cButton.RectMinSize = new Vector2(0, GemEntry.SIZE);
                     label.PushAlign(RichTextLabel.Align.Center);
                     if (nInWand + nInCGs == 0) {
                         label.PushColor(Colors.Red);
@@ -299,6 +300,7 @@ public class GemListScene : WindowDialog
                 )
                 {
                     RichTextLabel label = cButton.TextInstead();
+                    cButton.RectMinSize = new Vector2(0, GemEntry.SIZE);
                     label.PushColor(Colors.Red);
                     label.PushAlign(RichTextLabel.Align.Center);
                     label.AppendBbcode("Type error: ");
@@ -326,6 +328,19 @@ public class GemListScene : WindowDialog
                 _header.QueueFree();
                 ListBuyable();
                 Main.Singleton.MySidePanel.Update();
+            } else {
+                RichTextLabel label = cButton.TextInstead();
+                cButton.RectMinSize = new Vector2(0, GemEntry.SIZE);
+                label.PushAlign(RichTextLabel.Align.Center);
+                label.PushColor(Colors.Red);
+                label.AppendBbcode("Not enough ");
+                label.PushColor(Colors.Yellow);
+                label.AppendBbcode("$");
+                label.Pop();
+                label.AppendBbcode(".");
+                label.Pop();
+                label.Pop();
+                _allowUninstallFrom = null;
             }
         } else {
             Hide();

@@ -225,7 +225,10 @@ public class Circuit : JSONable
                         gotIt = true;
                     }
                 } else {
-                    if (gem.GetType() == Field[i, j].GetType()) {
+                    if (
+                        Field[i, j] != null
+                        && gem.GetType() == Field[i, j].GetType()
+                    ) {
                         gotIt = true;
                     }
                 }

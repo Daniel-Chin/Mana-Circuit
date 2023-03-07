@@ -4,7 +4,7 @@ using System;
 public class GemEntry : HBoxContainer
 {
     // code-defined
-    private static readonly int SIZE = 80;
+    public static readonly int SIZE = 80;
     public GemUI MyGemUI;
     public RichTextLabel[] Labels;
     public GemEntry() : base() { }
