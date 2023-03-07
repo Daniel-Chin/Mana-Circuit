@@ -56,3 +56,12 @@ bbcode_text = "[center]123[/center]"
 text = "123"
 fit_content_height = true
 scroll_active = false
+
+[node name="ManaRate" type="RichTextLabel" parent="VBox"]
+margin_top = 342.0
+margin_right = 304.0
+margin_bottom = 372.0
+bbcode_enabled = true
+bbcode_text = "[center]+ 3 / s[/center]"
+text = "+ 3 / s"
+fit_content_height = true

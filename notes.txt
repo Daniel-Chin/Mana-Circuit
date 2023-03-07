@@ -2,7 +2,6 @@
 Your power knows no bounds
 
 Todo
-    mana rate / s
     click unavailable gem - "Do you want to unload?"
     skareboard ownership GUI
     

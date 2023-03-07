@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Diagnostics;
 
 public class SidePanel : PanelContainer
 {
@@ -8,18 +7,26 @@ public class SidePanel : PanelContainer
     public VBoxContainer VBox;
     public RichTextLabel ManaLabel;
     public RichTextLabel MoneyLabel;
+    public RichTextLabel ManaRateLabel;
     public WandSimulation MyWandSim;
     private float _manaFontHeight;
+    private Simplest _manaAcc { get; set; }
+    private float _timeAcc { get; set; }
     public override void _Ready()
     {
+        _manaAcc = Simplest.Zero();
+        _timeAcc = 0f;
+        
         VBox = GetNode<VBoxContainer>("VBox");
-        ManaLabel = GetNode<RichTextLabel>("VBox/Crystal/Centerer/Mana");
         MoneyLabel = GetNode<RichTextLabel>("VBox/Money");
+        ManaRateLabel = GetNode<RichTextLabel>("VBox/ManaRate");
+        ManaLabel = GetNode<RichTextLabel>("VBox/Crystal/Centerer/Mana");
         VBox.Visible = false;
         MyWandSim = new WandSimulation(this);
         DynamicFont font = Shared.NewFont(60);
         ManaLabel.AddFontOverride("normal_font", font);
         _manaFontHeight = font.GetHeight();
+        ManaRateLabel.Clear();
         Update();
     }
 
@@ -47,13 +54,21 @@ public class SidePanel : PanelContainer
         if (GameState.Transient.WorldPaused)
             return;
         MyWandSim.Process(delta);
+        _timeAcc += delta;
+        if (_timeAcc >= 1) {
+            _timeAcc --;
+            SetManaRate(_manaAcc);
+            _manaAcc = Simplest.Zero();
+        }
     }
 
     public void ManaCrystalized(Simplest mana)
     {
         GameState.Transient.Mana = Simplest.Eval(
-            GameState.Transient.Mana, Operator.PLUS,
-            mana
+            GameState.Transient.Mana, Operator.PLUS, mana
+        );
+        _manaAcc = Simplest.Eval(
+            _manaAcc, Operator.PLUS, mana
         );
         Update();
     }
@@ -63,5 +78,16 @@ public class SidePanel : PanelContainer
         ManaLabel.BbcodeText = $"[center][color=#00ffff]{MathBB.Build(GameState.Transient.Mana, _manaFontHeight)}[/color][/center]";
         MoneyLabel.BbcodeText = $" [color=yellow]${MathBB.Build(GameState.Persistent.Money)}[/color]";
         Hold(GameState.Persistent.MyWand);
+    }
+
+    public void SetManaRate(Simplest s) {
+        ManaRateLabel.Clear();
+        ManaRateLabel.PushAlign(RichTextLabel.Align.Center);
+        ManaRateLabel.PushColor(Colors.Cyan);
+        ManaRateLabel.AppendBbcode("+ ");
+        ManaRateLabel.AppendBbcode(MathBB.Build(s));
+        ManaRateLabel.AppendBbcode(" / sec");
+        ManaRateLabel.Pop();
+        ManaRateLabel.Pop();
     }
 }
