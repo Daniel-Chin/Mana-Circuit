@@ -20,6 +20,7 @@ public class CircuitUI : AspectRatioContainer
     public int RecursionDepth;
     private MarginContainer _container;
     private Control _bgRect;
+    private MarginContainer _gridWrapper;
     private GridContainer _grid;
     private GemListScene _GemList;
     private List<ParticleAndTrail> _pAndTs;
@@ -47,8 +48,8 @@ public class CircuitUI : AspectRatioContainer
                 sourceLocation, source.Direction, Simplest.Ones(1)
             );
             Follower = sourceLocation.ToVector2();
-            MyTrail = new ManaTrail(parent.RecursionDepth <= 0);
-            parent._container.AddChild(MyTrail);
+            MyTrail = new ManaTrail(parent.MyMagicItem is Wand);
+            parent._gridWrapper.AddChild(MyTrail);
             MyTrail.LineWidth = (float)(3 * Math.Exp(-parent.RecursionDepth));
             MyTrail.Lifetime = .5f;
         }
@@ -95,6 +96,7 @@ public class CircuitUI : AspectRatioContainer
         RecursionDepth = recursionDepth;
         DoMouseEvent = doMouseEvent;
         SimParticles = simParticles;
+        bool isTypedCG = false;
         switch (MyMagicItem)
         {
             case Wand wand:
@@ -104,6 +106,8 @@ public class CircuitUI : AspectRatioContainer
             case CustomGem cG:
                 MetaLevel = cG.MetaLevel;
                 MyCircuit = cG.MyCircuit;
+                if (MetaLevel.MyRank == Rank.FINITE)
+                    isTypedCG = true;
                 break;
             case Gem _:
             default:
@@ -122,9 +126,15 @@ public class CircuitUI : AspectRatioContainer
         AddChild(_container);
         _bgRect = new Control();
         _grid = new GridContainer();
-        _container.AddChild(_grid);
         _grid.AddConstantOverride("vseparation", 0);
         _grid.AddConstantOverride("hseparation", 0);
+        _gridWrapper = new MarginContainer();
+        _gridWrapper.AddChild(_grid);
+        if (isTypedCG) {
+            RatioCenter(_gridWrapper, _container);
+        } else {
+            _container.AddChild(_gridWrapper);
+        }
 
         Rebuild();
     }
@@ -272,44 +282,32 @@ public class CircuitUI : AspectRatioContainer
     {
         if (MyMagicItem is Wand wand)
         {
-            TextureRect _tRect = new TextureRect();
-            _tRect.Texture = wand.TextureFlat();
-            _tRect.Expand = true;
-            _tRect.StretchMode = TextureRect.StretchModeEnum.Scale;
-            _bgRect = _tRect;
+            TextureRect tRect = new TextureRect();
+            tRect.Texture = wand.TextureFlat();
+            tRect.Expand = true;
+            tRect.StretchMode = TextureRect.StretchModeEnum.Scale;
+            _bgRect = tRect;
             return;
         }
         if (MetaLevel.MyRank != Rank.FINITE)
         {
-            TextureRect _tRect = new TextureRect();
-            _tRect.Texture = GD.Load<Texture>("res://texture/gem/wall.png");
-            _tRect.Expand = true;
-            _tRect.StretchMode = TextureRect.StretchModeEnum.Scale;
+            TextureRect tRect = new TextureRect();
+            tRect.Texture = GD.Load<Texture>("res://texture/gem/wall.png");
+            tRect.Expand = true;
+            tRect.StretchMode = TextureRect.StretchModeEnum.Scale;
             ShaderMaterial mat = new ShaderMaterial();
             mat.Shader = _rainbow;
-            _tRect.Material = mat;
-            _bgRect = _tRect;
+            tRect.Material = mat;
+            _bgRect = tRect;
             return;
         }
-        // Typed CG
-        Color color;
-        switch (MetaLevel.K % 3)
         {
-            case 0:
-                color = Color.FromHsv(.66f, 1f, .3f, 1f);
-                break;
-            case 1:
-                color = Color.FromHsv(.38f, 1f, .3f, 1f);
-                break;
-            case 2:
-                color = Color.FromHsv(0f, 1f, .3f, 1f);
-                break;
-            default:
-                throw new Shared.ValueError();
+            // Typed CG
+            TextureRect tRect = new TextureRect();
+            tRect.Texture = GD.Load<Texture>($"res://texture/gem/cg_{MetaLevel.K % 3}.png");
+            tRect.Expand = true;
+            _bgRect = tRect;
         }
-        ColorRect _cRect = new ColorRect();
-        _cRect.Color = color;
-        _bgRect = _cRect;
     }
 
     public void MouseEnteredGem(int i, int j)
@@ -330,5 +328,31 @@ public class CircuitUI : AspectRatioContainer
     public void MouseExitedGem(int i, int j)
     {
         EmitSignal("new_explain", "");
+    }
+
+    private static readonly float BORDER_WIDTH = .05f;
+    private void RatioCenter(
+        MarginContainer gridWrapper, Container container
+    ) {
+        VBoxContainer vBox = new VBoxContainer();
+        HBoxContainer hBox = new HBoxContainer();
+        container.AddChild(vBox);
+        
+        vBox.AddChild(Padder());
+        vBox.AddChild(hBox);
+        vBox.AddChild(Padder());
+        hBox.AddChild(Padder());
+        hBox.AddChild(gridWrapper);
+        hBox.AddChild(Padder());
+
+        hBox.SizeFlagsVertical = (int)SizeFlags.ExpandFill;
+        gridWrapper.SizeFlagsHorizontal = (int)SizeFlags.ExpandFill;
+    }
+    private MarginContainer Padder() {
+        MarginContainer padder = new MarginContainer();
+        padder.SizeFlagsVertical = (int)SizeFlags.ExpandFill;
+        padder.SizeFlagsHorizontal = (int)SizeFlags.ExpandFill;
+        padder.SizeFlagsStretchRatio = BORDER_WIDTH;
+        return padder;
     }
 }

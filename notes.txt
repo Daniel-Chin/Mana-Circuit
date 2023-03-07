@@ -2,9 +2,8 @@
 Your power knows no bounds
 
 Todo
-    click unavailable gem - "Do you want to unload?"
-    CG background: need Gem borders
     mana rate / s
+    click unavailable gem - "Do you want to unload?"
     skareboard ownership GUI
     
 
