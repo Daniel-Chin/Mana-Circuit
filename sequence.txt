@@ -61,7 +61,16 @@ if player doesn't buy stochastic, drop one for free. "author dropped it here"
 
 "A good mage needs 1% grinding and 99% thinking. "
 
-if hasn't made inf-mean wand, hint about loops
+if hasn't made inf-mean wand, 
+"stop and think" dialog.
+
+if hasn't made inf-mean wand, 
+hint about loops. 
+"My friend once tried to guide her mana into a loop."
+"But her mana simply looped on forever, never to reach the mana crystalizer!"
+
+if hasn't made inf-mean wand, 
+spawn inf-HP enemy after 10 kills
 
 Once made inf-mean wand, ask: what is your mean mana output?
 
@@ -78,7 +87,7 @@ then, Gem Expert NPC spawns.
 
 $80 -> 1st copy of CG0. 
 
-only one x1.5 on the ground. "there is only one"
+one x1.5 gifted by the shop. "there is only one"
 
 Make w
 
