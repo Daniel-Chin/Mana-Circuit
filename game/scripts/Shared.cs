@@ -19,7 +19,10 @@ public class Shared
         "res://misc/font/m5x7.ttf"
     );
     public static readonly int MAX_RECURSION = 4;
-    // 7f is the font's # of pixels in height
+    public static readonly Vector2 RESOLUTION = new Vector2(
+        (int)ProjectSettings.GetSetting("display/window/size/width"),
+        (int)ProjectSettings.GetSetting("display/window/size/height")
+    );
 
     public static void QFreeChildren(Node node)
     {
@@ -84,6 +87,27 @@ public class Shared
         foreach (Node n in c.GetChildren()) {
             PropogateMouseFilter(n as Control, e);
         }
+    }
+
+    private static float CachedDPI = 0;
+    public static float DPI() {
+        if (CachedDPI == 0) {
+            Vector2 dpi2D = (
+                Main.Singleton.GetViewport().GetTexture().GetData().GetSize()
+                / RESOLUTION
+            );
+            Assert(Math.Abs(dpi2D.x / dpi2D.y - 1f) <= float.Epsilon);
+            CachedDPI = dpi2D.x;
+        }
+        return CachedDPI;
+    }
+    public static Image Screenshot(Control control) {
+        Image img = control.GetViewport().GetTexture().GetData();
+        img.FlipY();
+        return img.GetRect(new Rect2(
+            control.RectGlobalPosition * DPI(), 
+            control.RectSize * DPI()
+        ));
     }
 }
 

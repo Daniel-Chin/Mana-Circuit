@@ -32,6 +32,7 @@ public class CircuitUI : AspectRatioContainer
     public bool DoMouseEvent;
     public bool SimParticles;
     private float _emitAcc;
+    public Image Screenshot {get; set;}
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -96,6 +97,7 @@ public class CircuitUI : AspectRatioContainer
         RecursionDepth = recursionDepth;
         DoMouseEvent = doMouseEvent;
         SimParticles = simParticles;
+        Screenshot = null;
         bool isTypedCG = false;
         switch (MyMagicItem)
         {
@@ -196,6 +198,7 @@ public class CircuitUI : AspectRatioContainer
 
     public override void _Process(float delta)
     {
+        Screenshot = Shared.Screenshot(_container);
         if (
             !SimParticles
             || RecursionDepth > Shared.MAX_RECURSION

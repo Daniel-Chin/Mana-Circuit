@@ -1,4 +1,5 @@
 builds/
+temp/
 
 # Godot-specific ignores
 .import/

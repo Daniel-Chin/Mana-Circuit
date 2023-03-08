@@ -23,7 +23,7 @@ public abstract class MagicEvent : Godot.Object
                 case 0:
                     Director.MainUI.MyLowPanel.SetFace(null);
                     Director.MainUI.MyLowPanel.Display(
-                        "You instictively know to *hold* the *Right Mouse Button*."
+                        "You instinctively know to *hold* the *Right Mouse Button*."
                     );
                     Director.UnpauseWorld();
                     _step++;

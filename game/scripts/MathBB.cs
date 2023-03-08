@@ -38,6 +38,7 @@ public class MathBB
             float width = _fontHeight / 7f / 2f * GD.Load<Texture>(
                 imagePath
             ).GetWidth();
+            // 7f is the font's # of pixels in height
             return $"[img={width}]{imagePath}[/img]";
         }
     }

@@ -1,0 +1,23 @@
+click away from shop selection dialog
+
+cancelling selection of orientation places the gem in default orientation
+
+talking to the shop reveals hint. but Subject doesn't go to the shop while holding max-finite ricecooker, because he has all the gems already. 
+
+remove half money when die
+
+can find loop by himself but doesn't see the threshold of 2. Maybe encourage to analyze mean sooner? actually, hint that "mult is strong when it's repeated".
+
+to spawn inventor MkII, I check up to w^4. but Subject directly jumped to w^9. 
+
+dropped money needs to be wider, for w^w^w^w^w^w
+
+circuitUI aspect ratio bug???
+
+GemExpert should:
+    explain CG can contain gem & be placed in wand.
+    Explain meta for those who skip.
+    don't say "theoretical mean" every time
+    explain typeless = meta^w, can contain meta^(w-1)
+
+clear world attacks when jump
