@@ -17,7 +17,7 @@ public class Money : Node2D, SpawnableUI
         AddChild(Label);
         Label.BbcodeEnabled = true;
         Label.ScrollActive = false;
-        Label.RectMinSize = new Vector2(100, 50);
+        Label.RectMinSize = new Vector2(150, 50);
         Label.RectSize = Label.RectMinSize;
         Label.RectPosition = -Label.RectMinSize * .5f;
         Label.Theme = Shared.THEME;

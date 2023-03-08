@@ -2,7 +2,6 @@
 Your power knows no bounds
 
 2do
-dropped money needs to be wider, for w^w^w^w^w^w
 circuitUI aspect ratio bug???
 clear world attacks when jump
 GemExpert should:
