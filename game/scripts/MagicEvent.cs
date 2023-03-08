@@ -160,9 +160,15 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.SetButtons(
                         "Buy gems", "Upgrade wand"
                     );
+                    Director.MainUI.MyLowPanel.AcceptClick = true;
                     _step++;
                     break;
-                case 2:
+                case 1:
+                    // cancelled selection
+                    _step = 6;
+                    NextStep();
+                    break;
+                case 6:
                     SaveLoad.SaveAsync();
                     Director.UnpauseWorld();
                     if (GameState.Persistent.HasGems["addOne"] == 0) {
@@ -284,6 +290,7 @@ public abstract class MagicEvent : Godot.Object
             Director.MainUI.MyLowPanel.NoButtons();
             if (buttonID == 0) {
                 // Buy gems
+                _step = 5;
                 GemListScene gemListScene = new GemListScene();
                 Director.MainUI.AddChild(gemListScene);
                 gemListScene.ListBuyable();

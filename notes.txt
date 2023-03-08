@@ -2,8 +2,7 @@
 Your power knows no bounds
 
 2do
-click away from shop selection dialog
-cancelling selection of orientation places the gem in default orientation
+no-mana check
 to spawn inventor MkII, I check up to w^4. but Subject directly jumped to w^9. 
 dropped money needs to be wider, for w^w^w^w^w^w
 circuitUI aspect ratio bug???

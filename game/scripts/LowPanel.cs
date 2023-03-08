@@ -8,20 +8,20 @@ public class LowPanel : PanelContainer
     public HBoxContainer ButtonsHBox;
     public Button Button0;
     public Button Button1;
-    public TextureButton Mask;
+    public bool AcceptClick;
     public float FontHeight;
     private float _timeElasped;
     private bool _hasButtons;
     public override void _Ready()
     {
         _hasButtons = false;
+        AcceptClick = true;
 
         Face = GetNode<TextureRect>("HBox/Face");
         Label = GetNode<RichTextLabel>("HBox/VBox/Label");
         ButtonsHBox = GetNode<HBoxContainer>("HBox/VBox/Buttons");
         Button0 = GetNode<Button>("HBox/VBox/Buttons/Centerer0/Button0");
         Button1 = GetNode<Button>("HBox/VBox/Buttons/Centerer1/Button1");
-        Mask = GetNode<TextureButton>("Mask");
         ButtonsHBox.Visible = false;
 
         Button0.Connect(
@@ -84,6 +84,7 @@ public class LowPanel : PanelContainer
     public void SetButtons(string text0, string text1)
     {
         _hasButtons = true;
+        AcceptClick = false;
         Button0.Text = $" {text0} ";
         Button1.Text = $" {text1} ";
     }
@@ -91,7 +92,7 @@ public class LowPanel : PanelContainer
     {
         _hasButtons = false;
         ButtonsHBox.Visible = false;
-        Mask.Visible = true;
+        AcceptClick = true;
     }
 
     public override void _Process(float delta)
@@ -102,7 +103,6 @@ public class LowPanel : PanelContainer
             Label.PercentVisible = 1;
             if (_hasButtons) {
                 ButtonsHBox.Visible = true;
-                Mask.Visible = false;
             }
         } else {
             Label.PercentVisible = rollProgress;
@@ -114,16 +114,14 @@ public class LowPanel : PanelContainer
         _timeElasped = Label.Text.Length / Params.TEXT_ROLL_SPEED;
     }
 
-    public void _on_Mask_pressed() { }
     public void Clicked()
     {
-        if (!Mask.Visible) return;
         if (_timeElasped < Label.Text.Length / Params.TEXT_ROLL_SPEED)
         {
             SkipRoll();
             return;
         }
-        if (_hasButtons)
+        if (!AcceptClick) 
             return;
         Main.Singleton.VBoxLowPanel.Visible = false;
         Director.OnEventStepComplete();
