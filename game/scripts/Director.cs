@@ -25,7 +25,10 @@ public class Director
             GameState.Transient.EnemiesTillNextSpawn = 0;
             return;
         }
-        if (SpawnShopIf(Simplest.Finite(2), (new Gem.AddOne(), 0))) {
+        if (
+            GameState.Persistent.MyWand is Wand.Staff
+            && SpawnShopIf(Simplest.Finite(2), (new Gem.AddOne(), 0))
+        ) {
             Console.WriteLine("hinting to buy +1");
             return;
         }
@@ -36,8 +39,11 @@ public class Director
             Console.WriteLine("hinting to buy x1.4");
             return;
         }
-        if (SpawnShopIf(Simplest.Finite(9), (new Gem.AddOne(), 1))) {
-            Console.WriteLine("hinting to buy +1");
+        if (
+            GameState.Persistent.MyWand is Wand.Staff
+            && SpawnShopIf(Simplest.Finite(9), (new Gem.AddOne(), 1))
+        ) {
+            Console.WriteLine("hinting to buy 2nd +1");
             return;
         }
         if (
@@ -93,6 +99,9 @@ public class Director
 
     public static void StartEvent(MagicEvent e)
     {
+        if (NowEvent is MagicEvent.Experting) {
+            NowEvent = null;
+        }
         Shared.Assert(NowEvent == null);
         NowEvent = e;
         NowEvent.NextStep();

@@ -70,9 +70,11 @@ public class UpgradeWand : WindowDialog
         vBox.AddChild(title);
         title.Text = wand.DisplayName();
         title.Align = Label.AlignEnum.Center;
-        vBox.AddChild(new CircuitUI(
+        CircuitUI cUI = new CircuitUI(
             wand, 0, false, true
-        ));
+        );
+        vBox.AddChild(cUI);
+        cUI.Rebuild();
     }
 
     public void Buy()

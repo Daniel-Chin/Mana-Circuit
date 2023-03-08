@@ -134,6 +134,7 @@ public class LowPanel : PanelContainer
                 return;
         }
         Main.Singleton.VBoxLowPanel.Visible = false;
+        NoButtons();
         Director.OnEventStepComplete();
     }
 
