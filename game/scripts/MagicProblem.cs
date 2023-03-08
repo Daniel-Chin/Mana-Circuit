@@ -147,7 +147,8 @@ public class MagicProblem
         Vector<double> x = A.Solve(b);
         if (double.IsNaN(x.Minimum()) || x.Minimum() < -.00001)
         {
-            Console.WriteLine("reject " + x);
+            if (Shared.DEBUG_MATH)
+                Console.WriteLine("reject " + x);
             return null;    // reject NaN & negative solutions
         }
         return x;
@@ -211,7 +212,8 @@ public class MagicProblem
         Simplest acc = drainMana[0];
         if (N == 0)
             return acc;
-        Print();
+        if (Shared.DEBUG_MATH)
+            Print();
         Vector<double> x = SolveFinite();
         if (x != null)
         {
@@ -227,7 +229,8 @@ public class MagicProblem
             }
             return acc;
         }
-        Console.WriteLine("Finite solution not found.");
+        if (Shared.DEBUG_MATH)
+            Console.WriteLine("Finite solution not found.");
         Guess = Simplest.Zeros(N);
         int patience = UPRANK_EVERY;
         while (true)
@@ -263,8 +266,10 @@ public class MagicProblem
             }
             if (accept) break;
             patience--;
-            Console.Write("Trying ");
-            Shared.PrintArray(Guess);
+            if (Shared.DEBUG_MATH) {
+                Console.Write("Trying ");
+                Shared.PrintArray(Guess);
+            }
             drainMana = AdvectSuperposition(inputMana);
         }
         return drainMana[0];
@@ -278,7 +283,8 @@ public class MagicProblem
         {
             typelessGem.CachedMultiplier = tGuess;
             typelessGem.CachedAdder = null;
-            Console.WriteLine("Trying typeless = " + tGuess);
+            if (Shared.DEBUG_MATH)
+                Console.WriteLine("Trying typeless = " + tGuess);
             Simplest drainMana = SolveTyped(1);
             if (drainMana <= Simplest.Eval(
                 tGuess, Operator.PLUS, new Simplest(
