@@ -3,7 +3,6 @@ Your power knows no bounds
 
 2do
 circuitUI aspect ratio bug???
-clear world attacks when jump
 GemExpert should:
     explain CG can contain gem & be placed in wand.
     Explain meta for those who skip.

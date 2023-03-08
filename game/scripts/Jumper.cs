@@ -84,11 +84,13 @@ public class Jumper {
                 charged += dt;
                 Main.Singleton.MyWorld.MyMageUI.Charging();
                 if (charged >= CHARGE_TIME) {
+                    // jump begins
                     GameState.Transient.Jumping = true;
                     charged = 0;
                     jumpedTime = 0;
                     Director.PauseWorld();
                     Main.Singleton.MyWorld.MyMageUI.Spinning();
+                    Main.Singleton.MyWorld.ClearAttacks();
                     jumpDirection = mouseDirection;
                     jumpMana = GameState.Transient.Mana;
                     GameState.Transient.Mana = Simplest.Zero();
