@@ -199,11 +199,12 @@ public class World : Node2D
             } else {
                 if (TrySpawnNPCAsNonEvent(_mouseDirection)) {
                 } else {
-                    if (GameState.Transient.Mana.Equals(Simplest.Zero())) {
+                    if (Main.Singleton.MySidePanel.MyWandSim.TimeSinceLastCrystalize > 1) {
                         if (Shared.Rand.NextDouble() < .2) {
                             SpawnEnemy(_mouseDirection);
                         } else {
                             Console.WriteLine("No mana, probabilistically did not spawn enemy");
+                            GameState.Persistent.Loneliness_WandSmith ++;
                         }
                     } else {
                         SpawnEnemy(_mouseDirection);

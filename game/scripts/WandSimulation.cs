@@ -12,6 +12,7 @@ public class WandSimulation
     public List<Particle> Particles { get; set; }
     public float TimeSinceLastEmit { get; set; }
     public float TimeSinceLastAdvect { get; set; }
+    public float TimeSinceLastCrystalize { get; set; }
 
     public WandSimulation(SidePanel sidePanel)
     {
@@ -69,6 +70,8 @@ public class WandSimulation
             }
             Particles = newParticles;
         }
+
+        TimeSinceLastCrystalize += dt;
     }
 
     private Particle ApplyGem(Particle p)
@@ -91,6 +94,7 @@ public class WandSimulation
         if (gem is Gem.Drain)
         {
             TheSidePanel.ManaCrystalized(p.Mana[0]);
+            TimeSinceLastCrystalize = 0;
         }
         return gem.Apply(p);
     }
