@@ -82,12 +82,8 @@ public class Director
                 return;
             }
             if (
-                GameState.Persistent.Event_JumperStage == 1 && (
-                    GameState.Persistent.HasCustomGems.ContainsKey(1) ||
-                    GameState.Persistent.HasCustomGems.ContainsKey(2) ||
-                    GameState.Persistent.HasCustomGems.ContainsKey(3) ||
-                    GameState.Persistent.HasCustomGems.ContainsKey(4)
-                )
+                GameState.Persistent.Event_JumperStage == 1
+                && GameState.Persistent.unlockedAnyMetaCustomGem()
             ) {
                 SetNPCToSpawn(new NPC.Inventor());
                 return;

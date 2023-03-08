@@ -200,6 +200,15 @@ public class GameState
             }
             return false;
         }
+        public bool unlockedAnyMetaCustomGem() {
+            foreach (var entry in HasCustomGems)
+            {
+                if (entry.Key.Equals(Simplest.Zero()))
+                    continue;
+                return true;
+            }
+            return false;
+        }
 
         public Simplest CountGemsOwned(Gem gem)
         {
