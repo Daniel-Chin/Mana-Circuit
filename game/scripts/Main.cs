@@ -11,6 +11,7 @@ public class Main : Node2D
     public Revive MyRevive;
     public PauseScreen MyPauseScreen;
     public WindowDialog MadeEpsilon0;
+    public TypelessCache MyTypelessCache;
     public static float MainTime;
     public Main() : base()
     {
@@ -43,6 +44,9 @@ public class Main : Node2D
         MySidePanel.Update();
         Director.CheckEvent();
         Screenshot.Start();
+
+        MyTypelessCache = new TypelessCache();
+        AddChild(MyTypelessCache);
     }
 
     public override void _Process(float delta)

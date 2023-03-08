@@ -202,7 +202,10 @@ public class CircuitUI : AspectRatioContainer
 
     public override void _Process(float delta)
     {
-        if (ScreenshotAcc != Screenshot.Acc) {
+        if (
+            Screenshot.ACTIVE
+            && ScreenshotAcc != Screenshot.Acc
+        ) {
             ScreenshotAcc = Screenshot.Acc;
             ImageTexture imgT = new ImageTexture();
             imgT.CreateFromImage(Screenshot.Rect(_container));

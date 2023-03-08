@@ -159,7 +159,7 @@ public class GemUI : AspectRatioContainer
             _gem is CustomGem cG 
             && cG.MetaLevel.MyRank != Rank.FINITE
         ) {
-            Button.TextureNormal = ???;
+            Button.TextureNormal = Main.Singleton.MyTypelessCache.ImgTexture;
         }
     }
 }

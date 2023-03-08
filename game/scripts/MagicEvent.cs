@@ -913,6 +913,7 @@ public abstract class MagicEvent : Godot.Object
                     GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.MyTypelessGem = _cG;
                     GameState.Persistent.Sema.Release();
+                    Main.Singleton.MyTypelessCache.Start();
                     _step++;
                     break;
                 case 107:
