@@ -2,7 +2,6 @@
 Your power knows no bounds
 
 2do
-remove half money when die
 click away from shop selection dialog
 cancelling selection of orientation places the gem in default orientation
 to spawn inventor MkII, I check up to w^4. but Subject directly jumped to w^9. 

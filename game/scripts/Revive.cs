@@ -60,7 +60,7 @@ public class Revive : PanelContainer
         Simplest money = GameState.Persistent.Money;
         GameState.Persistent.Sema.WaitOne();
         if (money.MyRank == Rank.FINITE) {
-            GameState.Persistent.Money = Simplest.Finite(Math.Ceiling(money.K * .1));
+            GameState.Persistent.Money = Simplest.Finite(Math.Floor(money.K * .5));
         } else {
             GameState.Persistent.Money = Downgrade(money);
         }
