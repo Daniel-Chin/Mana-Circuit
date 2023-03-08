@@ -2,7 +2,6 @@
 Your power knows no bounds
 
 2do
-circuitUI aspect ratio bug???
 GemExpert should:
     explain CG can contain gem & be placed in wand.
     Explain meta for those who skip.

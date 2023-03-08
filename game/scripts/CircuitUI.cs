@@ -351,12 +351,14 @@ public class CircuitUI : AspectRatioContainer
         EmitSignal("new_explain", "");
     }
 
-    private static readonly float BORDER_WIDTH = .05f;
+    private static readonly float BORDER_WIDTH = .1f;
     private void RatioCenter(
         MarginContainer gridWrapper, Container container
     ) {
         VBoxContainer vBox = new VBoxContainer();
         HBoxContainer hBox = new HBoxContainer();
+        vBox.AddConstantOverride("separation", 0);
+        hBox.AddConstantOverride("separation", 0);
         container.AddChild(vBox);
         
         vBox.AddChild(Padder());
