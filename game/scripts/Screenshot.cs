@@ -5,7 +5,8 @@ public class Screenshot {
     // intentionally thread-unsafe
     public static Godot.Image Data;
     public static bool Continue;
-    public static Semaphore Sema;
+    public static bool Finished;
+    // public static Semaphore Sema;
     private static Thread _thread;
     private static int acc;
     private static float accTime;
@@ -18,7 +19,8 @@ public class Screenshot {
         );
         Data.Fill(Godot.Colors.Black);
         Continue = true;
-        Sema = new Semaphore(1, 1);
+        Finished = false;
+        // Sema = new Semaphore(1, 1);
 
         acc = 0;
         accTime = 0;
@@ -39,9 +41,8 @@ public class Screenshot {
         Data = img;
     }
     public static void Worker() {
-        while (true) {
-            Sema.WaitOne();
-            if (!Continue) break;
+        // Sema.WaitOne();
+        while (Continue) {
             Once();
             acc ++;
             if (Main.MainTime >= accTime + 1) {
@@ -51,8 +52,9 @@ public class Screenshot {
                 Console.WriteLine(" / sec.");
                 acc = 0;
             }
-            Sema.Release();
         }
+        // Sema.Release();
         Console.WriteLine("Screenshot worker exit");
+        Finished = true;
     }
 }

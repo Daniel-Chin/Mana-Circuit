@@ -50,6 +50,8 @@ public class Main : Node2D
         MainTime += delta;
         Director.Process(delta);
         Jumper.Process(delta);
+        if (Screenshot.Finished)
+            RealQuit();
     }
 
     public override void _Input(InputEvent @event)
@@ -111,11 +113,13 @@ public class Main : Node2D
 
     public void Quit() {
         Console.WriteLine("Releasing...");
-        Screenshot.Sema.WaitOne();
         Screenshot.Continue = false;
-        Screenshot.Sema.Release();
-        GetTree().Quit();
+    }
+    public void RealQuit() {
+        Console.WriteLine("Joining...");
         Screenshot.Join();
         Console.WriteLine("Released.");
+        GetTree().Quit();
+        Console.WriteLine("Quit.");
     }
 }
