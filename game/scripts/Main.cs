@@ -12,13 +12,10 @@ public class Main : Node2D
     public PauseScreen MyPauseScreen;
     public WindowDialog MadeEpsilon0;
     public static float MainTime;
-    public Image Screenshot;
-    private float _shotAcc;
     public Main() : base()
     {
         Shared.Assert(Singleton == null);
         Singleton = this;
-        _shotAcc = 0;
     }
     public override void _Ready()
     {
@@ -45,20 +42,12 @@ public class Main : Node2D
         MyWorld.UpdateBack();
         MySidePanel.Update();
         Director.CheckEvent();
+        Screenshot.Start();
     }
 
     public override void _Process(float delta)
     {
         MainTime += delta;
-        _shotAcc -= delta;
-        if (_shotAcc < 0) {
-            _shotAcc += Params.SEC_PER_SCREENSHOT;
-            Screenshot = GetViewport().GetTexture().GetData();
-            Screenshot.Resize(
-                (int)Shared.RESOLUTION.x, (int)Shared.RESOLUTION.y, 
-                Image.Interpolation.Nearest
-            );
-        }
         Director.Process(delta);
         Jumper.Process(delta);
     }
@@ -104,7 +93,7 @@ public class Main : Node2D
             Shared.RESOLUTION.y - control.RectGlobalPosition.y
             - control.RectSize.y
         );
-        Image img = Screenshot.GetRect(new Rect2(
+        Image img = Screenshot.Data.GetRect(new Rect2(
             new Vector2(
                 control.RectGlobalPosition.x, flippedY
             ), 
@@ -112,5 +101,19 @@ public class Main : Node2D
         ));
         img.FlipY();
         return img;
+    }
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationWmQuitRequest)
+            Quit();
+    }
+
+    public void Quit() {
+        Console.WriteLine("Releasing...");
+        Screenshot.Continue = false;
+        GetTree().Quit();
+        Screenshot.Join();
+        Console.WriteLine("Released.");
     }
 }

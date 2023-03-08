@@ -19,6 +19,6 @@ public class PauseScreen : WindowDialog
     }
     public void SaveAndQuit() {
         SaveLoad.Save();
-        GetTree().Quit();
+        Main.Singleton.Quit();
     }
 }
