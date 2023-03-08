@@ -3,7 +3,6 @@ Your power knows no bounds
 
 2do
 GemExpert should:
-    Explain meta for those who skip.
     explain typeless = meta^w, can contain meta^(w-1)
 
 

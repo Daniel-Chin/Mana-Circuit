@@ -782,6 +782,13 @@ public abstract class MagicEvent : Godot.Object
                     _step++;
                     break;
                 case 12:
+                    for (int i = 0; i < _metaLevel.K; i++)
+                    {
+                        if (!GameState.Persistent.HasCustomGems.ContainsKey(i)) {
+                            _cG = new CustomGem(Simplest.Finite(i));
+                            break;
+                        }
+                    }
                     Director.MainUI.MyLowPanel.SetFace(null);
                     Director.MainUI.MyLowPanel.Display(
                         $"+ *{_cG.DisplayName()}* unlocked! +", 
@@ -796,6 +803,46 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 13:
                     Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
+                    _step++;
+                    if (
+                        Simplest.Finite(1) <= _metaLevel
+                        && _metaLevel <= Simplest.Finite(3)
+                    ) {
+                        CustomGem subCG = new CustomGem(Simplest.Finite(_metaLevel.K - 1));
+                        Director.MainUI.MyLowPanel.Display(
+                            $"{_cG.DisplayName()}s can contain {subCG.DisplayName()}s."
+                        );
+                    } else {
+                        NextStep();
+                    }
+                    break;
+                case 14:
+                    if (
+                        _metaLevel.Equals(Simplest.Zero())
+                    ) {
+                        Director.MainUI.MyLowPanel.Display(
+                            "A Custom Gem can be placed in your "
+                            + GameState.Persistent.MyWand.DisplayName() 
+                            + " while also containing other gems in its own circuit."
+                        );
+                    }
+                    _step++;
+                    break;
+                case 15:
+                    if (
+                        _metaLevel.Equals(Simplest.Zero())
+                    ) {
+                        Director.MainUI.MyLowPanel.Display(
+                            "Custom Gems take the theoretical mean of anything stochastic inside them."
+                        );
+                    }
+                    if (_metaLevel.Equals(_cG.MetaLevel)) {
+                        _step++;
+                    } else {
+                        _step = 12;
+                    }
+                    break;
+                case 16:
                     _step++;
                     if (
                         _metaLevel.MyRank == Rank.FINITE
@@ -813,42 +860,6 @@ public abstract class MagicEvent : Godot.Object
                     } else {
                         NextStep();
                     }
-                    break;
-                case 14:
-                    _step++;
-                    if (
-                        Simplest.Finite(1) <= _metaLevel
-                        && _metaLevel <= Simplest.Finite(3)
-                    ) {
-                        CustomGem subCG = new CustomGem(Simplest.Finite(_metaLevel.K - 1));
-                        Director.MainUI.MyLowPanel.Display(
-                            $"{_cG.DisplayName()}s can contain {subCG.DisplayName()}s."
-                        );
-                    } else {
-                        NextStep();
-                    }
-                    break;
-                case 15:
-                    if (
-                        _metaLevel.Equals(Simplest.Zero())
-                    ) {
-                        Director.MainUI.MyLowPanel.Display(
-                            "A Custom Gem can be placed in your "
-                            + GameState.Persistent.MyWand.DisplayName() 
-                            + " while also containing other gems in its own circuit."
-                        );
-                    }
-                    _step++;
-                    break;
-                case 16:
-                    if (
-                        _metaLevel.Equals(Simplest.Zero())
-                    ) {
-                        Director.MainUI.MyLowPanel.Display(
-                            "Custom Gems take the theoretical mean of anything stochastic inside them."
-                        );
-                    }
-                    _step++;
                     break;
                 case 17:
                     Director.MainUI.MyLowPanel.Display(
