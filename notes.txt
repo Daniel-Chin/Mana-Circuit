@@ -4,6 +4,7 @@ Your power knows no bounds
 2do
 GemExpert should:
     explain typeless = meta^w, can contain meta^(w-1)
+cancelling selection of orientation places the gem in default orientation
 
 
 How to make the player come up with inf themselves? 

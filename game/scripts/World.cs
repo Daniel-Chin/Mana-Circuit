@@ -52,12 +52,12 @@ public class World : Node2D
             _lastLeftUp = Main.MainTime;
         Vector2 drag = GetLocalMousePosition();
         _mouseDirection = drag.Normalized();
+        JumperAimLine.Visible = Jumper.Charging;
         if (GameState.Transient.WorldPaused)
             return;
         Time += delta;
         BackShader.SetShaderParam("worldTime", Time);
         bool walking = false;
-        JumperAimLine.Visible = Jumper.Charging;
         if (Jumper.Charging) {
             JumperAimLine.SetPointPosition(1, drag);
         } else {

@@ -203,7 +203,7 @@ public class GameState
         public bool unlockedAnyMetaCustomGem() {
             foreach (var entry in HasCustomGems)
             {
-                if (entry.Key.Equals(Simplest.Zero()))
+                if (entry.Key == 0)
                     continue;
                 return true;
             }

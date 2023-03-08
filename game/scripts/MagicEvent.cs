@@ -277,7 +277,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.Display(
                         $"There is only one {_strongMult.DisplayName()} in the world. Use it wisely."
                     );
-                    _step = 2;
+                    _step = 6;
                     break;
                 default:
                     Console.WriteLine("_step " + _step);
@@ -782,12 +782,33 @@ public abstract class MagicEvent : Godot.Object
                     _step++;
                     break;
                 case 12:
-                    for (int i = 0; i < _metaLevel.K; i++)
-                    {
+                    for (int i = 0; i <= _metaLevel.K; i++) {
                         if (!GameState.Persistent.HasCustomGems.ContainsKey(i)) {
                             _cG = new CustomGem(Simplest.Finite(i));
                             break;
                         }
+                    }
+                    if (_cG.MetaLevel.K >= 4) {
+                        GameState.Persistent.Sema.WaitOne();
+                        for (int i = 0; i <= _metaLevel.K; i++) {
+                            if (i >= 10)
+                                break;
+                            if (!GameState.Persistent.HasCustomGems.ContainsKey(i)) {
+                                _cG = new CustomGem(Simplest.Finite(i));
+                                GameState.Persistent.HasCustomGems[i] = (
+                                    0, _cG
+                                );
+                            }
+                        }
+                        GameState.Persistent.Sema.Release();
+                        _step = 16;
+                        _cG = new CustomGem(_metaLevel);
+                        Director.MainUI.MyLowPanel.SetFace(null);
+                        Director.MainUI.MyLowPanel.Display(
+                            "... and so on. Eventually you unlocked up to \n"
+                            + _cG.DisplayName() + ". "
+                        );
+                        break;
                     }
                     Director.MainUI.MyLowPanel.SetFace(null);
                     Director.MainUI.MyLowPanel.Display(
@@ -795,7 +816,7 @@ public abstract class MagicEvent : Godot.Object
                         true
                     );
                     GameState.Persistent.Sema.WaitOne();
-                    GameState.Persistent.HasCustomGems[(int)_metaLevel.K] = (
+                    GameState.Persistent.HasCustomGems[(int)_cG.MetaLevel.K] = (
                         0, _cG
                     );
                     GameState.Persistent.Sema.Release();
@@ -805,10 +826,10 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
                     _step++;
                     if (
-                        Simplest.Finite(1) <= _metaLevel
-                        && _metaLevel <= Simplest.Finite(3)
+                        Simplest.Finite(1) <= _cG.MetaLevel
+                        && _cG.MetaLevel <= Simplest.Finite(3)
                     ) {
-                        CustomGem subCG = new CustomGem(Simplest.Finite(_metaLevel.K - 1));
+                        CustomGem subCG = new CustomGem(Simplest.Finite(_cG.MetaLevel.K - 1));
                         Director.MainUI.MyLowPanel.Display(
                             $"{_cG.DisplayName()}s can contain {subCG.DisplayName()}s."
                         );
@@ -817,29 +838,33 @@ public abstract class MagicEvent : Godot.Object
                     }
                     break;
                 case 14:
+                    _step++;
                     if (
-                        _metaLevel.Equals(Simplest.Zero())
+                        _cG.MetaLevel.Equals(Simplest.Zero())
                     ) {
                         Director.MainUI.MyLowPanel.Display(
                             "A Custom Gem can be placed in your "
                             + GameState.Persistent.MyWand.DisplayName() 
-                            + " while also containing other gems in its own circuit."
+                            + " while also containing other gems in the Custom Gem's own circuit."
                         );
+                    } else {
+                        NextStep();
                     }
-                    _step++;
                     break;
                 case 15:
-                    if (
-                        _metaLevel.Equals(Simplest.Zero())
-                    ) {
-                        Director.MainUI.MyLowPanel.Display(
-                            "Custom Gems take the theoretical mean of anything stochastic inside them."
-                        );
-                    }
                     if (_metaLevel.Equals(_cG.MetaLevel)) {
                         _step++;
                     } else {
                         _step = 12;
+                    }
+                    if (
+                        _cG.MetaLevel.Equals(Simplest.Zero())
+                    ) {
+                        Director.MainUI.MyLowPanel.Display(
+                            "Custom Gems take the theoretical mean of anything stochastic inside them."
+                        );
+                    } else {
+                        NextStep();
                     }
                     break;
                 case 16:
@@ -854,6 +879,7 @@ public abstract class MagicEvent : Godot.Object
                         string x = new MathBB.RaisableChar(
                             'x', 1, Main.Singleton.MyLowPanel.FontHeight
                         ).ToString();
+                        Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
                         Director.MainUI.MyLowPanel.Display(
                             $"You see, if you hit me with a class-\n{w}{x} attack, I will unlock Meta{x} Custom Gems."
                         );
