@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Linq;
 
 using System.Collections.Generic;
 using Godot;
@@ -86,8 +87,9 @@ public class GameState
             writer.WriteLine("],");
 
             writer.WriteLine("[");
-            foreach (var entry in HasCustomGems)
-            {
+            foreach (var entry in HasCustomGems.OrderBy(
+                x => x.Key
+            )) {
                 writer.Write(entry.Key);
                 writer.WriteLine(',');
                 writer.Write(entry.Value.Item1);

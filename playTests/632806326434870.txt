@@ -21,3 +21,5 @@ GemExpert should:
     explain typeless = meta^w, can contain meta^(w-1)
 
 clear world attacks when jump
+
+loading custom gems should be sorted by metaLevel, otherwise prior gems could reference later gems. 
