@@ -36,7 +36,7 @@ public class GemUI : AspectRatioContainer
             Tinter = new ColorRect();
             Tinter.Color = Colors.Transparent;
             AddChild(Tinter);
-            MoveChild(Tinter, 0);
+            Tinter.MouseFilter = MouseFilterEnum.Ignore;
         }
     }
 

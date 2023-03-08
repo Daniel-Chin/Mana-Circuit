@@ -110,6 +110,7 @@ public class CircuitEditor : WindowDialog
         }
         sB.Append("[/center]");
         HeadingLabel.BbcodeText = sB.ToString();
+        Main.Singleton.MyTypelessCache.Rebuild();
     }
 
     public void NewExplain(string explain)
