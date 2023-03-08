@@ -43,7 +43,8 @@ public class Main : Node2D
         MyWorld.UpdateBack();
         MySidePanel.Update();
         Director.CheckEvent();
-        Screenshot.Start();
+        if (Screenshot.ACTIVE)
+            Screenshot.Start();
 
         MyTypelessCache = new TypelessCache();
         AddChild(MyTypelessCache);
@@ -55,7 +56,7 @@ public class Main : Node2D
         Director.Process(delta);
         Jumper.Process(delta);
         if (Screenshot.Finished)
-            RealQuit();
+            ScreenshotFinished();
     }
 
     public override void _Input(InputEvent @event)
@@ -101,13 +102,20 @@ public class Main : Node2D
     }
 
     public void Quit() {
-        Console.WriteLine("Releasing...");
-        Screenshot.Continue = false;
+        if (Screenshot.ACTIVE) {
+            Console.WriteLine("Releasing...");
+            Screenshot.Continue = false;
+        } else {
+            RealQuit();
+        }
     }
-    public void RealQuit() {
+    public void ScreenshotFinished() {
         Console.WriteLine("Joining...");
         Screenshot.Join();
         Console.WriteLine("Released.");
+        RealQuit();
+    }
+    public void RealQuit() {
         GetTree().Quit();
         Console.WriteLine("Quit.");
     }

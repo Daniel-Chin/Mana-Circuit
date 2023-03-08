@@ -29,15 +29,11 @@ public class Screenshot {
         accTime = 0;
     }
     public static void Start() {
-        if (ACTIVE) {
-            _thread = new Thread(new ThreadStart(Worker));
-            _thread.Start();
-        }
+        _thread = new Thread(new ThreadStart(Worker));
+        _thread.Start();
     }
     public static void Join() {
-        if (ACTIVE) {
-            _thread.Join();
-        }
+        _thread.Join();
     }
     public static void Once() {
         Godot.Image img = Main.Singleton.GetViewport().GetTexture().GetData();
