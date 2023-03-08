@@ -829,18 +829,34 @@ public abstract class MagicEvent : Godot.Object
                     }
                     break;
                 case 15:
-                    Director.MainUI.MyLowPanel.Display(
-                        "Custom Gems take the theoretical mean of anything stochastic inside them."
-                    );
+                    if (
+                        _metaLevel.Equals(Simplest.Zero())
+                    ) {
+                        Director.MainUI.MyLowPanel.Display(
+                            "A Custom Gem can be placed in your "
+                            + GameState.Persistent.MyWand.DisplayName() 
+                            + " while also containing other gems in its own circuit."
+                        );
+                    }
                     _step++;
                     break;
                 case 16:
+                    if (
+                        _metaLevel.Equals(Simplest.Zero())
+                    ) {
+                        Director.MainUI.MyLowPanel.Display(
+                            "Custom Gems take the theoretical mean of anything stochastic inside them."
+                        );
+                    }
+                    _step++;
+                    break;
+                case 17:
                     Director.MainUI.MyLowPanel.Display(
                         $"You have potential. However, \na {AttackClass()} is nothing I'd call exciting. "
                     );
                     _step++;
                     break;
-                case 17:
+                case 18:
                     Director.MainUI.MyLowPanel.Display(
                         "Find me again when you are not this weak."
                     );

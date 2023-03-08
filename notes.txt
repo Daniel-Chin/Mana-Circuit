@@ -3,9 +3,7 @@ Your power knows no bounds
 
 2do
 GemExpert should:
-    explain CG can contain gem & be placed in wand.
     Explain meta for those who skip.
-    don't say "theoretical mean" every time
     explain typeless = meta^w, can contain meta^(w-1)
 
 
