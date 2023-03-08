@@ -41,10 +41,10 @@ public class GemUI : AspectRatioContainer
             AddChild(Tinter);
             MoveChild(Tinter, 0);
         }
-        if (
-            _gem is CustomGem cG
-            && ! _screenshotCache.ContainsKey(cG.MetaLevel)
-        ) {
+        if (_gem is CustomGem cG && (
+            cG.MetaLevel.MyRank == Rank.FINITE
+            || ! _screenshotCache.ContainsKey(cG.MetaLevel)
+        )) {
             MyCircuitUI = new CircuitUI(
                 cG, RecursionDepth + 1, false, SimParticles, 
                 screenshotCache
