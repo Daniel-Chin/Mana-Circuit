@@ -48,7 +48,7 @@ public class SidePanel : PanelContainer
             MyCircuitUI.QueueFree();
         }
         MyCircuitUI = new CircuitUI(
-            wand, 0, false, false, new Dictionary<Simplest, CircuitUI>()
+            wand, 0, false, false
         );
         VBox.AddChild(MyCircuitUI);
         MyCircuitUI.Rebuild();

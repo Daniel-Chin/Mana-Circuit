@@ -15,18 +15,15 @@ public class GemUI : AspectRatioContainer
     public bool IsInCG;
     public bool SimParticles;
     private static Shader _flipper = GD.Load<Shader>("res://Flip.gdshader");
-    private Dictionary<Simplest, CircuitUI> _screenshotCache;
     public GemUI() : base() { }
     public GemUI(
-        Gem gem, int recursionDepth, bool isInCG, bool simParticles, 
-        Dictionary<Simplest, CircuitUI> screenshotCache
+        Gem gem, int recursionDepth, bool isInCG, bool simParticles
     ) : base()
     {
         _gem = gem;
         RecursionDepth = recursionDepth;
         IsInCG = isInCG;
         SimParticles = simParticles;
-        _screenshotCache = screenshotCache;
         Ratio = 1f;
         SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         SizeFlagsVertical = (int)Container.SizeFlags.ExpandFill;
@@ -41,31 +38,18 @@ public class GemUI : AspectRatioContainer
             AddChild(Tinter);
             MoveChild(Tinter, 0);
         }
-        if (_gem is CustomGem cG && (
-            cG.MetaLevel.MyRank == Rank.FINITE
-            || ! _screenshotCache.ContainsKey(cG.MetaLevel)
-        )) {
-            MyCircuitUI = new CircuitUI(
-                cG, RecursionDepth + 1, false, SimParticles, 
-                screenshotCache
-            );
-            _screenshotCache[cG.MetaLevel] = MyCircuitUI;
-        } else {
-            MyCircuitUI = null;
-        }
     }
 
     public void PaintIn()
     {
         string filename;
-        if (_gem is CustomGem cG)
-        {
-            if (MyCircuitUI == null) {
-                ImageTexture imgT = new ImageTexture();
-                imgT.CreateFromImage(_screenshotCache[cG.MetaLevel].Screenshot);
-                Button.TextureNormal = imgT;
+        if (_gem is CustomGem cG) {
+            if (cG.MetaLevel.MyRank != Rank.FINITE) {
                 return;
             }
+            MyCircuitUI = new CircuitUI(
+                cG, RecursionDepth + 1, false, SimParticles
+            );
             filename = "transparent";
             AddChild(MyCircuitUI);
             MoveChild(MyCircuitUI, 0);
@@ -167,5 +151,15 @@ public class GemUI : AspectRatioContainer
     {
         Tinter.Color = Colors.Transparent;
         EmitSignal("mouse_exited_overlay");
+    }
+
+    public override void _Process(float delta)
+    {
+        if (
+            _gem is CustomGem cG 
+            && cG.MetaLevel.MyRank != Rank.FINITE
+        ) {
+            Button.TextureNormal = ???;
+        }
     }
 }

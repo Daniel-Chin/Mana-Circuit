@@ -32,8 +32,8 @@ public class CircuitUI : AspectRatioContainer
     public bool DoMouseEvent;
     public bool SimParticles;
     private float _emitAcc;
-    public Image Screenshot {get; set;}
-    public Dictionary<Simplest, CircuitUI> ScreenshotCache {get; set;}
+    public ImageTexture MyScreenshot {get; set;}
+    public int ScreenshotAcc {get; set;}
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -91,16 +91,15 @@ public class CircuitUI : AspectRatioContainer
     public CircuitUI() : base() { }
     public CircuitUI(
         MagicItem magicItem, int recursionDepth,
-        bool doMouseEvent, bool simParticles, 
-        Dictionary<Simplest, CircuitUI> screenshotCache
+        bool doMouseEvent, bool simParticles
     ) : base()
     {
         MyMagicItem = magicItem;
         RecursionDepth = recursionDepth;
         DoMouseEvent = doMouseEvent;
         SimParticles = simParticles;
-        Screenshot = null;
-        ScreenshotCache = screenshotCache;
+        MyScreenshot = null;
+        ScreenshotAcc = 0;
         bool isTypedCG = false;
         switch (MyMagicItem)
         {
@@ -172,8 +171,7 @@ public class CircuitUI : AspectRatioContainer
                 Gem gem = MyCircuit.Field[i, j];
                 GemUI gemUI = new GemUI(
                     gem, RecursionDepth,
-                    !(MyMagicItem is Wand), SimParticles, 
-                    ScreenshotCache
+                    !(MyMagicItem is Wand), SimParticles
                 );
                 _grid.AddChild(gemUI);
                 GemUIs[i, j] = gemUI;
@@ -204,7 +202,12 @@ public class CircuitUI : AspectRatioContainer
 
     public override void _Process(float delta)
     {
-        Screenshot = Main.Singleton.ScreenshotRect(_container);
+        if (ScreenshotAcc != Screenshot.Acc) {
+            ScreenshotAcc = Screenshot.Acc;
+            ImageTexture imgT = new ImageTexture();
+            imgT.CreateFromImage(Screenshot.Rect(_container));
+            MyScreenshot = imgT;
+        }
         if (
             !SimParticles
             || RecursionDepth > Shared.MAX_RECURSION

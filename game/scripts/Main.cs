@@ -90,21 +90,6 @@ public class Main : Node2D
         MyRevive.Activate();
     }
 
-    public Image ScreenshotRect(Control control) {
-        float flippedY = (
-            Shared.RESOLUTION.y - control.RectGlobalPosition.y
-            - control.RectSize.y
-        );
-        Image img = Screenshot.Data.GetRect(new Rect2(
-            new Vector2(
-                control.RectGlobalPosition.x, flippedY
-            ), 
-            control.RectSize
-        ));
-        img.FlipY();
-        return img;
-    }
-
     public override void _Notification(int what)
     {
         if (what == NotificationWmQuitRequest)

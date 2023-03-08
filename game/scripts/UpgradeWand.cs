@@ -71,7 +71,7 @@ public class UpgradeWand : WindowDialog
         title.Text = wand.DisplayName();
         title.Align = Label.AlignEnum.Center;
         vBox.AddChild(new CircuitUI(
-            wand, 0, false, true, new Dictionary<Simplest, CircuitUI>()
+            wand, 0, false, true
         ));
     }
 

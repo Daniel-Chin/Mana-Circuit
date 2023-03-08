@@ -3,7 +3,9 @@ using System.Threading;
 
 public class Screenshot {
     // intentionally thread-unsafe
+    public static readonly bool ACTIVE = false;
     public static Godot.Image Data;
+    public static int Acc;
     public static bool Continue;
     public static bool Finished;
     // public static Semaphore Sema;
@@ -18,6 +20,7 @@ public class Screenshot {
             false, Godot.Image.Format.Rgbah
         );
         Data.Fill(Godot.Colors.Black);
+        Acc = 1;
         Continue = true;
         Finished = false;
         // Sema = new Semaphore(1, 1);
@@ -26,11 +29,15 @@ public class Screenshot {
         accTime = 0;
     }
     public static void Start() {
-        _thread = new Thread(new ThreadStart(Worker));
-        _thread.Start();
+        if (ACTIVE) {
+            _thread = new Thread(new ThreadStart(Worker));
+            _thread.Start();
+        }
     }
     public static void Join() {
-        _thread.Join();
+        if (ACTIVE) {
+            _thread.Join();
+        }
     }
     public static void Once() {
         Godot.Image img = Main.Singleton.GetViewport().GetTexture().GetData();
@@ -44,6 +51,7 @@ public class Screenshot {
         // Sema.WaitOne();
         while (Continue) {
             Once();
+            Acc ++;
             acc ++;
             if (Main.MainTime >= accTime + 1) {
                 accTime ++;
@@ -56,5 +64,20 @@ public class Screenshot {
         // Sema.Release();
         Console.WriteLine("Screenshot worker exit");
         Finished = true;
+    }
+
+    public static Godot.Image Rect(Godot.Control control) {
+        float flippedY = (
+            Shared.RESOLUTION.y - control.RectGlobalPosition.y
+            - control.RectSize.y
+        );
+        Godot.Image img = Data.GetRect(new Godot.Rect2(
+            new Godot.Vector2(
+                control.RectGlobalPosition.x, flippedY
+            ), 
+            control.RectSize
+        ));
+        img.FlipY();
+        return img;
     }
 }

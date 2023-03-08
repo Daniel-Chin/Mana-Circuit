@@ -72,7 +72,7 @@ public class CircuitEditor : WindowDialog
         }
         Editee = _gemList.Selected;
         MyCircuitUI = new CircuitUI(
-            Editee, 0, true, true, new Dictionary<Simplest, CircuitUI>()
+            Editee, 0, true, true
         );
         MyCircuitUI.Rebuild();
         CircuitUIContainer.AddChild(MyCircuitUI);

@@ -13,7 +13,7 @@ public class GemEntry : HBoxContainer
     {
         SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         RectMinSize = new Vector2(0, SIZE);
-        MyGemUI = new GemUI(gem, 1, false, true, new Dictionary<Simplest, CircuitUI>());
+        MyGemUI = new GemUI(gem, 1, false, true);
         MyGemUI.PaintIn();
         AddChild(MyGemUI);
         MyGemUI.RectMinSize = new Vector2(SIZE, SIZE);
