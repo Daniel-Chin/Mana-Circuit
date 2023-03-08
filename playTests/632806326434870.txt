@@ -3,6 +3,9 @@ click away from shop selection dialog
 cancelling selection of orientation places the gem in default orientation
 
 talking to the shop reveals hint. but Subject doesn't go to the shop while holding max-finite ricecooker, because he has all the gems already. 
+    this may be fine, since 
+    - you gotta use money, or you lose them.
+    - there is a "focuser" that is out of stock, making the player wanna check back. 
 
 remove half money when die
 
