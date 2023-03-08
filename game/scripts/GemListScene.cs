@@ -343,6 +343,7 @@ public class GemListScene : WindowDialog
                 _allowUninstallFrom = null;
             }
         } else {
+            _rotated = false;
             Hide();
         }
     }
@@ -465,6 +466,9 @@ public class GemListScene : WindowDialog
 
     private void Finish()
     {
+        if (_rotated) {
+            Selected = null;
+        }
         EmitSignal("finished");
         QueueFree();
     }
