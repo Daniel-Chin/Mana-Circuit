@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class GemEntry : HBoxContainer
 {
@@ -12,7 +13,8 @@ public class GemEntry : HBoxContainer
     {
         SizeFlagsHorizontal = (int)Container.SizeFlags.ExpandFill;
         RectMinSize = new Vector2(0, SIZE);
-        MyGemUI = new GemUI(gem, 1, false, true);
+        MyGemUI = new GemUI(gem, 1, false, true, new Dictionary<Simplest, CircuitUI>());
+        MyGemUI.PaintIn();
         AddChild(MyGemUI);
         MyGemUI.RectMinSize = new Vector2(SIZE, SIZE);
         MyGemUI.SizeFlagsHorizontal = (int)Container.SizeFlags.Fill;

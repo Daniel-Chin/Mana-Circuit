@@ -24,4 +24,5 @@ public class Params
     public static readonly double PROB_ENEMY_INF = .2;
     public static readonly int INF_AFTER_KILLS_AFTER_STRONG_MULT = 15;
     public static readonly float CONFIRM_DEADZONE = .7f;
+    public static readonly float SEC_PER_SCREENSHOT = .1f;
 }

@@ -89,25 +89,16 @@ public class Shared
         }
     }
 
-    private static float CachedDPI = 0;
-    public static float DPI() {
-        if (CachedDPI == 0) {
-            Vector2 dpi2D = (
-                Main.Singleton.GetViewport().GetTexture().GetData().GetSize()
-                / RESOLUTION
-            );
-            Assert(Math.Abs(dpi2D.x / dpi2D.y - 1f) <= float.Epsilon);
-            CachedDPI = dpi2D.x;
+    private static Vector2? CachedDPI = null;
+    public static Vector2 DPI() {
+        if (CachedDPI is Vector2 result) {
+            return result;
         }
-        return CachedDPI;
-    }
-    public static Image Screenshot(Control control) {
-        Image img = control.GetViewport().GetTexture().GetData();
-        img.FlipY();
-        return img.GetRect(new Rect2(
-            control.RectGlobalPosition * DPI(), 
-            control.RectSize * DPI()
-        ));
+        CachedDPI = (
+            Main.Singleton.GetViewport().GetTexture().GetData().GetSize()
+            / RESOLUTION
+        );
+        return DPI();
     }
 }
 

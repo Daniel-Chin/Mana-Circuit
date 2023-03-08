@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class SidePanel : PanelContainer
 {
@@ -46,8 +47,11 @@ public class SidePanel : PanelContainer
                 return;
             MyCircuitUI.QueueFree();
         }
-        MyCircuitUI = new CircuitUI(wand, 0, false, false);
+        MyCircuitUI = new CircuitUI(
+            wand, 0, false, false, new Dictionary<Simplest, CircuitUI>()
+        );
         VBox.AddChild(MyCircuitUI);
+        MyCircuitUI.Rebuild();
         VBox.Visible = true;
     }
 

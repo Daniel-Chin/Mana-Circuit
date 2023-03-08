@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.Text;
-
+using System.Collections.Generic;
 
 public class CircuitEditor : WindowDialog
 {
@@ -71,7 +71,10 @@ public class CircuitEditor : WindowDialog
             return;
         }
         Editee = _gemList.Selected;
-        MyCircuitUI = new CircuitUI(Editee, 0, true, true);
+        MyCircuitUI = new CircuitUI(
+            Editee, 0, true, true, new Dictionary<Simplest, CircuitUI>()
+        );
+        MyCircuitUI.Rebuild();
         CircuitUIContainer.AddChild(MyCircuitUI);
         MyCircuitUI.Connect(
             "modified", this, "CircuitModified"

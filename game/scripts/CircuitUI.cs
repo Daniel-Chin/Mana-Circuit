@@ -33,6 +33,7 @@ public class CircuitUI : AspectRatioContainer
     public bool SimParticles;
     private float _emitAcc;
     public Image Screenshot {get; set;}
+    public Dictionary<Simplest, CircuitUI> ScreenshotCache {get; set;}
     private class ParticleAndTrail
     {
         public CircuitUI Parent;
@@ -90,7 +91,8 @@ public class CircuitUI : AspectRatioContainer
     public CircuitUI() : base() { }
     public CircuitUI(
         MagicItem magicItem, int recursionDepth,
-        bool doMouseEvent, bool simParticles
+        bool doMouseEvent, bool simParticles, 
+        Dictionary<Simplest, CircuitUI> screenshotCache
     ) : base()
     {
         MyMagicItem = magicItem;
@@ -98,6 +100,7 @@ public class CircuitUI : AspectRatioContainer
         DoMouseEvent = doMouseEvent;
         SimParticles = simParticles;
         Screenshot = null;
+        ScreenshotCache = screenshotCache;
         bool isTypedCG = false;
         switch (MyMagicItem)
         {
@@ -137,8 +140,6 @@ public class CircuitUI : AspectRatioContainer
         } else {
             _container.AddChild(_gridWrapper);
         }
-
-        Rebuild();
     }
 
     public void Rebuild()
@@ -171,7 +172,8 @@ public class CircuitUI : AspectRatioContainer
                 Gem gem = MyCircuit.Field[i, j];
                 GemUI gemUI = new GemUI(
                     gem, RecursionDepth,
-                    !(MyMagicItem is Wand), SimParticles
+                    !(MyMagicItem is Wand), SimParticles, 
+                    ScreenshotCache
                 );
                 _grid.AddChild(gemUI);
                 GemUIs[i, j] = gemUI;
@@ -193,12 +195,16 @@ public class CircuitUI : AspectRatioContainer
                 }
             }
         }
+        foreach (GemUI gemUI in GemUIs) {
+            if (gemUI != null)
+                gemUI.PaintIn();
+        }
         // Console.WriteLine("Rebuild end");
     }
 
     public override void _Process(float delta)
     {
-        Screenshot = Shared.Screenshot(_container);
+        Screenshot = Main.Singleton.ScreenshotRect(_container);
         if (
             !SimParticles
             || RecursionDepth > Shared.MAX_RECURSION

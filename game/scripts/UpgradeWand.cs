@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class UpgradeWand : WindowDialog
 {
@@ -69,7 +70,9 @@ public class UpgradeWand : WindowDialog
         vBox.AddChild(title);
         title.Text = wand.DisplayName();
         title.Align = Label.AlignEnum.Center;
-        vBox.AddChild(new CircuitUI(wand, 0, false, true));
+        vBox.AddChild(new CircuitUI(
+            wand, 0, false, true, new Dictionary<Simplest, CircuitUI>()
+        ));
     }
 
     public void Buy()

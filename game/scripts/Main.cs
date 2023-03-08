@@ -12,10 +12,13 @@ public class Main : Node2D
     public PauseScreen MyPauseScreen;
     public WindowDialog MadeEpsilon0;
     public static float MainTime;
+    public Image Screenshot;
+    private float _shotAcc;
     public Main() : base()
     {
         Shared.Assert(Singleton == null);
         Singleton = this;
+        _shotAcc = 0;
     }
     public override void _Ready()
     {
@@ -47,6 +50,15 @@ public class Main : Node2D
     public override void _Process(float delta)
     {
         MainTime += delta;
+        _shotAcc -= delta;
+        if (_shotAcc < 0) {
+            _shotAcc += Params.SEC_PER_SCREENSHOT;
+            Screenshot = GetViewport().GetTexture().GetData();
+            Screenshot.Resize(
+                (int)Shared.RESOLUTION.x, (int)Shared.RESOLUTION.y, 
+                Image.Interpolation.Nearest
+            );
+        }
         Director.Process(delta);
         Jumper.Process(delta);
     }
@@ -85,5 +97,20 @@ public class Main : Node2D
     public void PlayerDied()
     {
         MyRevive.Activate();
+    }
+
+    public Image ScreenshotRect(Control control) {
+        float flippedY = (
+            Shared.RESOLUTION.y - control.RectGlobalPosition.y
+            - control.RectSize.y
+        );
+        Image img = Screenshot.GetRect(new Rect2(
+            new Vector2(
+                control.RectGlobalPosition.x, flippedY
+            ), 
+            control.RectSize
+        ));
+        img.FlipY();
+        return img;
     }
 }
