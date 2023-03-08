@@ -791,7 +791,7 @@ public abstract class MagicEvent : Godot.Object
                     if (_cG.MetaLevel.K >= 4) {
                         GameState.Persistent.Sema.WaitOne();
                         for (int i = 0; i <= _metaLevel.K; i++) {
-                            if (i >= 10)
+                            if (i >= 5)
                                 break;
                             if (!GameState.Persistent.HasCustomGems.ContainsKey(i)) {
                                 _cG = new CustomGem(Simplest.Finite(i));
@@ -958,13 +958,43 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 105:
                     _cG = new CustomGem(_metaLevel);
-                    Director.MainUI.MyLowPanel.Display(
-                        "As per our agreement, I now grant you the ability to make          \n"
-                        + $"*{_cG.DisplayName()}s*."
-                    );
+                    {
+                        string w = new MathBB.RaisableChar(
+                            'w', 1, Main.Singleton.MyLowPanel.FontHeight
+                        ).ToString();
+                        Director.MainUI.MyLowPanel.Display(
+                            "As per our agreement, I now grant you the ability to make          \n"
+                            + $"*Meta{w} Custom Gems*."
+                        );
+                    }
                     _step++;
                     break;
                 case 106:
+                    {
+                        string w = new MathBB.RaisableChar(
+                            'w', 1, Main.Singleton.MyLowPanel.FontHeight
+                        ).ToString();
+                        string minus = new MathBB.RaisableChar(
+                            '-', 1, Main.Singleton.MyLowPanel.FontHeight
+                        ).ToString();
+                        string one = new MathBB.RaisableChar(
+                            '1', 1, Main.Singleton.MyLowPanel.FontHeight
+                        ).ToString();
+                        Director.MainUI.MyLowPanel.Display(
+                            $"*Meta{w} Custom Gems* can contain \n*Meta{w}{minus}{one} Custom Gems* --- "
+                            + $"which are just *Meta{w} Custom Gems*."
+                        );
+                    }
+                    _step++;
+                    break;
+                case 107:
+                    Director.MainUI.MyLowPanel.Display(
+                        "Because they can self-embed, mages also call them *"
+                        + _cG.DisplayName() + "s*."
+                    );
+                    _step++;
+                    break;
+                case 108:
                     Director.MainUI.MyLowPanel.SetFace(null);
                     Director.MainUI.MyLowPanel.Display(
                         $"+ *{_cG.DisplayName()}* unlocked! +", 
@@ -974,22 +1004,22 @@ public abstract class MagicEvent : Godot.Object
                     GameState.Persistent.MyTypelessGem = _cG;
                     GameState.Persistent.Sema.Release();
                     Main.Singleton.MyTypelessCache.Start();
-                    _step++;
+                    _step = 115;
                     break;
-                case 107:
+                case 115:
                     Director.MainUI.MyLowPanel.SetFace((NPC)_npcUI.MySpawnable);
                     Director.MainUI.MyLowPanel.Display(
                         "You know, you may just be strong enough to achieve what I couldn't."
                     );
                     _step++;
                     break;
-                case 108:
+                case 116:
                     Director.MainUI.MyLowPanel.Display(
                         "For all our lives, mages like me seek a way to produce epsilon_naught amount of mana. "
                     );
                     _step++;
                     break;
-                case 109:
+                case 117:
                     Director.MainUI.MyLowPanel.Display(
                         "It is generally suspected to be related to the typeless custom gems."
                     );
@@ -1017,7 +1047,7 @@ public abstract class MagicEvent : Godot.Object
                     Director.MainUI.MyLowPanel.Display(
                         "Well. I have taught you all that I know."
                     );
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 5; i++)
                     {
                         if (!GameState.Persistent.HasCustomGems.ContainsKey(i)) {
                             GameState.Persistent.Sema.WaitOne();
