@@ -114,15 +114,25 @@ public class LowPanel : PanelContainer
         _timeElasped = Label.Text.Length / Params.TEXT_ROLL_SPEED;
     }
 
-    public void Clicked()
+    public void Clicked(InputEventMouseButton emb)
     {
         if (_timeElasped < Label.Text.Length / Params.TEXT_ROLL_SPEED)
         {
             SkipRoll();
             return;
         }
-        if (!AcceptClick) 
+        if (!AcceptClick)
             return;
+        if (_hasButtons) {
+            if (new Rect2(
+                new Vector2(0, 0), Button0.RectSize
+            ).HasPoint(emb.Position - Button0.RectGlobalPosition))
+                return;
+            if (new Rect2(
+                new Vector2(0, 0), Button1.RectSize
+            ).HasPoint(emb.Position - Button1.RectGlobalPosition))
+                return;
+        }
         Main.Singleton.VBoxLowPanel.Visible = false;
         Director.OnEventStepComplete();
     }

@@ -76,7 +76,7 @@ public class Main : Node2D
             && emb.Pressed
         ) {
             if (VBoxLowPanel.Visible) {
-                MyLowPanel.Clicked();
+                MyLowPanel.Clicked(emb);
             } else {
                 if (!GameState.Transient.WorldPaused)
                     MyWorld.DoAttack();
