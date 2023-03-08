@@ -111,7 +111,9 @@ public class Main : Node2D
 
     public void Quit() {
         Console.WriteLine("Releasing...");
+        Screenshot.Sema.WaitOne();
         Screenshot.Continue = false;
+        Screenshot.Sema.Release();
         GetTree().Quit();
         Screenshot.Join();
         Console.WriteLine("Released.");
