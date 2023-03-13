@@ -41,7 +41,6 @@ public class CircuitEditor : WindowDialog
         VBox.AddChild(Pad.V(centerer, 10));
         UninstallButton = new Button();
         centerer.AddChild(UninstallButton);
-        UpdateUninstallButton();
         UninstallButton.Connect(
             "pressed", this, "UninstallAllClicked"
         );
@@ -111,6 +110,7 @@ public class CircuitEditor : WindowDialog
         sB.Append("[/center]");
         HeadingLabel.BbcodeText = sB.ToString();
         Main.Singleton.MyTypelessCache.Rebuild();
+        UpdateUninstallButton();
     }
 
     public void NewExplain(string explain)
@@ -160,5 +160,12 @@ public class CircuitEditor : WindowDialog
             UninstallButton.Text = " Uninstall all gems ";
             UninstallButton.Disabled = false;
         }
+        if (!MyCircuitUI.MyCircuit.HasAnyPlacables()) {
+            UninstallButton.Flat = true;
+            UninstallButton.Text = " Click an empty space to begin ";
+            UninstallButton.Disabled = true;
+            return;
+        }
+        UninstallButton.Flat = false;
     }
 }

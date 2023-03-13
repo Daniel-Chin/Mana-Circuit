@@ -215,6 +215,22 @@ public class Circuit : JSONable
             }
         }
     }
+    public bool HasAnyPlacables() {
+        List<Gem> placables = GemListScene.AllPlacables();
+        for (int i = 0; i < Size.IntX; i++) {
+            for (int j = 0; j < Size.IntY; j++) {
+                foreach (Gem placable in placables) {
+                    if (
+                        Field[i, j] != null
+                        && placable.GetType() == Field[i, j].GetType()
+                    ) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     public void RemoveAny(Gem gem) {
         bool gotIt = false;
