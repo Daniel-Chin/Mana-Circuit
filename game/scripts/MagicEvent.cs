@@ -1060,7 +1060,7 @@ public abstract class MagicEvent : Godot.Object
                     break;
                 case 124:
                     Director.MainUI.MyLowPanel.Display(
-                        "Time to go to sleep."
+                        "For related works, press ESC after I fall asleep."
                     );
                     _step = 200;
                     break;
