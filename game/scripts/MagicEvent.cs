@@ -346,6 +346,7 @@ public abstract class MagicEvent : Godot.Object
                 _step = 30;
                 NextStep();
             } else {
+                _step = 5;
                 Bye();
             }
         }

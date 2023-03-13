@@ -178,7 +178,7 @@ public class GemListScene : WindowDialog
         List<Gem> gems = new List<Gem>();
         gems.AddRange(AllBuyableCGs());
         gems.AddRange(AllBuyableGems());
-        gems.Add(new Gem.StrongMult());
+        gems.Insert(gems.Count - 4, new Gem.StrongMult());
         return gems;
     }
 
