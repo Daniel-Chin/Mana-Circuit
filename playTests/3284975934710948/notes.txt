@@ -1,0 +1,30 @@
+1st crash
+    end of 1.mkv
+    2nd crash
+    end of 2.mkv
+
+did not see tooltip of empty space
+    2.mkv 2:10
+
+make mirror cheaper, in case of the soft soft lock 3.mkv 12:00
+
+the game did not emphasize quantitative analysis. Even this subject did not do math at 3.mkv 15:00
+    10:48 similar occurance. 迟迟不放乘法！
+    maybe "you should form the habit of analyzing the mean mana output"
+
+another possible solution to limit the search space is to make the center of ricecooker a blockage
+
+once mean-inf, "what is the mean output now?" should be said by wand smith. 
+
+3.mkv 31:50
+    maybe shop hint should also consider design time at wand smith?
+
+3.mkv 33:25
+    how to we make the player compute mean ASAP? once mean-inf, "what is the mean output now?" should be said by wand smith. 
+    OR EVEN, popup the dialog immediately when an inf-mean design appears in the designer. This communicates (/hints) the optimality of the current design. 
+
+"computing the mean is not that difficult. At its worst, just 等比数列求和."
+
+bug. hitting gem expert with a w^6 attack after chain-unlock w^9 triggers "!!!" dialog
+
+game expert should mention "press ESC to see related works."
