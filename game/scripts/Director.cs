@@ -69,6 +69,13 @@ public class Director
         ) {
             if (
                 GameState.Persistent.HasGems[new Gem.Stochastic(false).Name()] == 0
+                && SpawnShopIf(NPC.Shop.PriceOf(new Gem.Stochastic(false)))
+            ) {
+                Console.WriteLine("hint to buy stochastic");
+                return;
+            }
+            if (
+                GameState.Persistent.HasGems[new Gem.Stochastic(false).Name()] == 0
                 && GameState.Persistent.Money >= Simplest.Eval(
                     NPC.Shop.PriceOf(new Gem.Stochastic(false)), 
                     Operator.TIMES, Simplest.Finite(2.5)
