@@ -133,11 +133,12 @@ public abstract class Gem : MagicItem
                 }
                 else
                 {
-                    (int, CustomGem) iC;
-                    if (GameState.Persistent.HasCustomGems.TryGetValue(
-                        (int)metaLevel.K, out iC
-                    ))
-                    {
+                    if (
+                        metaLevel.MyRank == Rank.FINITE
+                        && GameState.Persistent.HasCustomGems.TryGetValue(
+                            (int)metaLevel.K, out (int, CustomGem) iC
+                        )
+                    ) {
                         gem = iC.Item2;
                         break;
                     }

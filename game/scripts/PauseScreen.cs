@@ -41,7 +41,6 @@ maguro. AC. Alith.
 # Recommended
 ".Substring(1));
 
-        Console.WriteLine("dan " + GameState.Persistent.MadeInf);
         if (GameState.Persistent.MadeInf) {
             sB.Append(@"
 - VSauce. ""How To Count Past Infinity"". https://youtu.be/SrU9YDoXE88

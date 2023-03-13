@@ -4,7 +4,7 @@ using Godot;
 
 public class Shared
 {
-    public static readonly bool DEBUG_MATH = true;
+    public static readonly bool DEBUG_MATH = false;
 
     public class ObjectStateIllegal : Exception { }
     public class ValueError : Exception { }

@@ -247,7 +247,7 @@ public class World : Node2D
         Vector2 location = direction * .6f + new Vector2(
             (float)Shared.Rand.NextDouble() - .5f,
             (float)Shared.Rand.NextDouble() - .5f
-        ) * 2 * .3f;
+        ) * 2 * .25f;
         location = location.Normalized();
         ui.Position = location * SpawnRadius();
         SpawnedSpecialUIs.Add(ui);

@@ -1001,6 +1001,7 @@ public abstract class MagicEvent : Godot.Object
                         $"+ *{_cG.DisplayName()}* unlocked! +", 
                         true
                     );
+                    Shared.Assert(_cG.MetaLevel.MyRank != Rank.FINITE);
                     GameState.Persistent.Sema.WaitOne();
                     GameState.Persistent.MyTypelessGem = _cG;
                     GameState.Persistent.Sema.Release();

@@ -103,11 +103,22 @@ public class MagicProblem
                     }
                     else if (gem is Gem.Stochastic stochastic)
                     {
+                        if (Shared.DEBUG_MATH) {
+                            Console.WriteLine("Hit stochastic.");
+                            Console.WriteLine("in mana: " + p.Mana[0]);
+                        }
                         p.Multiply(0.5);
                         int j = i + PointInt.BaseVecToPhase(p.Direction);
+                        if (Shared.DEBUG_MATH) {
+                            Console.WriteLine("halved mana: " + p.Mana[0]);
+                            Console.WriteLine("j: " + j);
+                        }
                         JoinInto(j, p);
                         p = stochastic.ApplyMirror(p);
                         j = i + PointInt.BaseVecToPhase(p.Direction);
+                        if (Shared.DEBUG_MATH) {
+                            Console.WriteLine("j: " + j);
+                        }
                         JoinInto(j, p);
                     }
                     break;
@@ -142,6 +153,8 @@ public class MagicProblem
         Vector<double> b = Vector<double>.Build.Dense(N);
         for (int i = 0; i < N; i++)
         {
+            if (MinusB[i].MyRank != Rank.FINITE)
+                return null;
             b[i] = -MinusB[i].K;
         }
         Vector<double> x = A.Solve(b);
@@ -206,12 +219,20 @@ public class MagicProblem
 
     public Simplest SolveTyped(int inputMana)
     {
+        if (Shared.DEBUG_MATH)
+            Console.WriteLine("SolveTyped begin");
         Simplest[] drainMana = AdvectSuperposition(inputMana);
-        if (drainMana == null)
+        if (drainMana == null) {
+            if (Shared.DEBUG_MATH)
+                Console.WriteLine("drain collected no particles.");
             return Simplest.Zero();
+        }
         Simplest acc = drainMana[0];
-        if (N == 0)
+        if (N == 0) {
+            if (Shared.DEBUG_MATH)
+                Console.WriteLine("Problem size = 0.");
             return acc;
+        }
         if (Shared.DEBUG_MATH)
             Print();
         Vector<double> x = SolveFinite();
@@ -227,6 +248,8 @@ public class MagicProblem
                     )
                 );
             }
+            if (Shared.DEBUG_MATH)
+                Console.WriteLine("Finite solution found.");
             return acc;
         }
         if (Shared.DEBUG_MATH)
@@ -272,6 +295,25 @@ public class MagicProblem
             }
             drainMana = AdvectSuperposition(inputMana);
         }
+        if (Shared.DEBUG_MATH) {
+            Console.WriteLine("Guess:");
+            foreach (Simplest s in Guess) {
+                Console.Write(s);
+                Console.Write(", ");
+            }
+            Console.WriteLine(". ");
+
+            Console.WriteLine("MinusB:");
+            foreach (Simplest s in MinusB) {
+                Console.Write(s);
+                Console.Write(", ");
+            }
+            Console.WriteLine(". ");
+        }
+        if (Shared.DEBUG_MATH) {
+            Console.WriteLine("drainMana: " + drainMana[0]);
+            Console.WriteLine("SolveTyped end");
+        }
         return drainMana[0];
     }
 
@@ -286,6 +328,8 @@ public class MagicProblem
             if (Shared.DEBUG_MATH)
                 Console.WriteLine("Trying typeless = " + tGuess);
             Simplest drainMana = SolveTyped(1);
+            if (Shared.DEBUG_MATH)
+                Console.WriteLine("drainMana = " + drainMana);
             if (drainMana <= Simplest.Eval(
                 tGuess, Operator.PLUS, new Simplest(
                     Rank.FINITE, .1

@@ -115,6 +115,14 @@ public class Circuit : JSONable
             {
                 results = new Particle[1];
                 results[0] = gem.Apply(particle);
+                // if (
+                //     gem is CustomGem cG
+                //     && cG.MetaLevel.MyRank != Rank.FINITE
+                // ) {
+                //     Console.WriteLine(particle.Mana[0]);
+                //     Console.WriteLine(cG.CachedMultiplier);
+                //     Console.WriteLine(results[0].Mana[0]);
+                // }
             }
         }
         if (results[0] == null)

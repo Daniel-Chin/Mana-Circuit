@@ -48,6 +48,8 @@ public class Main : Node2D
 
         MyTypelessCache = new TypelessCache();
         AddChild(MyTypelessCache);
+
+        GameState.Persistent.Loneliness_WandSmith =99;
     }
 
     public override void _Process(float delta)
