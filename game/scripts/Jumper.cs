@@ -105,6 +105,7 @@ public class Jumper {
                         }
                     }
                     Charging = false;
+                    SFX.Play(SFX.JUMP);
                     Director.JumpBegan();
                 }
             } else {

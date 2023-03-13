@@ -12,6 +12,7 @@ public class Main : Node2D
     public PauseScreen MyPauseScreen;
     public WindowDialog MadeEpsilon0;
     public TypelessCache MyTypelessCache;
+    public AudioStreamPlayer AudioPlayer;
     public static float MainTime;
     public Main() : base()
     {
@@ -29,6 +30,7 @@ public class Main : Node2D
         MyRevive = GetNode<Revive>("Overlay/VBox2/HBox/Revive");
         MyPauseScreen = GetNode<PauseScreen>("PauseScreen");
         MadeEpsilon0 = GetNode<WindowDialog>("MadeEpsilon0");
+        AudioPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
         MyWorld.Connect(
             "wand_replaced", this, "WandReplaced"
         );
