@@ -18,6 +18,7 @@ public class CircuitEditor : WindowDialog
     private bool _confirmingUninstallAll;
     private float _confirmingUninstallAllTime;
     private bool _justMadeInfMean;
+    private float _startTime;
     public CircuitEditor() : base()
     {
         _confirmingUninstallAll = false;
@@ -85,10 +86,18 @@ public class CircuitEditor : WindowDialog
         );
         CircuitModified();
         PopupCentered();
+        _startTime = Main.MainTime;
     }
     public void OnPopupHide()
     {
         QueueFree();
+        if (GameState.Persistent.HasGems[new Gem.Stochastic(false).Name()] != 0) {
+            int increment = (int)Math.Floor((Main.MainTime - _startTime) / 20f);
+            GameState.Persistent.Sema.WaitOne();
+            GameState.Persistent.KillsSinceStochastic += increment;
+            GameState.Persistent.Sema.Release();
+            Console.WriteLine("due to design time, increment kill counter by " + increment);
+        }
         EmitSignal("finished", _justMadeInfMean);
     }
 
