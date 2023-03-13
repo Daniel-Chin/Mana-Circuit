@@ -792,8 +792,6 @@ public abstract class MagicEvent : Godot.Object
                     if (_cG.MetaLevel.K >= 4) {
                         GameState.Persistent.Sema.WaitOne();
                         for (int i = 0; i <= _metaLevel.K; i++) {
-                            if (i >= 5)
-                                break;
                             if (!GameState.Persistent.HasCustomGems.ContainsKey(i)) {
                                 _cG = new CustomGem(Simplest.Finite(i));
                                 GameState.Persistent.HasCustomGems[i] = (

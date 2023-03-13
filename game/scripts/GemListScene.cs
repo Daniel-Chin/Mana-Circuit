@@ -161,24 +161,31 @@ public class GemListScene : WindowDialog
         };
         return gems;
     }
-    public static List<Gem> AllBuyableCGs()
+    public static (List<Gem>, List<Gem>) AllBuyableCGs()
     {
         List<Gem> gems = new List<Gem>();
+        List<Gem> gemsMore = new List<Gem>();
         if (GameState.Persistent.MyTypelessGem is CustomGem typeless)
         {
             gems.Add(typeless);
         }
         foreach (var entry in GameState.Persistent.HasCustomGems)
         {
-            gems.Add(entry.Value.Item2);
+            if (entry.Key < 5) {
+                gems.Add(entry.Value.Item2);
+            } else {
+                gemsMore.Add(entry.Value.Item2);
+            }
         }
-        return gems;
+        return (gems, gemsMore);
     }
     public static List<Gem> AllPlacables() {
         List<Gem> gems = new List<Gem>();
-        gems.AddRange(AllBuyableCGs());
+        var (cgLow, cgHigh) = AllBuyableCGs();
+        gems.AddRange(cgLow);
         gems.AddRange(AllBuyableGems());
         gems.Insert(gems.Count - 4, new Gem.StrongMult());
+        gems.AddRange(cgHigh);
         return gems;
     }
 
@@ -431,7 +438,9 @@ public class GemListScene : WindowDialog
         wandEntry.MyGemUI.Button.TextureNormal = wand.Texture();
         wandEntry.Labels[0].BbcodeText = wand.DisplayName();
 
-        ListGems(AllBuyableCGs());
+        var (cgLow, cgHigh) = AllBuyableCGs();
+        ListGems(cgLow);
+        ListGems(cgHigh);
     }
 
     public void OnClickWand()
@@ -460,8 +469,10 @@ public class GemListScene : WindowDialog
             "[center][color=yellow]Price[/color][/center]"
         );
 
-        ListGems(AllBuyableCGs());
+        var (cgLow, cgHigh) = AllBuyableCGs();
+        ListGems(cgLow);
         ListGems(AllBuyableGems());
+        ListGems(cgHigh);
     }
 
     private void Finish()
