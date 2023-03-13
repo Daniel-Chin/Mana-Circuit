@@ -17,9 +17,11 @@ public class CircuitEditor : WindowDialog
     public Button UninstallButton;
     private bool _confirmingUninstallAll;
     private float _confirmingUninstallAllTime;
+    private bool _justMadeInfMean;
     public CircuitEditor() : base()
     {
         _confirmingUninstallAll = false;
+        _justMadeInfMean = false;
 
         RectMinSize = new Vector2(700, 550);
         Theme = Shared.THEME;
@@ -87,11 +89,26 @@ public class CircuitEditor : WindowDialog
     public void OnPopupHide()
     {
         QueueFree();
-        EmitSignal("finished");
+        EmitSignal("finished", _justMadeInfMean);
     }
 
     public void CircuitModified()
     {
+        if (!GameState.Persistent.MadeInfMeanWand) {
+            CustomGem cGem = new CustomGem(Simplest.Zero());
+            cGem.MyCircuit = MyCircuitUI.MyCircuit;
+            cGem.Eval();
+            if (cGem.CachedMultiplier.MyRank != Rank.FINITE) {
+                GameState.Persistent.Sema.WaitOne();
+                GameState.Persistent.MadeInfMeanWand = true;
+                GameState.Persistent.Sema.Release();
+                Console.WriteLine("player made inf-mean wand");
+                _justMadeInfMean = true;
+                Hide();
+                return;
+            }
+        }
+
         StringBuilder sB = new StringBuilder();
         sB.Append("[center]");
         sB.Append(Editee.DisplayName());

@@ -393,7 +393,7 @@ public abstract class MagicEvent : Godot.Object
                     return null;
                 case 10:
                     GameState.Persistent.ShopTip = SHOP_TIP_TOP;
-                    return "A quiz for you: what is the theoretical mean of your mana output rate?";
+                    return "A quiz for you: what is your average mana output rate?";
                 case SHOP_TIP_TOP:
                     // fixed point
                     return null;
@@ -1191,6 +1191,85 @@ public abstract class MagicEvent : Godot.Object
                 default:
                     throw new Shared.ValueError();
             }
+        }
+    }
+
+    public class Smithing : MagicEvent {
+        private int _step;
+        private NPC _npc;
+        public Smithing(NPC npc)
+        {
+            _step = 0;
+            _npc = npc;
+        }
+        public override void NextStep() {
+
+            switch (_step)
+            {
+                case 0:
+                    Director.PauseWorld();
+                    CircuitEditor circuitEditor = new CircuitEditor();
+                    Main.Singleton.AddChild(circuitEditor);
+                    circuitEditor.Popup();
+                    circuitEditor.Connect(
+                        "finished", this, "Bye"
+                    );
+                    _step++;
+                    break;
+                case 10:
+                    Director.MainUI.MyLowPanel.SetFace(_npc);
+                    Director.MainUI.MyLowPanel.Display(
+                        "You should form the habit of analyzing your circuit's average mana output per emission."
+                    );
+                    _step = 20;
+                    break;
+                case 15:
+                    Director.MainUI.MyLowPanel.SetFace(_npc);
+                    Director.MainUI.MyLowPanel.Display(
+                        "A quiz for you! "
+                    );
+                    _step++;
+                    break;
+                case 16:
+                    string wandName = GameState.Persistent.MyWand.DisplayName();
+                    Director.MainUI.MyLowPanel.Display(
+                        $"In your {wandName}'s circuit, what is the theoretical mean strength of each mana particle?"
+                    );
+                    _step++;
+                    break;
+                case 17:
+                    Director.MainUI.MyLowPanel.Display(
+                        "It's not that hard. You won't need anything harder than *Infinite Geometric Series*."
+                    );
+                    _step = 20;
+                    break;
+                case 20:
+                    SaveLoad.SaveAsync();
+                    Director.UnpauseWorld();
+                    Director.EventFinished();
+                    break;
+            }
+        }
+        public void Bye(bool justMadeInfMean) {
+            Main.Singleton.MySidePanel.MyCircuitUI.Rebuild();
+            if (justMadeInfMean) {
+                GameState.Persistent.Sema.WaitOne();
+                GameState.Persistent.SmithTip ++;
+                GameState.Persistent.Sema.Release();
+                _step = 15;
+            } else if (
+                GameState.Persistent.HasGems[new Gem.Stochastic(false).Name()] != 0
+                && GameState.Persistent.SmithTip == 0
+            ) {
+                GameState.Persistent.Sema.WaitOne();
+                GameState.Persistent.SmithTip ++;
+                GameState.Persistent.Sema.Release();
+                _step = 10;
+            } else {
+                _step = 20;
+            }
+            
+            NextStep();
         }
     }
 }

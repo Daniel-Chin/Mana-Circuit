@@ -74,32 +74,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
             return "wandSmith";
         }
         public override void Collided(NPCUI npcUI) {
-            CircuitEditor circuitEditor = new CircuitEditor();
-            Main.Singleton.AddChild(circuitEditor);
-            circuitEditor.Popup();
-            Director.PauseWorld();
-            circuitEditor.Connect(
-                "finished", this, "Bye"
-            );
-        }
-        public void Bye() {
-            if (!GameState.Persistent.MadeInfMeanWand) {
-                Circuit c = GameState.Persistent.MyWand.MyCircuit;
-                CustomGem cG = new CustomGem(Simplest.Zero());
-                cG.MyCircuit = c;
-                cG.Eval();
-                if (cG.CachedMultiplier.MyRank != Rank.FINITE) {
-                    GameState.Persistent.Sema.WaitOne();
-                    GameState.Persistent.MadeInfMeanWand = true;
-                    GameState.Persistent.Sema.Release();
-                    Console.WriteLine("player made inf-mean wand");
-                }
-            }
-
-
-            SaveLoad.SaveAsync();
-            Director.UnpauseWorld();
-            Main.Singleton.MySidePanel.MyCircuitUI.Rebuild();
+            Director.StartEvent(new MagicEvent.Smithing(this));
         }
     }
 

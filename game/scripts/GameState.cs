@@ -36,6 +36,7 @@ public class GameState
         public int Loneliness_GemExpert { get; set; }
         public int Loneliness_WandSmith { get; set; }
         public int ShopTip { get; set; }
+        public int SmithTip { get; set; }
         public int KillsSinceStrongMult { get; set; }
         public int KillsSinceStochastic { get; set; }
         public bool MadeInf { get; set; }
@@ -63,6 +64,7 @@ public class GameState
             Loneliness_WandSmith = 0;
 
             ShopTip = 0;
+            SmithTip = 0;
             KillsSinceStrongMult = 0;
             KillsSinceStochastic = 0;
             MadeInf = false;
@@ -127,6 +129,8 @@ public class GameState
             writer.WriteLine(',');
             writer.Write(ShopTip);
             writer.WriteLine(',');
+            writer.Write(SmithTip);
+            writer.WriteLine(',');
             writer.Write(KillsSinceStrongMult);
             writer.WriteLine(',');
             writer.Write(KillsSinceStochastic);
@@ -171,6 +175,7 @@ public class GameState
             Loneliness_GemExpert = Int32.Parse(JSON.NoLast(reader));
             Loneliness_WandSmith = Int32.Parse(JSON.NoLast(reader));
             ShopTip = Int32.Parse(JSON.NoLast(reader));
+            SmithTip = Int32.Parse(JSON.NoLast(reader));
             KillsSinceStrongMult = Int32.Parse(JSON.NoLast(reader));
             KillsSinceStochastic = Int32.Parse(JSON.NoLast(reader));
             MadeInf = JSON.ParseBool(reader);
