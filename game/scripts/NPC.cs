@@ -52,7 +52,7 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
                         return new Simplest(Rank.FINITE, 25);
                     return new Simplest(Rank.FINITE, 25 + k * 10);
                 case Gem.Mirror _:
-                    return new Simplest(Rank.FINITE, 7 + k);
+                    return new Simplest(Rank.FINITE, 7);
                 case CustomGem cG:
                     if (cG.MetaLevel.MyRank != Rank.FINITE)
                         return Simplest.W();

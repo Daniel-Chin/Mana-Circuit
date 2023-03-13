@@ -216,7 +216,6 @@ public abstract class Wand : MagicItem, JSONable
         {
             Ricecooker ricecooker = new Ricecooker();
             ricecooker.Init();
-            ricecooker.Salvage(this, new PointInt(0, 0));
             return ricecooker;
         }
     }
@@ -233,20 +232,30 @@ public abstract class Wand : MagicItem, JSONable
         }
         public override void Init()
         {
-            Circuit c = new Circuit(new PointInt(5, 5));
+            //  v
+            //  o
+            //  o
+            //  oooo
+            // <oooo
+            Circuit c = new Circuit(new PointInt(6, 6));
 
-            c.Add(new Gem.Source(new PointInt(1, 0)), new PointInt(0, 1));
+            c.Add(new Gem.Source(new PointInt(0, 1)), new PointInt(1, 0));
 
-            Gem drain = new Gem.Drain();
-            c.Add(drain, new PointInt(1, 0));
+            c.Add(new Gem.Drain(), new PointInt(0, 4));
 
-            for (int i = 0; i < c.Size.IntX; i++)
+            for (int i = 0; i < 6; i++)
             {
                 c.Add(new Gem.Wall(), new PointInt(i, 0), true);
-                c.Add(new Gem.Wall(), new PointInt(i, 4), true);
+                c.Add(new Gem.Wall(), new PointInt(i, 5), true);
                 c.Add(new Gem.Wall(), new PointInt(0, i), true);
-                c.Add(new Gem.Wall(), new PointInt(4, i), true);
+                c.Add(new Gem.Wall(), new PointInt(5, i), true);
             }
+            c.Add(new Gem.Wall(), new PointInt(2, 1));
+            c.Add(new Gem.Wall(), new PointInt(3, 1));
+            c.Add(new Gem.Wall(), new PointInt(4, 1));
+            c.Add(new Gem.Wall(), new PointInt(2, 2));
+            c.Add(new Gem.Wall(), new PointInt(3, 2));
+            c.Add(new Gem.Wall(), new PointInt(4, 2));
 
             MyCircuit = c;
         }
