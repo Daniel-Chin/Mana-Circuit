@@ -18,6 +18,7 @@ once mean-inf, "what is the mean output now?" should be said by wand smith.
 
 3.mkv 31:50
     maybe shop hint should also consider design time at wand smith?
+    staring at the circuit editor also increments kill count. 
 
 3.mkv 33:25
     how to we make the player compute mean ASAP? once mean-inf, "what is the mean output now?" should be said by wand smith. 
