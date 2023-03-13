@@ -49,8 +49,8 @@ public abstract class NPC : Godot.Object, SpawnableSpecial
                     return new Simplest(Rank.W_TO_THE_K, k);
                 case Gem.Stochastic _:
                     if (k == 0)
-                        return new Simplest(Rank.FINITE, 25);
-                    return new Simplest(Rank.FINITE, 25 + k * 10);
+                        return new Simplest(Rank.FINITE, 60);
+                    return new Simplest(Rank.FINITE, 60 + k * 10);
                 case Gem.Mirror _:
                     return new Simplest(Rank.FINITE, 7);
                 case CustomGem cG:

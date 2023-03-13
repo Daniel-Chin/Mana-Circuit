@@ -179,6 +179,7 @@ public class GameState
             KillsSinceStrongMult = Int32.Parse(JSON.NoLast(reader));
             KillsSinceStochastic = Int32.Parse(JSON.NoLast(reader));
             MadeInf = JSON.ParseBool(reader);
+            Console.WriteLine("read " + MadeInf);
             MadeInfMeanWand = JSON.ParseBool(reader);
 
             Shared.Assert(reader.ReadLine().Equals("],"));

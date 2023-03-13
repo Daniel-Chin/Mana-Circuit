@@ -50,26 +50,7 @@ margin_bottom = 327.0
 size_flags_horizontal = 3
 custom_colors/font_color_readonly = Color( 0.988235, 0.988235, 0.988235, 1 )
 custom_styles/read_only = SubResource( 2 )
-text = "# Recommended
-- VSauce. \"How To Count Past Infinity\". https://youtu.be/SrU9YDoXE88
-  - Watch this video to learn the *correct* Math about various 
-    infinities. 
-- Germapur. \"Miner Gun Builder\" (MGB). 
-  - Play MGB if you want a much longer power-growing arc. 
-  - MGB also directly inspired my game. 
-- Patrick Traynor. \"Patrick's Parabox\". https://www.patricksparabox.com
-  - An awesome puzzle game where infinity is also a necessary 
-    consequence of the game mechanics. 
-
-# Alpha & Beta Testers
-maguro. AC. Alith. 
-
-# Attribution & Thanks
-- Pixel font \"m5x7\" by Daniel Linssen. https://managore.itch.io/m5x7
-- Godot 3.5.1 engine. 
-- C#. 
-
-"
+text = ""
 readonly = true
 smooth_scrolling = true
 

@@ -67,7 +67,7 @@ public class Main : Node2D
                     MyPauseScreen.Resume();
                 } else if (!GameState.Transient.WorldPaused) {
                     Director.PauseWorld();
-                    MyPauseScreen.PopupCentered();
+                    MyPauseScreen.Popup();
                 }
             }
         } else if (

@@ -393,7 +393,9 @@ public abstract class MagicEvent : Godot.Object
                     return null;
                 case 10:
                     GameState.Persistent.ShopTip = SHOP_TIP_TOP;
-                    return "A quiz for you: what is your average mana output rate?";
+                    if (! GameState.Persistent.MadeInf)
+                        return "A quiz for you: what is your average mana output rate?";
+                    return Tip();
                 case SHOP_TIP_TOP:
                     // fixed point
                     return null;
@@ -1193,6 +1195,7 @@ public abstract class MagicEvent : Godot.Object
     }
 
     public class Smithing : MagicEvent {
+        public const int SMITH_TIP_TOP = 100;
         private int _step;
         private NPC _npc;
         public Smithing(NPC npc)
@@ -1252,7 +1255,7 @@ public abstract class MagicEvent : Godot.Object
             Main.Singleton.MySidePanel.MyCircuitUI.Rebuild();
             if (justMadeInfMean) {
                 GameState.Persistent.Sema.WaitOne();
-                GameState.Persistent.SmithTip ++;
+                GameState.Persistent.SmithTip = SMITH_TIP_TOP;
                 GameState.Persistent.Sema.Release();
                 _step = 15;
             } else if (

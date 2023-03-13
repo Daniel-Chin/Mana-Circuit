@@ -32,13 +32,16 @@ maguro. AC. Alith.
         GetNode<Button>("VBox/HBox/QuitButton").Connect(
             "pressed", this, "SaveAndQuit"
         );
+    }
 
+    public void Popup() {
         StringBuilder sB = new StringBuilder();
 
         sB.Append(@"
 # Recommended
 ".Substring(1));
 
+        Console.WriteLine("dan " + GameState.Persistent.MadeInf);
         if (GameState.Persistent.MadeInf) {
             sB.Append(@"
 - VSauce. ""How To Count Past Infinity"". https://youtu.be/SrU9YDoXE88
@@ -59,12 +62,12 @@ maguro. AC. Alith.
 
         if (GameState.Persistent.MyTypelessGem != null) {
             sB.Append(@"
-# The automatic solver of Custom Gem mean effect  
+# The automatic solver of Custom Gems' mean effect  
 - *Location* (2D) = Int X Int.  
 - *Direction* (2D) = Right | Up | Left | Down.  
 - A custom gem has one source and one drain. Denote 
   Source = (L, D) where L is Location and D is Direction. 
-  Denote Drain = Ll', undefined) where L' is location.  
+  Denote Drain = (L', undefined) where L' is Location.  
 - *Mana* = Number | Infinities.  
 - Each mana *Particle* (leaving a cyan trail) = 
   location X Direction X Mana.  
@@ -89,7 +92,7 @@ maguro. AC. Alith.
   hypothesized TCG multiplier.  
 - A guess G = (S, M) is F-closed iif these two conditions are met:  
   - S is F-closed.  
-  - S[Drain] <= M.  
+  - F(S)[Drain] <= M.  
 - Finally, the solver estimates the smallest f-closed 
   guess G* = (S*, M*). M* is then taken to be the 
   multiplier of the TCG.  
@@ -105,6 +108,7 @@ maguro. AC. Alith.
   solution cannot be rejected.  
 - In contrast, if you move the +1 gem to the right and 
   TCG(x) = TCG(x) + 1, then TCG(x) = inf * x.  
+
 ".Substring(1));
         }
 
@@ -124,7 +128,9 @@ maguro. AC. Alith.
         sB.Append(Godot.OS.GetUserDataDir());
         sB.Append("\n");
         sB.Append("Delete all files there to reset the game. \n");
-        GetNode<TextEdit>("VBox/TextHBox/TextEdit").Text += sB.ToString();
+        GetNode<TextEdit>("VBox/TextHBox/TextEdit").Text = sB.ToString();
+
+        PopupCentered();
     }
 
     public void Resume() {

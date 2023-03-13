@@ -82,7 +82,7 @@ public class Director
             if (
                 !GameState.Persistent.HasCustomGems.ContainsKey(0)
                 && GameState.Persistent.Event_JumperStage >= 1
-                && GameState.Persistent.ShopTip == MagicEvent.Shopping.SHOP_TIP_TOP
+                && GameState.Persistent.SmithTip == MagicEvent.Smithing.SMITH_TIP_TOP
             ) {
                 SetNPCToSpawn(new NPC.GemExpert());
                 return;
