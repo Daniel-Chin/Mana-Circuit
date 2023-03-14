@@ -38,6 +38,9 @@ maguro. AC. Alith.
         StringBuilder sB = new StringBuilder();
 
         sB.Append(@"
+Mana Circuits.  
+Daniel Chin, 2023.  
+
 # Recommended
 ".Substring(1));
 
