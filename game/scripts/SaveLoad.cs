@@ -65,6 +65,13 @@ public class SaveLoad
     }
 
     public static void SaveAsync() {
+        if (Godot.OS.HasFeature("HTML5")) {
+            Console.WriteLine(
+                "HTML build has problem with threads, so saving is sync and blocking."
+            );
+            Save();
+            return;
+        }
         Thread t = new Thread(new ThreadStart(Save));
         t.Start();
     }
