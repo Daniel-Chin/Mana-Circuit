@@ -10,6 +10,7 @@ public class MagicProblem
     private static readonly int UPRANK_EVERY = 17;
     public int N;
     public Circuit MyCircuit;
+    public Gem.Source SourceGem;
     public PointInt SourceLocation;
     public List<(PointInt, Gem.Stochastic)> StochasticWithLocations;
     public List<(PointInt, Gem.Focus)> FocusWithLocations;
@@ -21,7 +22,7 @@ public class MagicProblem
     public MagicProblem(Circuit circuit)
     {
         MyCircuit = circuit;
-        SourceLocation = MyCircuit.FindAll<Gem.Source>()[0].Item1;
+        (SourceLocation, SourceGem) = MyCircuit.FindAll<Gem.Source>()[0];
         StochasticWithLocations = MyCircuit.FindAll<Gem.Stochastic>();
         FocusWithLocations = MyCircuit.FindAll<Gem.Focus>();
         N = StochasticWithLocations.Count * 4 + FocusWithLocations.Count;
@@ -50,7 +51,10 @@ public class MagicProblem
         Simplest[] mana;
         mana = Simplest.Zeros(N + 1);
         mana[0].K = inputMana;
-        particles.Enqueue(new Particle(SourceLocation, null, mana));
+        particles.Enqueue(new Particle(
+            SourceLocation + SourceGem.Direction, 
+            SourceGem.Direction, mana
+        ));
         for (int i = 0; i < N; i++)
         {
             mana = Simplest.Zeros(N + 1);
@@ -89,6 +93,9 @@ public class MagicProblem
             Gem gem = MyCircuit.Seek(p.Location);
             switch (gem)
             {
+                case Gem.Source source:
+                    // remove particle
+                    break;
                 case Gem.Drain drain:
                     // Console.WriteLine("drain got " + p);
                     drainMana = (Simplest[])p.Mana.Clone();
